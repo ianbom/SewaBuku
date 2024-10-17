@@ -5,23 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\CoverBuku;
 use App\Models\DetailBuku;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
     public function index(){
         $buku = Buku::all();
+
         return view('sewa_buku.admin.buku.index_buku', ['buku'=> $buku]);
     }
 
     public function indexBukuUser(){
 
+        $userId = Auth::id();
         $buku = Buku::with('coverBuku')
                     ->with(['order.rating' => function($query) {
                         $query->select('id_order', 'rating');
                     }])
                     ->get();
+
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
         foreach ($buku as $b) {
             $totalRating = 0;
@@ -37,8 +43,31 @@ class BukuController extends Controller
             $b->ratingRerata = $totalOrderWithRating > 0 ? $totalRating / $totalOrderWithRating : null;
         }
         //return response()->json(['data' => $buku]);
-        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku]);
+        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites]);
     }
+
+    public function detailBukuUser($id) {
+        $userId = Auth::id();
+
+        $buku = Buku::with('coverBuku', 'tagsBuku', 'order.rating')->findOrFail($id);
+
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+
+        $ratings = $buku->order->whereNotNull('rating')->pluck('rating.rating');
+
+        if ($ratings->count() > 0) {
+            $averageRating = $ratings->avg();
+        } else {
+            $averageRating = null;
+        }
+
+        return view('sewa_buku.user.buku.detail_buku', [
+            'buku' => $buku,
+            'favorites' => $favorites,
+            'averageRating' => $averageRating
+        ]);
+    }
+
 
 
     public function create(){
@@ -116,9 +145,8 @@ class BukuController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Buku berhasil diupload');
+        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diupload');
     } catch (\Throwable $th) {
-        // Handle any errors that occur during the process
         return redirect()->back()->withErrors($th->getMessage());
     }
 }
@@ -251,6 +279,13 @@ class BukuController extends Controller
         }
     }
 
+    public function editTagsBuku($id){
+
+    }
+
+    public function updateTagsBuku(){
+
+    }
 
 
 

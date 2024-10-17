@@ -115,3 +115,4 @@
         detailBukuIndex++;
     });
 </script>
+@endsection

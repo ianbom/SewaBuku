@@ -89,3 +89,5 @@
         container.appendChild(detailDiv);
     });
 </script>
+@endsection
+

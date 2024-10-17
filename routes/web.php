@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\LanggananController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\TagsController;
+use App\Http\Controllers\UserController;
 use App\Models\Langganan;
 use Illuminate\Support\Facades\Route;
 
@@ -34,11 +37,33 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/detail/edit{id}', [BukuController::class, 'editDetailBuku'])->name('admin.detailBuku.edit');
         Route::put('/detail/update/{id}', [BukuController::class, 'updateDetailBuku'])->name('admin.updateBuku.edit');
     });
+    Route::group(['prefix' => 'order'], function () {
+        Route::get('/index', [OrderController::class, 'indexOrderAdmin'])->name('admin.order.index');
+    });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/index', [UserController::class, 'indexUserAdmin'])->name('admin.user.index');
+    });
+
+    Route::group(['prefix' => 'profile'], function () {
+        Route::get('/', [UserController::class, 'profileAdmin'])->name('admin.profile');
+        Route::get('/edit', [UserController::class, 'updateProfileAdmin'])->name('admin.profile.edit'); // embuhh
+    });
+
+    Route::group(['prefix' => 'tags'], function () {
+        Route::get('/index', [TagsController::class, 'indexTags'])->name('admin.tags.index');
+        Route::post('/store', [TagsController::class, 'storetags'])->name('admin.tags.store');
+        Route::get('/edit/{id}', [TagsController::class, 'editTags'])->name('admin.tags.edit');
+        Route::put('/update/{id}', [TagsController::class, 'updateTags'])->name('admin.tags.update');
+    });
+
+
 });
 
 Route::group(['prefix' => 'user'], function () {
     Route::group(['prefix' => 'buku'], function () {
         Route::get('/index', [BukuController::class, 'indexBukuUser'])->name('user.buku.index');
+        Route::get('/show/{id}', [BukuController::class, 'detailBukuUser'])->name('user.buku.show');
         Route::get('/baca/{id}', [LanggananController::class, 'bacaBuku'])->name('user.buku.baca');
     });
 
@@ -56,9 +81,13 @@ Route::group(['prefix' => 'user'], function () {
 
     Route::group(['prefix' => 'rating'], function () {
         Route::post('/store/{id}', [RatingController::class, 'storeRating'])->name('user.rating.store');
-
     });
 
+    Route::group(['prefix' => 'favorite'], function () {
+        Route::get('/index', [FavoriteController::class, 'indexFavorite'])->name('user.favorite.index');
+        Route::post('/store/{id}', [FavoriteController::class, 'storeFavorite'])->name('user.favorite.store');
+        Route::delete('/delete/{id}', [FavoriteController::class, 'deleteFavortie'])->name('user.favorite.delete');
+    });
 });
 
 

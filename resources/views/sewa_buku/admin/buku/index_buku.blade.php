@@ -3,6 +3,7 @@
 @section('content')
 <div class="container mx-auto py-8">
     <h1 class="text-2xl font-bold mb-4">Daftar Buku</h1>
+    <a class="text-1xl bg-blue-500 rounded-sm p-1 " href="{{ route('admin.buku.create') }}" >Buat buku</a>
 
     <table class="min-w-full bg-white border border-gray-300">
         <thead>
@@ -52,3 +53,4 @@
     </table>
 </div>
 
+@endsection

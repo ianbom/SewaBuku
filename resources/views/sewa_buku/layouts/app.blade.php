@@ -16,9 +16,21 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-            <main>
+        @auth
+            @if(auth()->user()->is_admin)
+                <!-- Sidebar untuk Admin -->
+                @include('sewa_buku.layouts.header_admin')
+            @else
+                <!-- Sidebar untuk User Biasa -->
+                @include('sewa_buku.layouts.header')
+            @endif
+        @endauth
 
+        <div class="main-content">
+            <main>
+                @yield('content')
             </main>
         </div>
     </body>
+
 </html>

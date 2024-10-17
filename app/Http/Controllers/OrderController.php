@@ -70,4 +70,10 @@ class OrderController extends Controller
             return response()->json(['error' => $th->getMessage()]);
         }
     }
+
+    public function indexOrderAdmin(){
+        $order = Order::with('user', 'buku')->get();
+        //return response()->json(['order' => $order]);
+        return view('sewa_buku.admin.order.index_order', ['order' => $order]);
+    }
 }

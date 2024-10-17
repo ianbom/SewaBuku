@@ -50,6 +50,7 @@
         </a>
     </div>
 </div>
+@endsection
 
 {{-- <div class="flex flex-wrap gap-4 mb-4">
     @foreach ($buku->coverBuku as $cover)

@@ -22,7 +22,7 @@
     @endif
 
     <!-- Form untuk mengedit dan menambahkan detail buku -->
-    <form action="{{ route('admin.updateBuku.edit', $detailBuku->first()->id_buku) }}" method="POST" enctype="multipart/form-data" id="detailBukuForm">
+    <form action="{{ route('admin.updateBuku.edit', $buku->id_buku) }}" method="POST" enctype="multipart/form-data" id="detailBukuForm">
         @csrf
         @method('PUT')
 

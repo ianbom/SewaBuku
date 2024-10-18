@@ -12,7 +12,7 @@ class Tags extends Model
     protected $primaryKey = 'id_tags';
     protected $table = 'tags';
 
-    public function bukuTags(){
+    public function buku(){
         return $this->belongsToMany(Buku::class, 'buku_tags', 'id_tags', 'id_buku');
     }
 }

@@ -36,6 +36,20 @@
                 <p>{{ $buku->sinopsis }}</p>
             </div>
 
+            <div class="mb-4">
+                <h2 class="text-2xl font-semibold mb-2">Tags:</h2>
+                @if($buku->tags->isNotEmpty())
+                    <ul>
+                        @foreach ($buku->tags as $tag)
+                            <li>{{ $tag->nama_tags }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p>Tidak ada tag untuk buku ini.</p>
+                @endif
+            </div>
+
+
             <!-- Bagian Teaser Audio -->
             @if($buku->teaser_audio)
             <div class="mb-4">

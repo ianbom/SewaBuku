@@ -11,7 +11,11 @@
             <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">Sort</button>
         </div>
         <div class="w-full md:w-1/3">
-            <input type="text" placeholder="Search buku..." class="w-full px-4 py-2 border border-gray-300 rounded shadow-sm">
+            <form action="{{ route('user.buku.index') }}" method="GET" class="mb-4">
+                <input type="text" name="query" placeholder="Cari judul buku..." class="border rounded p-2" required>
+                <button type="submit" class="bg-blue-500 text-white rounded px-4 py-2">Cari</button>
+            </form>
+
         </div>
     </div>
 

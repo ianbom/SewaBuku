@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\BukuTags;
 use App\Models\CoverBuku;
 use App\Models\DetailBuku;
 use App\Models\Favorite;
+use App\Models\Tags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -49,7 +51,7 @@ class BukuController extends Controller
     public function detailBukuUser($id) {
         $userId = Auth::id();
 
-        $buku = Buku::with('coverBuku', 'tagsBuku', 'order.rating')->findOrFail($id);
+        $buku = Buku::with('coverBuku', 'tags', 'order.rating')->findOrFail($id);
 
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
@@ -151,9 +153,6 @@ class BukuController extends Controller
     }
 }
 
-
-
-
     public function edit($id){
         $buku = Buku::findOrFail($id);
         return view('sewa_buku.admin.buku.edit_buku', ['buku'=> $buku]);
@@ -229,12 +228,25 @@ class BukuController extends Controller
     }
 }
 
-    public function editDetailBuku($id){
-        $buku = Buku::findOrFail($id);
-        $detailBuku = DetailBuku::where('id_buku', $buku->id_buku)->get();
-        //return response()->json(['buku' => $detailBuku]);
-        return view('sewa_buku.admin.buku.edit_detail_buku', ['detailBuku' => $detailBuku]);
+public function editDetailBuku($id)
+{
+    $buku = Buku::findOrFail($id);
+
+    // Mengambil semua detail buku yang sesuai atau membuat detail buku baru jika belum ada
+    $detailBuku = DetailBuku::where('id_buku', $buku->id_buku)->get();
+
+    if ($detailBuku->isEmpty()) {
+        // Jika belum ada detail buku, buat satu detail baru
+        $detailBuku = collect([new DetailBuku(['id_buku' => $buku->id_buku])]);
     }
+
+    return view('sewa_buku.admin.buku.edit_detail_buku', [
+        'detailBuku' => $detailBuku,
+        'buku' => $buku
+    ]);
+}
+
+
 
     public function updateDetailBuku(Request $request, $id)
     {
@@ -246,25 +258,20 @@ class BukuController extends Controller
                 'detail_buku.*.keep_existing_audio' => 'nullable|boolean',
             ]);
 
-            // Temukan buku berdasarkan ID
             $buku = Buku::findOrFail($id);
 
-            // Hapus semua detail buku terkait buku ini untuk mencegah duplikasi
             $buku->detailBuku()->delete();
 
-            // Simpan kembali semua detail buku baru
             foreach ($request->input('detail_buku') as $key => $detail) {
                 $detailAudioPath = null;
 
-                // Cek apakah ada file audio baru yang diunggah
                 if ($request->hasFile("detail_buku.$key.audio")) {
                     $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
                 } elseif (isset($detail['keep_existing_audio']) && $detail['keep_existing_audio'] && isset($detail['existing_audio'])) {
-                    // Gunakan audio yang sudah ada jika tidak ada yang diunggah
+
                     $detailAudioPath = $detail['existing_audio'];
                 }
 
-                // Buat entri detail buku baru untuk buku ini
                 DetailBuku::create([
                     'id_buku' => $buku->id_buku,
                     'bab' => $detail['bab'],
@@ -279,15 +286,34 @@ class BukuController extends Controller
         }
     }
 
-    public function editTagsBuku($id){
+    public function editTagsBuku($id)
+{
+    $buku = Buku::findOrFail($id);
+    $tags = Tags::all();
+    $selectedTags = $buku->tags->pluck('id_tags')->toArray();
 
+    return view('sewa_buku.admin.buku.create_tags_buku', [
+        'buku' => $buku,
+        'tags' => $tags,
+        'selectedTags' => $selectedTags
+    ]);
+}
+
+
+    public function updateTagsBuku(Request $request, $id)
+    {
+        $buku = Buku::findOrFail($id);
+
+        $request->validate([
+            'id_tags' => 'nullable|array',
+            'id_tags.*' => 'exists:tags,id_tags'
+        ]);
+
+
+        $buku->tags()->sync($request->id_tags ?? []);
+
+        return redirect()->back()->with('success', 'Tags berhasil diperbarui!');
     }
-
-    public function updateTagsBuku(){
-
-    }
-
-
 
 
     public function show($id){
@@ -309,6 +335,16 @@ class BukuController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+
+    public function searchJudulBuku(Request $request)
+    {
+        $query = $request->input('query');
+
+        $buku = Buku::where('judul_buku', 'like', "%{$query}%")->get();
+
+        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku]);
     }
 
 }

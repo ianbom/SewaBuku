@@ -36,6 +36,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('/delete/cover/{id}', [BukuController::class, 'deleteCover'])->name('admin.buku.deleteCover');
         Route::get('/detail/edit{id}', [BukuController::class, 'editDetailBuku'])->name('admin.detailBuku.edit');
         Route::put('/detail/update/{id}', [BukuController::class, 'updateDetailBuku'])->name('admin.updateBuku.edit');
+        Route::get('/tags/edit{id}', [BukuController::class, 'editTagsBuku'])->name('admin.tagsBuku.edit');
+        Route::put('/tags/update{id}', [BukuController::class, 'updateTagsBuku'])->name('admin.tagsBuku.update');
     });
     Route::group(['prefix' => 'order'], function () {
         Route::get('/index', [OrderController::class, 'indexOrderAdmin'])->name('admin.order.index');
@@ -63,6 +65,7 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'user'], function () {
     Route::group(['prefix' => 'buku'], function () {
         Route::get('/index', [BukuController::class, 'indexBukuUser'])->name('user.buku.index');
+        Route::get('/search/judulBuku', [BukuController::class, 'searchJudulBuku'])->name('judulBuku.search');
         Route::get('/show/{id}', [BukuController::class, 'detailBukuUser'])->name('user.buku.show');
         Route::get('/baca/{id}', [LanggananController::class, 'bacaBuku'])->name('user.buku.baca');
     });
@@ -72,6 +75,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('/show/{id}', [OrderController::class, 'showOrder'])->name('user.order.show');
         Route::post('/store/{id}', [OrderController::class,'storeOrder'])->name('user.order.store');
         Route::post('/bayar/{id}', [OrderController::class,'storePayment'])->name('user.payment.store');
+        Route::put('/batal/{id}', [OrderController::class,'batalkanOrder'])->name('user.order.batal');
     });
 
     Route::group(['prefix' => 'langganan'], function () {

@@ -21,6 +21,7 @@
                 </div>
             </div>
 
+
             <!-- Informasi Pembayaran -->
             <div>
                 <div class="mb-4">
@@ -32,6 +33,9 @@
                     <label class="block text-gray-700 font-bold mb-2">Status Order:</label>
                     <p class="text-gray-900">{{ $order->status_order }}</p>
                 </div>
+
+
+
             </div>
         </div>
 
@@ -46,17 +50,23 @@
             <a href="{{ url()->previous() }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 mr-4">
                 Kembali
             </a>
+
+            @if ($order->status_order == 'Proses')
+            <form action="{{ route('user.order.batal', $order->id_order) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Batalkan</button>
+            </form>
+        @endif
+
+
             <a href="#" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
                 Cetak Invoice
             </a>
 
-            @if ($order->status_order == 'Dibayar')
-                <a class="bg-green-500 text-white py-2 px-4 rounded">
-                    Selesai
-                </a>
-            @endif
 
-            @if ($order->status_order != 'Dibayar')
+            @if ($order->status_order == 'Proses')
                 <form action="{{ route('user.payment.store', $order->id_order) }}" method="POST">
                     @csrf
                     <button type="submit" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Bayar</button>

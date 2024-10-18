@@ -76,4 +76,15 @@ class OrderController extends Controller
         //return response()->json(['order' => $order]);
         return view('sewa_buku.admin.order.index_order', ['order' => $order]);
     }
+
+    public function batalkanOrder($id){
+        try {
+            $order = Order::findOrFail($id);
+            $order->status_order = 'Dibatalkan';
+            $order->save();
+            return redirect()->back()->with('succes', 'Sukses membatalkan pesanan');
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()]);
+        }
+    }
 }

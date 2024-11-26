@@ -8,8 +8,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\IsAdmin;
 use App\Models\Langganan;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,13 +21,16 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::group(['prefix' => 'admin'], function () {
+
+Route::middleware(['is_admin'])->prefix('admin')->group(function () {
     Route::group(['prefix' => 'buku'], function () {
         Route::get('/index', [BukuController::class, 'index'])->name('admin.buku.index');
         Route::get('/create', [BukuController::class, 'create'])->name('admin.buku.create');
@@ -49,7 +54,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', [UserController::class, 'profileAdmin'])->name('admin.profile');
-        Route::get('/edit', [UserController::class, 'updateProfileAdmin'])->name('admin.profile.edit'); // embuhh
+        Route::get('/edit', [UserController::class, 'updateProfileAdmin'])->name('admin.profile.edit'); // error pake profile bawaan aja
     });
 
     Route::group(['prefix' => 'tags'], function () {
@@ -58,7 +63,6 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/edit/{id}', [TagsController::class, 'editTags'])->name('admin.tags.edit');
         Route::put('/update/{id}', [TagsController::class, 'updateTags'])->name('admin.tags.update');
     });
-
 
 });
 

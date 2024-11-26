@@ -11,7 +11,7 @@
             <a href="{{ route('admin.order.index') }}" class="hover:text-gray-400">Order</a>
             <a href="{{ route('admin.user.index') }}" class="hover:text-gray-400">User</a>
             <a href="{{ route('admin.profile') }}" class="hover:text-gray-400">Profile</a>
-             {{--<a href="{{ route('admin.favorite.index') }}" class="hover:text-gray-400">Favorite</a> --}}
+            <a href="{{ route('admin.tags.index') }}" class="hover:text-gray-400">Tags</a>
         </nav>
 
         <!-- Hamburger Menu (Mobile) -->
@@ -27,8 +27,9 @@
         <nav class="flex flex-col space-y-4 p-4">
             <a href="{{ route('admin.buku.index') }}" class="hover:text-gray-400">Buku</a>
             <a href="{{ route('admin.order.index') }}" class="hover:text-gray-400">Order</a>
-            {{-- <a href="{{ route('admin.langganan.index') }}" class="hover:text-gray-400">Langganan</a>
-            <a href="{{ route('admin.favorite.index') }}" class="hover:text-gray-400">Favorite</a> --}}
+            <a href="{{ route('admin.user.index') }}" class="hover:text-gray-400">User</a>
+            <a href="{{ route('admin.profile') }}" class="hover:text-gray-400">Profile</a>
+            <a href="{{ route('admin.tags.index') }}" class="hover:text-gray-400">Tags</a>
         </nav>
     </div>
 </header>

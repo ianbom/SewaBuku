@@ -341,10 +341,35 @@ public function editDetailBuku($id)
     public function searchJudulBuku(Request $request)
     {
         $query = $request->input('query');
+        $userId = Auth::id();
+        $buku = Buku::with('coverBuku')
+                    ->where('judul_buku', 'like', "%{$query}%")
+                    ->with(['order.rating' => function($query) {
+                        $query->select('id_order', 'rating');
+                    }])
+                    ->get();
 
-        $buku = Buku::where('judul_buku', 'like', "%{$query}%")->get();
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
-        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku]);
+        foreach ($buku as $b) {
+            $totalRating = 0;
+            $totalOrderWithRating = 0;
+
+            foreach ($b->order as $order) {
+                if ($order->rating) {
+                    $totalRating += $order->rating->rating;
+                    $totalOrderWithRating++;
+                }
+            }
+
+            $b->ratingRerata = $totalOrderWithRating > 0 ? $totalRating / $totalOrderWithRating : null;
+        }
+        //return response()->json(['data' => $buku]);
+        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites]);
+    }
+
+    public function indexBukuUserSearch(Request $request){
+
     }
 
 }

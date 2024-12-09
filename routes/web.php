@@ -3,9 +3,12 @@
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\LanggananController;
+use App\Http\Controllers\OpsiController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
@@ -64,6 +67,16 @@ Route::middleware(['is_admin'])->prefix('admin')->group(function () {
         Route::put('/update/{id}', [TagsController::class, 'updateTags'])->name('admin.tags.update');
     });
 
+    Route::resource('/quiz', QuizController::class)->except('create');
+    Route::get('/quiz/create/{id}', [QuizController::class, 'create'])->name('quiz.create');
+
+    Route::resource('/soal', SoalController::class)->except('create');
+    Route::get('/soal/create/{id}', [SoalController::class, 'create'])->name('soal.create');
+
+    Route::resource('/opsi', OpsiController::class)->except('create');
+    Route::get('/opsi/create/{id}', [OpsiController::class, 'create'])->name('opsi.create');
+
+
 });
 
 Route::group(['prefix' => 'user'], function () {
@@ -72,6 +85,9 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('/search/judulBuku', [BukuController::class, 'searchJudulBuku'])->name('judulBuku.search');
         Route::get('/show/{id}', [BukuController::class, 'detailBukuUser'])->name('user.buku.show');
         Route::get('/baca/{id}', [LanggananController::class, 'bacaBuku'])->name('user.buku.baca');
+        Route::get('/quiz/{id}', [QuizController::class, 'kerjakanQuiz'])->name('user.quiz.kerjakan');
+        Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
+
     });
 
     Route::group(['prefix' => 'order'], function () {

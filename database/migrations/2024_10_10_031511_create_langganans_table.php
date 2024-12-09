@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('akhir_langganan');
             $table->timestamps();
         });
-    }
+    } 
 
     /**
      * Reverse the migrations.

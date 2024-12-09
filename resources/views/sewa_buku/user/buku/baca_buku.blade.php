@@ -25,22 +25,35 @@
             @foreach($buku->detailBuku as $detail)
             <div id="bab-{{ $detail->id_detail_buku }}" class="mb-12 p-4 bg-white shadow-md rounded-md">
                 <h3 class="text-2xl font-semibold mb-4">{{ $detail->bab }}</h3>
+
+                @if (!$quizStatus[$detail->id_detail_buku])
+                    <a href="{{ route('user.quiz.kerjakan', $detail->id_detail_buku) }}"
+                       class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+                        Kerjakan Soal
+                    </a>
+                @else
+                    <span class="text-green-500 font-bold">Sudah Mengerjakan</span>
+                    <p class="text-gray-700">Nilai Anda: {{ $quizScores[$detail->id_detail_buku] }}</p>
+                @endif
+
                 <p class="text-gray-700 leading-relaxed mb-4">
                     {{ $detail->isi }}
                 </p>
 
                 <!-- Audio jika tersedia -->
                 @if($detail->audio)
-                <div class="mt-4">
-                    <h4 class="text-lg font-semibold">Dengarkan Audio Bab</h4>
-                    <audio controls class="w-full mt-2">
-                        <source src="{{ Storage::url($detail->audio) }}" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                </div>
+                    <div class="mt-4">
+                        <h4 class="text-lg font-semibold">Dengarkan Audio Bab</h4>
+                        <audio controls class="w-full mt-2">
+                            <source src="{{ Storage::url($detail->audio) }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
                 @endif
             </div>
             @endforeach
+
+
         </div>
 
     </div>

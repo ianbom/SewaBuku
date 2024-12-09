@@ -232,11 +232,9 @@ public function editDetailBuku($id)
 {
     $buku = Buku::findOrFail($id);
 
-    // Mengambil semua detail buku yang sesuai atau membuat detail buku baru jika belum ada
     $detailBuku = DetailBuku::where('id_buku', $buku->id_buku)->get();
 
     if ($detailBuku->isEmpty()) {
-        // Jika belum ada detail buku, buat satu detail baru
         $detailBuku = collect([new DetailBuku(['id_buku' => $buku->id_buku])]);
     }
 

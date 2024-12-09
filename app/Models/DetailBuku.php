@@ -16,4 +16,8 @@ class DetailBuku extends Model
     public function buku(){
         return $this->belongsTo(Buku::class, 'id_buku', 'id_buku');
     }
+
+    public function quiz(){
+        return $this->hasMany(Quiz::class, 'id_detail_buku', 'id_detail_buku');
+    }
 }

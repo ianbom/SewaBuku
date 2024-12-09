@@ -53,6 +53,13 @@
                         </div>
                     @endif
                 </div>
+
+                <div class="mb-2">
+                    <a href="{{ route('quiz.create', $detail->id_detail_buku) }}" class="bg-blue-500 text-white rounded px-4 py-2">Buat Quiz</a>
+                    <a href="{{ route('quiz.show', $detail->id_detail_buku) }}" class="bg-green-500 text-white rounded px-4 py-2">Lihat Quiz</a>
+                </div>
+
+
             </div>
         @endforeach
 

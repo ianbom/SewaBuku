@@ -39,4 +39,8 @@ class Buku extends Model
     public function tags(){
         return $this->belongsToMany(Tags::class, 'buku_tags', 'id_buku', 'id_tags');
     }
+
+    public function rating(){
+        return $this->hasMany(Rating::class, 'id_buku', 'id_buku');
+    }
 }

@@ -8,9 +8,11 @@ use App\Models\CoverBuku;
 use App\Models\DetailBuku;
 use App\Models\Favorite;
 use App\Models\Langganan;
+use App\Models\Rating;
 use App\Models\Tags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
@@ -28,28 +30,15 @@ class BukuController extends Controller
 
 
         $buku = Buku::with('coverBuku')
-                    ->with(['order.rating' => function($query) {
-                        $query->select('id_order', 'rating');
-                    }])
-                    ->get();
+        ->withCount(['rating as ratingRerata' => function ($query) {
+            $query->select(DB::raw('coalesce(avg(rating), 0)'));
+        }])
+        ->get();
 
         // Ambil data favorit buku untuk user
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
         foreach ($buku as $b) {
-            $totalRating = 0;
-            $totalOrderWithRating = 0;
-
-            foreach ($b->order as $order) {
-                if ($order->rating) {
-                    $totalRating += $order->rating->rating;
-                    $totalOrderWithRating++;
-                }
-            }
-
-            $b->ratingRerata = $totalOrderWithRating > 0 ? $totalRating / $totalOrderWithRating : null;
-
-
             if ($b->is_free || $checkLangganan) {
 
                 $b->can_read = true;
@@ -70,18 +59,27 @@ class BukuController extends Controller
 
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
-        $ratings = $buku->order->whereNotNull('rating')->pluck('rating.rating');
+        $rating = Rating::where('id_buku', $buku->id_buku)->get();
 
-        if ($ratings->count() > 0) {
-            $averageRating = $ratings->avg();
-        } else {
-            $averageRating = null;
-        }
+        $ratingCheck = Rating::where('id', $userId)
+        ->where('id_buku', $buku->id_buku)
+        ->first();
+
+        $checkLanggananAktif = Langganan::where('id', $userId)
+            ->where('status_langganan', true)
+            ->exists();
+
+        $averageRating = $rating->isNotEmpty() ? $rating->avg('rating') : null;
+
+        //return response()->json(['data' => $ratings]);
 
         return view('sewa_buku.user.buku.detail_buku', [
             'buku' => $buku,
             'favorites' => $favorites,
-            'averageRating' => $averageRating
+            'averageRating' => $averageRating,
+            'ratingCheck' => $ratingCheck,
+            'rating' => $rating,
+            'checkLanggananAktif' => $checkLanggananAktif
         ]);
     }
 

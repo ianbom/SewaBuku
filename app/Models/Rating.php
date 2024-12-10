@@ -15,4 +15,12 @@ class Rating extends Model
     public function order(){
         return $this->belongsTo(Order::class, 'id_order', 'id_order');
     }
+
+    public function buku(){
+        return $this->belongsTo(Buku::class, 'id_buku', 'id_buku');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'id', 'id'); 
+    }
 }

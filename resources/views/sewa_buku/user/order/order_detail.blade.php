@@ -75,7 +75,7 @@
         </div>
 
         <!-- Rating Section -->
-        @if ($order->status_order == 'Dibayar')
+        {{-- @if ($order->status_order == 'Dibayar')
             <div class="mt-10">
                 @if ($rating)
                     <h3 class="text-xl font-semibold mb-4">Rating Anda:</h3>
@@ -117,7 +117,7 @@
                     </form>
                 @endif
             </div>
-        @endif
+        @endif --}}
 
     </div>
 </div>

@@ -83,17 +83,64 @@
             <!-- Bagian Komentar dan Rating dari User -->
             <div class="mb-4">
                 <h2 class="text-2xl font-semibold mb-2">Komentar dan Rating:</h2>
-                @if($buku->order->whereNotNull('rating')->count() > 0)
-                    @foreach($buku->order->whereNotNull('rating') as $order)
+                @if($rating)
+                    @foreach($rating as $rating)
                         <div class="border-t border-gray-200 pt-4">
-                            <p>{{ $order->user->name }}</p>
-                            <p class="text-lg font-semibold">Komentar : {{ $order->rating->komentar }}</p>
-                            <p class="text-yellow-500">Rating : {{ $order->rating->rating }} / 5</p>
+                            <p>{{ $rating->user->name }}</p>
+                            <p class="text-lg font-semibold">Komentar : {{ $rating->komentar }}</p>
+                            <p class="text-yellow-500">Rating : {{ $rating->rating }} / 5</p>
                         </div>
                     @endforeach
                 @else
                     <p class="text-gray-500">Belum ada komentar atau rating untuk buku ini.</p>
                 @endif
+            </div>
+
+            {{-- Submit Rating --}}
+
+            <div class="mt-10">
+                @if ($checkLanggananAktif)
+                @if ($ratingCheck)
+                    <h3 class="text-xl font-semibold mb-4">Rating Anda:</h3>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">Rating:</label>
+                        <p class="text-gray-900">{{ $ratingCheck->rating }} / 5</p>
+                    </div>
+
+                    @if ($ratingCheck->komentar)
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2">Komentar:</label>
+                            <p class="text-gray-900">{{ $ratingCheck->komentar }}</p>
+                        </div>
+                    @endif
+                @else
+                    <h3 class="text-xl font-semibold mb-4">Berikan Rating untuk Order Ini:</h3>
+                    <form action="{{ route('user.rating.store', $buku->id_buku) }}" method="POST">
+                        @csrf
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2">Rating (1-5):</label>
+                            <select name="rating" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2">Komentar:</label>
+                            <textarea name="komentar" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm"></textarea>
+                        </div>
+                        <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                            Submit Rating
+                        </button>
+                    </form>
+                @endif
+                @else
+                <span>Anda belum berlangganan, tidak bisa memberi rating</span>
+                @endif
+
+
             </div>
 
             <!-- Tombol Favorite -->

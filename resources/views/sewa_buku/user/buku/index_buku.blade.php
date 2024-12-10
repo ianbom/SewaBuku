@@ -36,17 +36,22 @@
                 <div class="mb-4">
                     <span class="text-black font-semibold">Rating:</span>
                     <div class="inline-block ml-2">
-                        @for($i = 1; $i <= 5; $i++)
-                            @if($i <= floor($book->ratingRerata))
-                                <i class="fas fa-star text-yellow-500"></i>
-                            @elseif($i - $book->ratingRerata < 1)
-                                <i class="fas fa-star-half-alt text-yellow-500"></i>
-                            @else
-                                <i class="far fa-star text-yellow-500"></i>
-                            @endif
-                        @endfor
+                        @if($book->ratingRerata > 0)
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= floor($book->ratingRerata))
+                                    <i class="fas fa-star text-yellow-500"></i>
+                                @elseif($i - $book->ratingRerata < 1)
+                                    <i class="fas fa-star-half-alt text-yellow-500"></i>
+                                @else
+                                    <i class="far fa-star text-yellow-500"></i>
+                                @endif
+                            @endfor
+                        @else
+                            <span class="text-gray-500">Belum ada rating</span>
+                        @endif
                     </div>
                 </div>
+
 
                 <!-- Harga dan tombol order -->
                 <div class="flex justify-between items-center mb-4">

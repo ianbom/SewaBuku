@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('rating', function (Blueprint $table) {
             $table->id('id_rating');
-            $table->foreignId('id_order')->constrained('order', 'id_order');
+            $table->foreignId('id')->constrained('users', 'id');
+            $table->foreignId('id_buku')->constrained('buku', 'id_buku');
             $table->integer('rating');
             $table->text('komentar')->nullable();
             $table->timestamps();

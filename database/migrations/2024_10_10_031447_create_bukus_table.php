@@ -19,10 +19,11 @@ return new class extends Migration
                 $table->string('jumlah_halaman');
                 $table->string('isbn');
                 $table->string('tahun_terbit');
-                $table->decimal('harga', 15, 2);
+                $table->decimal('harga', 15, 2)->nullable();
                 $table->string('teaser_audio'); //mp3
                 $table->text('sinopsis');
                 $table->text('ringkasan_audio');
+                $table->boolean('is_free')->default(false);
                 $table->timestamps();
             });
     }

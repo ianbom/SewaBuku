@@ -13,7 +13,7 @@
                 <thead>
                     <tr class="bg-gray-100">
                         <th class="py-3 px-6 text-left font-medium text-gray-600 uppercase tracking-wider">ID Order</th>
-                        <th class="py-3 px-6 text-left font-medium text-gray-600 uppercase tracking-wider">Judul Buku</th>
+                        <th class="py-3 px-6 text-left font-medium text-gray-600 uppercase tracking-wider">Nama Paket</th>
                         <th class="py-3 px-6 text-left font-medium text-gray-600 uppercase tracking-wider">Total Bayar</th>
                         <th class="py-3 px-6 text-left font-medium text-gray-600 uppercase tracking-wider">Status</th>
                         <th class="py-3 px-6 text-left font-medium text-gray-600 uppercase tracking-wider">Aksi</th>
@@ -25,11 +25,10 @@
                             <td class="py-3 px-6">{{ $o->id_order }}</td>
                             <td class="py-3 px-6">
                                 <!-- Menampilkan judul buku yang diorder -->
-                                @if($o->buku)
-                                    {{ $o->buku->judul_buku }}
-                                @else
-                                    <span class="text-red-500">Buku tidak ditemukan</span>
-                                @endif
+
+                                 <span> {{ $o->paketLangganan->nama_paket ?? '-'}} </span>
+
+
                             </td>
                             <td class="py-3 px-6">Rp{{ number_format($o->total_bayar, 0, ',', '.') }}</td>
                             <td class="py-3 px-6">

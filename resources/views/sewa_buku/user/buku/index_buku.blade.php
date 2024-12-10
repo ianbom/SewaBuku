@@ -54,13 +54,14 @@
                     <a href="{{ route('user.buku.show', $book->id_buku) }}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Detail</a>
                 </div>
 
-                <!-- Tombol Order -->
-                <form action="{{ route('user.order.store', $book->id_buku) }}" method="POST">
-                    @csrf
-                    <button class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 w-full" type="submit">
-                        Order
-                    </button>
-                </form>
+                @if ($book->is_free == true || $checkLangganan)
+                <!-- Jika buku gratis atau user memiliki langganan -->
+                <a href="{{ route('user.buku.baca', $book->id_buku) }}" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 w-full">Baca Buku</a>
+          @else
+                <!-- Jika buku berbayar dan user tidak memiliki langganan -->
+                <span class="bg-yellow-500 text-white py-2 px-4 rounded w-full disabled">Langganan untuk membaca</span>
+            @endif
+
 
                 <!-- Tombol Favorite -->
                 <form action="{{ route('user.favorite.store', $book->id_buku) }}" method="POST" class="mt-2">

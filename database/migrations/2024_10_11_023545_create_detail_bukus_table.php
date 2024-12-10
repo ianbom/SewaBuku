@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('bab');
             $table->text('isi');
             $table->string('audio')->nullable();
+            $table->boolean('is_free_detail')->default(false);
             $table->timestamps();
         });
     }

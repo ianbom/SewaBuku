@@ -36,7 +36,8 @@ class LanggananController extends Controller
 {
     try {
         $buku = Buku::with('detailBuku')->findOrFail($id);
-
+        $userId = Auth::id();
+        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
         $quizStatus = [];
         $quizScores = [];
         $userId = Auth::id();
@@ -44,7 +45,7 @@ class LanggananController extends Controller
             $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
 
             if ($quiz) {
-                
+
                 $isAttempted = Jawaban::where('id_quiz', $quiz->id_quiz)
                     ->where('id', $userId)
                     ->exists();
@@ -65,12 +66,21 @@ class LanggananController extends Controller
                 $quizStatus[$detailBuku->id_detail_buku] = false;
                 $quizScores[$detailBuku->id_detail_buku] = null;
             }
+
+            if ($detailBuku->is_free_detail || $checkLangganan) {
+
+                $detailBuku->can_read = true;
+            } else {
+
+                $detailBuku->can_read = false;
+            }
         }
 
         return view('sewa_buku.user.buku.baca_buku', [
             'buku' => $buku,
             'quizStatus' => $quizStatus,
             'quizScores' => $quizScores,
+            'checkLangganan' => $checkLangganan,
         ]);
 
     } catch (\Throwable $th) {

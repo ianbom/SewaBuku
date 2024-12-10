@@ -57,6 +57,26 @@
             <input type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="ringkasan_audio" name="ringkasan_audio" accept="audio/mp3" required>
         </div>
 
+        <div class="mb-4">
+            <label for="is_free" class="block text-sm font-medium text-gray-700">Apakah Buku Gratis?</label>
+            <div class="flex items-center space-x-2">
+                <input
+                    type="checkbox"
+                    id="is_free"
+                    name="is_free"
+                    value="1"
+                    class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    {{ old('is_free', false) ? 'checked' : '' }}
+                >
+                <span class="text-gray-600">Ya</span>
+            </div>
+            @error('is_free')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+
+
+
         <!-- Form untuk Detail Buku (Multiple Details) -->
         <div id="detail-buku-container" class="mb-4">
             <h3 class="text-lg font-semibold mb-2">Detail Buku</h3>
@@ -73,8 +93,15 @@
                     <label for="audio" class="block text-sm font-medium text-gray-700">Audio (MP3) <small class="text-gray-500">(Optional)</small></label>
                     <input type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="detail_buku[0][audio]" accept="audio/mp3">
                 </div>
+                <div class="mb-3">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="detail_buku[0][is_free_detail]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-700">Gratis untuk Bab ini?</span>
+                    </label>
+                </div>
             </div>
         </div>
+
 
         <!-- Tombol Tambah Detail Buku -->
         <button type="button" id="add-detail-buku" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mb-3">Tambah Detail Buku</button>
@@ -108,6 +135,12 @@
                 <div class="mb-3">
                     <label for="audio" class="block text-sm font-medium text-gray-700">Audio (MP3) <small class="text-gray-500">(Optional)</small></label>
                     <input type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="detail_buku[${detailBukuIndex}][audio]" accept="audio/mp3">
+                </div>
+                <div class="mb-3">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="detail_buku[0][is_free_detail]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-700">Gratis untuk Bab ini?</span>
+                    </label>
                 </div>
             </div>
         `;

@@ -23,6 +23,7 @@
             <h1 class="text-3xl font-bold mb-6">{{ $buku->judul_buku }}</h1>
 
             @foreach($buku->detailBuku as $detail)
+            @if ($detail->is_free_detail == true || $checkLangganan)
             <div id="bab-{{ $detail->id_detail_buku }}" class="mb-12 p-4 bg-white shadow-md rounded-md">
                 <h3 class="text-2xl font-semibold mb-4">{{ $detail->bab }}</h3>
 
@@ -39,8 +40,6 @@
                 <p class="text-gray-700 leading-relaxed mb-4">
                     {{ $detail->isi }}
                 </p>
-
-                <!-- Audio jika tersedia -->
                 @if($detail->audio)
                     <div class="mt-4">
                         <h4 class="text-lg font-semibold">Dengarkan Audio Bab</h4>
@@ -51,6 +50,10 @@
                     </div>
                 @endif
             </div>
+          @else
+                <span class="bg-red-500 text-white py-2 px-4 rounded w-full disabled">Langganan untuk membaca</span>
+            @endif
+
             @endforeach
 
 

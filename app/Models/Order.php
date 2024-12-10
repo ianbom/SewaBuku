@@ -29,4 +29,8 @@ class Order extends Model
     public function rating(){
         return $this->hasOne(Rating::class, 'id_order', 'id_order');
     }
+
+    public function paketLangganan(){
+        return $this->belongsTo(paketLangganan::class, 'id_paket_langganan', 'id_paket_langganan');
+    }
 }

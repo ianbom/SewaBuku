@@ -11,6 +11,7 @@
             <a href="{{ route('user.order.index') }}" class="hover:text-gray-400">Order</a>
             <a href="{{ route('user.langganan.index') }}" class="hover:text-gray-400">Langganan</a>
             <a href="{{ route('user.favorite.index') }}" class="hover:text-gray-400">Favorite</a>
+            <a href="{{ route('user.paketLangganan.index') }}" class="hover:text-gray-400">Paket Langganan</a>
         </nav>
 
         <!-- Hamburger Menu (Mobile) -->

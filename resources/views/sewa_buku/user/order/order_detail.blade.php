@@ -16,8 +16,8 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-bold mb-2">Nama Buku:</label>
-                    <p class="text-gray-900">{{ $order->buku->judul_buku }}</p>
+                    <label class="block text-gray-700 font-bold mb-2">Nama Paket:</label>
+                    <p class="text-gray-900">{{ $order->paketLangganan->nama_paket }}</p>
                 </div>
             </div>
 

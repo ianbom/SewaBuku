@@ -7,6 +7,7 @@ use App\Models\BukuTags;
 use App\Models\CoverBuku;
 use App\Models\DetailBuku;
 use App\Models\Favorite;
+use App\Models\Langganan;
 use App\Models\Tags;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,15 +21,19 @@ class BukuController extends Controller
         return view('sewa_buku.admin.buku.index_buku', ['buku'=> $buku]);
     }
 
-    public function indexBukuUser(){
-
+    public function indexBukuUser() {
         $userId = Auth::id();
+
+        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+
+
         $buku = Buku::with('coverBuku')
                     ->with(['order.rating' => function($query) {
                         $query->select('id_order', 'rating');
                     }])
                     ->get();
 
+        // Ambil data favorit buku untuk user
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
         foreach ($buku as $b) {
@@ -43,10 +48,20 @@ class BukuController extends Controller
             }
 
             $b->ratingRerata = $totalOrderWithRating > 0 ? $totalRating / $totalOrderWithRating : null;
+
+
+            if ($b->is_free || $checkLangganan) {
+
+                $b->can_read = true;
+            } else {
+
+                $b->can_read = false;
+            }
         }
-        //return response()->json(['data' => $buku]);
-        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites]);
+
+        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites, 'checkLangganan' => $checkLangganan]);
     }
+
 
     public function detailBukuUser($id) {
         $userId = Auth::id();
@@ -95,6 +110,7 @@ class BukuController extends Controller
             'detail_buku.*.isi' => 'required|string',
             'detail_buku.*.audio' => 'nullable|file|mimes:mp3', // Nullable audio
             'cover_buku.*' => 'required|file|mimes:jpeg,png,jpg',
+            'is_free' => 'nullable|boolean',
         ]);
 
         // Handle teaser audio upload
@@ -119,6 +135,7 @@ class BukuController extends Controller
             'teaser_audio' => $teaserAudioPath,
             'sinopsis' => $request->sinopsis,
             'ringkasan_audio' => $ringkasanAudioPath,
+            'is_free' => $request->has('is_free'),
         ]);
 
         // Handle detail_buku (multiple book details)
@@ -133,6 +150,7 @@ class BukuController extends Controller
                 'bab' => $detail['bab'],
                 'isi' => $detail['isi'],
                 'audio' => $detailAudioPath, // Nullable audio
+                'is_free_detail' => isset($detail['is_free_detail']) ? true : false,
             ]);
         }
 

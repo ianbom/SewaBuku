@@ -12,6 +12,7 @@
             <a href="{{ route('admin.user.index') }}" class="hover:text-gray-400">User</a>
             <a href="{{ route('admin.profile') }}" class="hover:text-gray-400">Profile</a>
             <a href="{{ route('admin.tags.index') }}" class="hover:text-gray-400">Tags</a>
+            <a href="{{ route('paket-langganan.index') }}">Paket Langganan</a>
         </nav>
 
         <!-- Hamburger Menu (Mobile) -->

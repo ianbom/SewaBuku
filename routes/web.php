@@ -5,6 +5,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\LanggananController;
 use App\Http\Controllers\OpsiController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaketLanggananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RatingController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
 use App\Models\Langganan;
+use App\Models\PaketLangganan;
 use Illuminate\Support\Facades\Route;
 
 
@@ -76,6 +78,7 @@ Route::middleware(['is_admin'])->prefix('admin')->group(function () {
     Route::resource('/opsi', OpsiController::class)->except('create');
     Route::get('/opsi/create/{id}', [OpsiController::class, 'create'])->name('opsi.create');
 
+    Route::resource('/paket-langganan', PaketLanggananController::class);
 
 });
 
@@ -111,6 +114,10 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('/index', [FavoriteController::class, 'indexFavorite'])->name('user.favorite.index');
         Route::post('/store/{id}', [FavoriteController::class, 'storeFavorite'])->name('user.favorite.store');
         Route::delete('/delete/{id}', [FavoriteController::class, 'deleteFavortie'])->name('user.favorite.delete');
+    });
+
+    Route::group(['prefix' => 'paket-langganan'], function () {
+        Route::get('/index', [PaketLanggananController::class, 'indexUser'])->name('user.paketLangganan.index');
     });
 });
 

@@ -88,6 +88,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('/search/judulBuku', [BukuController::class, 'searchJudulBuku'])->name('judulBuku.search');
         Route::get('/show/{id}', [BukuController::class, 'detailBukuUser'])->name('user.buku.show');
         Route::get('/baca/{id}', [LanggananController::class, 'bacaBuku'])->name('user.buku.baca');
+        Route::get('/baca/bab/{id}', [LanggananController::class, 'bacaBabBuku'])->name('user.buku.bacaBab');
         Route::get('/quiz/{id}', [QuizController::class, 'kerjakanQuiz'])->name('user.quiz.kerjakan');
         Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
 

@@ -21,15 +21,13 @@
             <div class="mb-4">
                 <p><span class="font-semibold">Penulis:</span> {{ $buku->penulis }}</p>
                 <p><span class="font-semibold">Penerbit:</span> {{ $buku->penerbit }}</p>
-                <p><span class="font-semibold">Jumlah Halaman:</span> {{ $buku->jumlah_halaman }}</p>
+                <p><span class="font-semibold">Tentang Penulis:</span> {{ $buku->tentang_penulis }}</p>
+                <p><a href="{{ $buku->link_pembelian }}" class="font-semibold text-blue-500">Link Pemberlian: {{ $buku->link_pembelian }}</a> </p>
+                <p><span class="font-semibold">Rating Amazon:</span> {{ $buku->rating_amazon }}</p>
                 <p><span class="font-semibold">ISBN:</span> {{ $buku->isbn }}</p>
                 <p><span class="font-semibold">Tahun Terbit:</span> {{ $buku->tahun_terbit }}</p>
             </div>
 
-            <div class="mb-4">
-                <h2 class="text-2xl font-semibold mb-2">Harga:</h2>
-                <p class="text-lg font-bold text-green-500">Rp{{ number_format($buku->harga, 0, ',', '.') }}</p>
-            </div>
 
             <div class="mb-4">
                 <h2 class="text-2xl font-semibold mb-2">Sinopsis:</h2>

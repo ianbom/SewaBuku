@@ -39,7 +39,7 @@
                     </p> --}}
 
                     <div class="flex justify-between items-center">
-                        <span class="text-gray-900 font-bold text-lg">Rp{{ number_format($fav->buku->harga, 0, ',', '.') }}</span>
+                        
                         <a href="{{ route('user.buku.show', $fav->buku->id_buku) }}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Detail</a>
                     </div>
                     <form action="{{ route('user.favorite.delete', $fav->id_favorite) }}" method="POST">

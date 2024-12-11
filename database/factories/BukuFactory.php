@@ -19,11 +19,12 @@ class BukuFactory extends Factory
         return [
             'judul_buku' => $this->faker->sentence(3),
             'penulis' => $this->faker->name(),
+            'tentang_penulis' => $this->faker->sentence(),
             'penerbit' => $this->faker->company(),
-            'jumlah_halaman' => $this->faker->numberBetween(100, 500),
             'isbn' => $this->faker->isbn13(),
             'tahun_terbit' => $this->faker->year(),
-            'harga' => $this->faker->randomFloat(2, 10000, 100000), // harga dengan 2 desimal
+            'rating_amazon' => $this->faker->numberBetween(1,5),
+            'link_pembelian' => $this->faker->sentence(),
             'teaser_audio' => $this->faker->fileExtension(), // Bisa diubah sesuai logika
             'sinopsis' => $this->faker->paragraph(5),
             'ringkasan_audio' => $this->faker->paragraph(5)

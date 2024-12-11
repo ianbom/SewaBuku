@@ -63,5 +63,9 @@ class User extends Authenticatable
         return $this->hasMany(Rating::class, 'id', 'id');
     }
 
+    public function dibaca(){
+        return $this->hasMany(Dibaca::class, 'id', 'id');
+    }
+
 
 }

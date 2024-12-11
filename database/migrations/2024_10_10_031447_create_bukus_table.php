@@ -15,16 +15,21 @@ return new class extends Migration
                 $table->id('id_buku');
                 $table->string('judul_buku');
                 $table->string('penulis');
+                $table->text('tentang_penulis'); // baru
                 $table->string('penerbit');
-                $table->string('jumlah_halaman');
+
                 $table->string('isbn');
                 $table->string('tahun_terbit');
-                $table->decimal('harga', 15, 2)->nullable();
+
+                $table->integer('rating_amazon'); // baru
+                $table->string('link_pembelian'); // baru
                 $table->string('teaser_audio'); //mp3
                 $table->text('sinopsis');
                 $table->text('ringkasan_audio');
                 $table->boolean('is_free')->default(false);
                 $table->timestamps();
+                // $table->decimal('harga', 15, 2)->nullable();
+                 // $table->string('jumlah_halaman');
             });
     }
 

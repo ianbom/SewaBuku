@@ -14,7 +14,6 @@
                 <th class="py-3 px-4 text-left">Jumlah Halaman</th>
                 <th class="py-3 px-4 text-left">ISBN</th>
                 <th class="py-3 px-4 text-left">Tahun Terbit</th>
-                <th class="py-3 px-4 text-left">Harga</th>
                 <th class="py-3 px-4 text-left">Teaser Audio</th>
                 <th class="py-3 px-4 text-left">Sinopsis</th>
                 <th class="py-3 px-4 text-left">Ringkasan Audio</th>
@@ -27,10 +26,8 @@
                 <td class="py-3 px-4">{{ $item->judul_buku }}</td>
                 <td class="py-3 px-4">{{ $item->penulis }}</td>
                 <td class="py-3 px-4">{{ $item->penerbit }}</td>
-                <td class="py-3 px-4">{{ $item->jumlah_halaman }}</td>
                 <td class="py-3 px-4">{{ $item->isbn }}</td>
                 <td class="py-3 px-4">{{ $item->tahun_terbit }}</td>
-                <td class="py-3 px-4">Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
                 <td class="py-3 px-4">
                     <audio controls>
                         <source src="{{ asset('storage/' . $item->teaser_audio) }}" type="audio/mp3">

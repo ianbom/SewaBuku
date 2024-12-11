@@ -15,4 +15,15 @@ class Tags extends Model
     public function buku(){
         return $this->belongsToMany(Buku::class, 'buku_tags', 'id_tags', 'id_buku');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(Tags::class, 'id_child', 'id_tags');
+    }
+
+    // Relasi untuk child tags
+    public function child()
+    {
+        return $this->hasMany(Tags::class, 'id_child', 'id_tags');
+    }
 }

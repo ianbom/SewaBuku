@@ -55,7 +55,7 @@
 
                 <!-- Harga dan tombol order -->
                 <div class="flex justify-between items-center mb-4">
-                    <span class="text-gray-900 font-bold text-lg">Rp{{ number_format($book->harga, 0, ',', '.') }}</span>
+                    
                     <a href="{{ route('user.buku.show', $book->id_buku) }}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Detail</a>
                 </div>
 

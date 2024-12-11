@@ -92,15 +92,16 @@ class BukuController extends Controller
     public function store(Request $request)
 {
     try {
-        // Validate the request data
+       
         $request->validate([
             'nama_buku' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
             'penerbit' => 'required|string|max:255',
-            'jumlah_halaman' => 'required|string|max:255',
+            'tentang_penulis' => 'required|string',
+            'rating_amazon' => 'required|numeric',
+            'link_pembelian' => 'required|string',
             'isbn' => 'required|string|max:255',
             'tahun_terbit' => 'required|string|max:255',
-            'harga' => 'required|numeric',
             'teaser_audio' => 'required|file|mimes:mp3',
             'sinopsis' => 'required|string',
             'ringkasan_audio' => 'required|file|mimes:mp3',
@@ -126,10 +127,11 @@ class BukuController extends Controller
             'judul_buku' => $request->nama_buku,
             'penulis' => $request->penulis,
             'penerbit' => $request->penerbit,
-            'jumlah_halaman' => $request->jumlah_halaman,
+            'tentang_penulis' => $request->tentang_penulis,
+            'rating_amazon' => $request->rating_amazon,
+            'link_pembelian' => $request->link_pembelian,
             'isbn' => $request->isbn,
             'tahun_terbit' => $request->tahun_terbit,
-            'harga' => $request->harga,
             'teaser_audio' => $teaserAudioPath,
             'sinopsis' => $request->sinopsis,
             'ringkasan_audio' => $ringkasanAudioPath,
@@ -182,10 +184,11 @@ class BukuController extends Controller
             'nama_buku' => 'nullable|string|max:255',
             'penulis' => 'nullable|string|max:255',
             'penerbit' => 'nullable|string|max:255',
-            'jumlah_halaman' => 'nullable|string|max:255',
+            'tentang_penulis' => 'nullable|string',
+            'rating_amazon' => 'nullable|numeric',
+            'link_pembelian' => 'nullable|string',
             'isbn' => 'nullable|string|max:255',
             'tahun_terbit' => 'nullable|string|max:255',
-            'harga' => 'nullable|numeric',
             'teaser_audio' => 'nullable|file|mimes:mp3', // Nullable for update
             'sinopsis' => 'nullable|string',
             'ringkasan_audio' => 'nullable|file|mimes:mp3', // Nullable for update
@@ -220,10 +223,11 @@ class BukuController extends Controller
             'judul_buku' => $request->nama_buku,
             'penulis' => $request->penulis,
             'penerbit' => $request->penerbit,
-            'jumlah_halaman' => $request->jumlah_halaman,
+            'tentang_penulis' => $request->tentang_penulis,
+            'rating_amazon' => $request->rating_amazon,
+            'link_pembelian' => $request->link_pembelian,
             'isbn' => $request->isbn,
             'tahun_terbit' => $request->tahun_terbit,
-            'harga' => $request->harga,
             'sinopsis' => $request->sinopsis,
         ]);
 

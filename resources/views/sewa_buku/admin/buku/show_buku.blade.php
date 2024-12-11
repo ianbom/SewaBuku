@@ -5,11 +5,6 @@
     <h1 class="text-2xl font-bold mb-4">{{ $buku->nama_buku }}</h1>
 
     <div class="mb-4">
-        <span class="text-lg font-semibold">Harga:</span>
-        <span class="text-lg text-green-500">Rp {{ number_format($buku->harga, 2, ',', '.') }}</span>
-    </div>
-
-    <div class="mb-4">
         <span class="text-lg font-semibold">Sinopsis:</span>
         <p class="text-gray-700">{{ $buku->sinopsis }}</p>
     </div>

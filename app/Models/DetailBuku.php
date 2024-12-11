@@ -20,4 +20,9 @@ class DetailBuku extends Model
     public function quiz(){
         return $this->hasMany(Quiz::class, 'id_detail_buku', 'id_detail_buku');
     }
+
+
+    public function dibaca(){
+        return $this->hasMany(Dibaca::class, 'id_detail_buku', 'id_detail_buku');
+    }
 }

@@ -2,14 +2,11 @@
 
 @section('content')
 <div class="container mx-auto mt-10">
-    <h1 class="text-3xl font-bold text-center mb-8">Daftar Langganan Buku</h1>
+    <h1 class="text-3xl font-bold text-center mb-8">Langganan Anda</h1>
 
     @if($langganan->isEmpty())
         <div class="text-center">
             <p class="text-lg text-gray-600">Anda belum memiliki paket langganan saat ini.</p>
-            <a href="{{ route('buku.index') }}" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                Lihat Buku
-            </a>
         </div>
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

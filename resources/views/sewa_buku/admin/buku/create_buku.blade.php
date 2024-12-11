@@ -18,13 +18,23 @@
         </div>
 
         <div class="mb-4">
-            <label for="penerbit" class="block text-sm font-medium text-gray-700">Penerbit</label>
-            <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="penerbit" name="penerbit" required>
+            <label for="tentang_penulis" class="block text-sm font-medium text-gray-700">Tentang Penulis</label>
+            <textarea class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="tentang_penulis" name="tentang_penulis" required></textarea>
         </div>
 
         <div class="mb-4">
-            <label for="jumlah_halaman" class="block text-sm font-medium text-gray-700">Jumlah Halaman</label>
-            <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="jumlah_halaman" name="jumlah_halaman" required>
+            <label for="rating_amazon" class="block text-sm font-medium text-gray-700">Rating Amazon</label>
+            <input type="number" step="0.1" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="rating_amazon" name="rating_amazon" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="link_pembelian" class="block text-sm font-medium text-gray-700">Link Pembelian</label>
+            <input type="url" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="link_pembelian" name="link_pembelian" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="penerbit" class="block text-sm font-medium text-gray-700">Penerbit</label>
+            <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="penerbit" name="penerbit" required>
         </div>
 
         <div class="mb-4">
@@ -35,11 +45,6 @@
         <div class="mb-4">
             <label for="tahun_terbit" class="block text-sm font-medium text-gray-700">Tahun Terbit</label>
             <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="tahun_terbit" name="tahun_terbit" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="harga" class="block text-sm font-medium text-gray-700">Harga</label>
-            <input type="number" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="harga" name="harga" required>
         </div>
 
         <div class="mb-4">

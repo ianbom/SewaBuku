@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\DetailBuku;
+use App\Models\Dibaca;
 use App\Models\Jawaban;
 use App\Models\Langganan;
 use App\Models\Quiz;
@@ -38,6 +39,15 @@ class LanggananController extends Controller
         $buku = Buku::with('detailBuku')->findOrFail($id);
         $userId = Auth::id();
         $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+
+        $terakhirDibaca = Dibaca::where('id', $userId)
+        ->where('id_buku', $buku->id_buku)
+        ->where('is_read', true)
+        ->latest('updated_at')
+        ->first();
+
+    $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
+
         $quizStatus = [];
         $quizScores = [];
         $userId = Auth::id();
@@ -74,6 +84,7 @@ class LanggananController extends Controller
 
                 $detailBuku->can_read = false;
             }
+
         }
 
         return view('sewa_buku.user.buku.baca_buku', [
@@ -81,6 +92,7 @@ class LanggananController extends Controller
             'quizStatus' => $quizStatus,
             'quizScores' => $quizScores,
             'checkLangganan' => $checkLangganan,
+            'babTerakhirDibaca' => $babTerakhirDibaca,
         ]);
 
     } catch (\Throwable $th) {
@@ -88,6 +100,44 @@ class LanggananController extends Controller
     }
 }
 
+public function bacaBabBuku($id)
+{
+    try {
+        $user = Auth::user();
+        $detailBuku = DetailBuku::findOrFail($id);
+
+       
+        Dibaca::where('id', $user->id)
+            ->where('id_buku', $detailBuku->id_buku)
+            ->update(['is_read' => false]);
+
+
+        $dibaca = Dibaca::where('id', $user->id)
+            ->where('id_detail_buku', $detailBuku->id_detail_buku)
+            ->where('id_buku', $detailBuku->id_buku)
+            ->first();
+
+        if ($dibaca) {
+
+            $dibaca->is_read = true;
+            $dibaca->save();
+        } else {
+
+            Dibaca::create([
+                'id' => $user->id,
+                'id_detail_buku' => $detailBuku->id_detail_buku,
+                'id_buku' => $detailBuku->id_buku,
+                'is_read' => true,
+            ]);
+        }
+
+
+        return view('sewa_buku.user.buku.baca_bab_buku', ['detailBuku' => $detailBuku]);
+    } catch (\Throwable $th) {
+
+        return response()->json(['err' => $th->getMessage()]);
+    }
+}
 
 
 }

@@ -26,6 +26,34 @@
             @enderror
         </div>
 
+                <!-- Tentang Penulis -->
+        <div>
+            <label for="tentang_penulis" class="block text-sm font-medium text-gray-700">Tentang Penulis</label>
+            <textarea name="tentang_penulis" id="tentang_penulis" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">{{ old('tentang_penulis', $buku->tentang_penulis) }}</textarea>
+            @error('tentang_penulis')
+                <p class="text-red-600 text-sm">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Rating Amazon -->
+        <div>
+            <label for="rating_amazon" class="block text-sm font-medium text-gray-700">Rating Amazon</label>
+            <input type="number" name="rating_amazon" id="rating_amazon" value="{{ old('rating_amazon', $buku->rating_amazon) }}" step="0.1" min="0" max="5" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            @error('rating_amazon')
+                <p class="text-red-600 text-sm">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Link Pembelian -->
+        <div>
+            <label for="link_pembelian" class="block text-sm font-medium text-gray-700">Link Pembelian</label>
+            <input type="url" name="link_pembelian" id="link_pembelian" value="{{ old('link_pembelian', $buku->link_pembelian) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            @error('link_pembelian')
+                <p class="text-red-600 text-sm">{{ $message }}</p>
+            @enderror
+        </div>
+
+
         <!-- Penerbit -->
         <div>
             <label for="penerbit" class="block text-sm font-medium text-gray-700">Penerbit</label>
@@ -35,16 +63,7 @@
             @enderror
         </div>
 
-        <!-- Jumlah Halaman -->
-        <div>
-            <label for="jumlah_halaman" class="block text-sm font-medium text-gray-700">Jumlah Halaman</label>
-            <input type="text" name="jumlah_halaman" id="jumlah_halaman" value="{{ old('jumlah_halaman', $buku->jumlah_halaman) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-            @error('jumlah_halaman')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- ISBN -->
+             <!-- ISBN -->
         <div>
             <label for="isbn" class="block text-sm font-medium text-gray-700">ISBN</label>
             <input type="text" name="isbn" id="isbn" value="{{ old('isbn', $buku->isbn) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
@@ -62,19 +81,13 @@
             @enderror
         </div>
 
-        <!-- Harga -->
-        <div>
-            <label for="harga" class="block text-sm font-medium text-gray-700">Harga</label>
-            <input type="number" name="harga" id="harga" value="{{ old('harga', $buku->harga) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-            @error('harga')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
+
+
 
         <!-- Teaser Audio -->
         <div>
             <label for="teaser_audio" class="block text-sm font-medium text-gray-700">Teaser Audio (MP3)</label>
-            <input type="file" name="teaser_audio" id="teaser_audio" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50">
+            <input type="file" name="teaser_audio" id="teaser_audio" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" accept="audio/mp3">
             <p class="text-xs text-gray-500 mt-2">Current Teaser Audio: {{ $buku->teaser_audio }}</p>
             @error('teaser_audio')
                 <p class="text-red-600 text-sm">{{ $message }}</p>
@@ -84,7 +97,7 @@
         <!-- Ringkasan Audio -->
         <div>
             <label for="ringkasan_audio" class="block text-sm font-medium text-gray-700">Ringkasan Audio (MP3)</label>
-            <input type="file" name="ringkasan_audio" id="ringkasan_audio" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50">
+            <input type="file" name="ringkasan_audio" id="ringkasan_audio" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" accept="audio/mp3">
             <p class="text-xs text-gray-500 mt-2">Current Ringkasan Audio: {{ $buku->ringkasan_audio }}</p>
             @error('ringkasan_audio')
                 <p class="text-red-600 text-sm">{{ $message }}</p>

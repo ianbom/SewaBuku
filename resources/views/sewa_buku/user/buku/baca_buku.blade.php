@@ -25,7 +25,13 @@
             @foreach($buku->detailBuku as $detail)
             @if ($detail->is_free_detail == true || $checkLangganan)
             <div id="bab-{{ $detail->id_detail_buku }}" class="mb-12 p-4 bg-white shadow-md rounded-md">
+
                 <h3 class="text-2xl font-semibold mb-4">{{ $detail->bab }}</h3>
+                @if($detail->id_detail_buku == $babTerakhirDibaca)
+                <span class="text-sm text-green-500">(Terakhir Dibaca)</span>
+            @endif
+
+                <a href="{{ route('user.buku.bacaBab', $detail->id_detail_buku) }}" class=" bg-slate-500 py-2 px-4 rounded w-full text-white"> Baca Bab {{ $detail->bab }}</a>
 
                 @if (!$quizStatus[$detail->id_detail_buku])
                     <a href="{{ route('user.quiz.kerjakan', $detail->id_detail_buku) }}"

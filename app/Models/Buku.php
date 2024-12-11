@@ -43,4 +43,8 @@ class Buku extends Model
     public function rating(){
         return $this->hasMany(Rating::class, 'id_buku', 'id_buku');
     }
+
+    public function dibaca(){
+        return $this->hasMany(DetailBuku::class, 'id_buku', 'id_buku');
+    }
 }

@@ -23,9 +23,9 @@ class OrderController extends Controller
 
     public function showOrder($id){
         $order = Order::findOrFail($id);
-        $rating = Rating::where('id_order', $order->id_order)->first();
+
         //return response()->json(['order' => $order]);
-        return view('sewa_buku.user.order.order_detail', ['order'=> $order, 'rating' => $rating]);
+        return view('sewa_buku.user.order.order_detail', ['order'=> $order]);
     }
 
     public function storeOrder($id){

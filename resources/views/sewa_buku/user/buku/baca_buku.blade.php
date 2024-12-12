@@ -33,15 +33,24 @@
 
                 <a href="{{ route('user.buku.bacaBab', $detail->id_detail_buku) }}" class=" bg-slate-500 py-2 px-4 rounded w-full text-white"> Baca Bab {{ $detail->bab }}</a>
 
-                @if (!$quizStatus[$detail->id_detail_buku])
+            @if ($detail->quiz->first())
+            @if (!$quizStatus[$detail->id_detail_buku])
                     <a href="{{ route('user.quiz.kerjakan', $detail->id_detail_buku) }}"
                        class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
                         Kerjakan Soal
                     </a>
                 @else
-                    <span class="text-green-500 font-bold">Sudah Mengerjakan</span>
+                <a href="{{ route('user.quiz.kerjakan', $detail->id_detail_buku) }}"
+                    class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+                     Kerjakan Lagi
+                 </a>
                     <p class="text-gray-700">Nilai Anda: {{ $quizScores[$detail->id_detail_buku] }}</p>
                 @endif
+                @else
+                <span>Tidak ada quiz</span>
+            @endif
+
+
 
                 <p class="text-gray-700 leading-relaxed mb-4">
                     {{ $detail->isi }}

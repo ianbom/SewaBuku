@@ -100,32 +100,48 @@ class QuizController extends Controller
     }
 
     public function submitQuiz(Request $request, $id)
-{
-    try {
-        $quiz = Quiz::findOrFail($id);
-        $jawabanUser = $request->input('jawaban', []);
-        $userId = Auth::id();
-        $request->validate([
-            'id_soal' => 'unique:soal,id_soal',
-        ]);
+    {
+        try {
+            $quiz = Quiz::findOrFail($id);
+            $jawabanUser = $request->input('jawaban', []);
+            $userId = Auth::id();
 
-        foreach ($jawabanUser as $idSoal => $idOpsi) {
-            $opsi = Opsi::where('id_opsi', $idOpsi)->first();
-            $jawaban = Jawaban::create([
-                'id_quiz' => $quiz->id_quiz,
-                'id_soal' => $idSoal,
-                'id_opsi' => $idOpsi,
-                'id' => $userId,
-                'is_correct' => $opsi->is_correct ?? false,
+            $request->validate([
+                'jawaban' => 'required|array',
             ]);
-        }
 
-       return response()->json(['jawaban' => $jawaban]);
-    } catch (\Throwable $th) {
-        return response()->json(['error' => $th->getMessage()]);
+            foreach ($jawabanUser as $idSoal => $idOpsi) {
+                $opsi = Opsi::where('id_opsi', $idOpsi)->first();
+
+
+                $jawaban = Jawaban::where('id_quiz', $quiz->id_quiz)
+                    ->where('id_soal', $idSoal)
+                    ->where('id', $userId)
+                    ->first();
+
+                if ($jawaban) {
+
+                    $jawaban->id_opsi = $idOpsi;
+                    $jawaban->is_correct = $opsi->is_correct ?? false;
+                    $jawaban->save();
+                } else {
+
+                    Jawaban::create([
+                        'id_quiz' => $quiz->id_quiz,
+                        'id_soal' => $idSoal,
+                        'id_opsi' => $idOpsi,
+                        'id' => $userId,
+                        'is_correct' => $opsi->is_correct ?? false,
+                    ]);
+                }
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Jawaban berhasil disimpan']);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+        }
     }
 
-}
 
 
 }

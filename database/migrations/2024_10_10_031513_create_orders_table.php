@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('id_order');
             $table->foreignId('id')->constrained('users', 'id')->cascadeOnUpdate();
             $table->foreignId('id_paket_langganan')->constrained('paket_langganan', 'id_paket_langganan')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('id_buku')->nullable()->constrained('buku', 'id_buku')->cascadeOnUpdate();
             $table->string('nama_paket');
             $table->decimal('total_bayar', 15, 2);
             $table->integer('masa_waktu');

@@ -44,6 +44,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function hasRole($string)
+    {
+        return false;
+    }
+
     public function bukuLangganan()
     {
         return $this->belongsToMany(Buku::class, 'langganan', 'id', 'id_buku')

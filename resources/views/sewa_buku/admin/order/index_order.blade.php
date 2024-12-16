@@ -1,51 +1,105 @@
 @extends('sewa_buku.layouts.app')
 
-@section('content')
-<div class="container mx-auto mt-10">
-    <h1 class="text-3xl font-bold text-center mb-8">Daftar Pesanan</h1>
+@section('style')
+@endsection
 
-    <!-- Tabel daftar pesanan -->
-    <div class="bg-white shadow-md rounded my-6">
-        <table class="min-w-full bg-white">
-            <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">ID Order</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Nama User</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Judul Buku</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Total Bayar</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Status</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Tanggal Order</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700">
-                @foreach($order as $item)
-                    <tr>
-                        <td class="text-left py-3 px-4">{{ $item->id_order }}</td>
-                        <td class="text-left py-3 px-4">{{ $item->user->name }}</td>
-                        <td class="text-left py-3 px-4">{{ $item->buku->judul_buku }}</td>
-                        <td class="text-left py-3 px-4">Rp{{ number_format($item->total_bayar, 0, ',', '.') }}</td>
-                        <td class="text-left py-3 px-4">
-                            @if($item->status_order == 'Dibayar')
-                                <span class="bg-green-500 text-white py-1 px-2 rounded text-xs">Dibayar</span>
-                            @else
-                                <span class="bg-red-500 text-white py-1 px-2 rounded text-xs">{{ $item->status_order }}</span>
-                            @endif
-                        </td>
-                        <td class="text-left py-3 px-4">{{ date('d M Y', strtotime($item->created_at)) }}</td>
-                        <td class="text-left py-3 px-4">
-                            <a href="">Aksi nanti</a>
-                            {{-- <a href="{{ route('admin.order.show', $item->id_order) }}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Detail</a>
-                            <form action="{{ route('admin.order.delete', $item->id_order) }}" method="POST" class="inline-block">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Hapus</button>
-                            </form> --}}
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+@section('title')
+    Daftar Pesanan
+@endsection
+
+@section('content')
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Daftar Pesanan</h3>
+                    <p class="text-subtitle text-muted">Kelola daftar pesanan buku</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Daftar Pesanan</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <section class="datatable">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <h5 class="card-title">Data Pesanan</h5>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="table-1" class="table table-striped table-bordered text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>ID Order</th>
+                                            <th>Nama User</th>
+                                            <th>Judul Buku</th>
+                                            <th>Total Bayar</th>
+                                            <th>Status</th>
+                                            <th>Tanggal Order</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($order as $item)
+                                            <tr>
+                                                <td>{{ $item->id_order }}</td>
+                                                <td>{{ $item->user->name }}</td>
+                                                <td>{{ $item->buku->judul_buku }}</td>
+                                                <td>Rp{{ number_format($item->total_bayar, 0, ',', '.') }}</td>
+                                                <td>
+                                                    @if ($item->status_order == 'Dibayar')
+                                                        <span class="badge bg-success">Dibayar</span>
+                                                    @else
+                                                        <span class="badge bg-danger">{{ $item->status_order }}</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ date('d M Y', strtotime($item->created_at)) }}</td>
+                                                <td>
+                                                    <a href="{{ route('admin.order.show', $item->id_order) }}"
+                                                        class="btn btn-primary btn-sm">Detail</a>
+                                                    <form action="{{ route('admin.order.delete', $item->id_order) }}" method="POST" class="d-inline-block">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pesanan ini?')">Hapus</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-</div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#table-1').DataTable({
+                responsive: true,
+                columnDefs: [
+                    {
+                        targets: [0],
+                        className: 'text-center'
+                    },
+                    {
+                        targets: [6],
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+            });
+        });
+    </script>
 @endsection

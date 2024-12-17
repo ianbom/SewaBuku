@@ -1,53 +1,145 @@
 @extends('sewa_buku.layouts.app')
 
+@section('style')
+@endsection
+
+@section('title')
+    Daftar Buku
+@endsection
+
 @section('content')
-<div class="container mx-auto py-8">
-    <h1 class="text-2xl font-bold mb-4">Daftar Buku</h1>
-    <a class="text-1xl bg-blue-500 rounded-sm p-1 " href="{{ route('admin.buku.create') }}" >Buat buku</a>
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Daftar Buku</h3>
+                    <p class="text-subtitle text-muted">Kelola daftar buku di perpustakaan</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Daftar Buku</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <section class="datatable">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <h5 class="card-title">Data Buku</h5>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <a href="{{ route('admin.buku.create') }}" class="btn btn-info btn-rounded m-t-10 mb-2">
+                                    Tambah Buku Baru
+                                </a>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="table-1" class="table table-striped table-bordered text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Judul Buku</th>
+                                            <th>Penulis</th>
+                                            <th>Penerbit</th>
+                                            <th>Jumlah Halaman</th>
+                                            <th>ISBN</th>
+                                            <th>Tahun Terbit</th>
+                                            <th>Teaser Audio</th>
+                                            <th>Sinopsis</th>
+                                            <th>Ringkasan Audio</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($buku as $key => $item)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $item->judul_buku }}</td>
+                                                <td>{{ $item->penulis }}</td>
+                                                <td>{{ $item->penerbit }}</td>
+                                                <td>{{ $item->jumlah_halaman }}</td>
+                                                <td>{{ $item->isbn }}</td>
+                                                <td>{{ $item->tahun_terbit }}</td>
+                                                <td>
+                                                    <audio controls>
+                                                        <source src="{{ asset('storage/' . $item->teaser_audio) }}"
+                                                            type="audio/mp3">
+                                                        Browser Anda tidak mendukung pemutar audio.
+                                                    </audio>
+                                                </td>
+                                                <td>{{ Str::limit($item->sinopsis, 100) }}</td>
+                                                <td>
+                                                    <audio controls>
+                                                        <source src="{{ asset('storage/' . $item->ringkasan_audio) }}"
+                                                            type="audio/mp3">
+                                                        Browser Anda tidak mendukung pemutar audio.
+                                                    </audio>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('admin.buku.edit', $item->id_buku) }}"
+                                                        class="btn btn-warning btn-sm">
+                                                        Edit
+                                                    </a>
+                                                    <a href="#deleteData" class="btn btn-danger btn-sm"
+                                                        {{-- data-delete-url="{{ route('admin.buku.destroy', $item->id_buku) }}" --}}
+                                                        onclick="return deleteConfirm(this, 'delete')">
+                                                        Hapus
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+@endsection
 
-    <table class="min-w-full bg-white border border-gray-300">
-        <thead>
-            <tr class="bg-gray-200 text-gray-600 uppercase text-sm">
-                <th class="py-3 px-4 text-left">Judul Buku</th>
-                <th class="py-3 px-4 text-left">Penulis</th>
-                <th class="py-3 px-4 text-left">Penerbit</th>
-                <th class="py-3 px-4 text-left">Jumlah Halaman</th>
-                <th class="py-3 px-4 text-left">ISBN</th>
-                <th class="py-3 px-4 text-left">Tahun Terbit</th>
-                <th class="py-3 px-4 text-left">Teaser Audio</th>
-                <th class="py-3 px-4 text-left">Sinopsis</th>
-                <th class="py-3 px-4 text-left">Ringkasan Audio</th>
-                <th class="py-3 px-4 text-left">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($buku as $item)
-            <tr class="border-b hover:bg-gray-100">
-                <td class="py-3 px-4">{{ $item->judul_buku }}</td>
-                <td class="py-3 px-4">{{ $item->penulis }}</td>
-                <td class="py-3 px-4">{{ $item->penerbit }}</td>
-                <td class="py-3 px-4">{{ $item->isbn }}</td>
-                <td class="py-3 px-4">{{ $item->tahun_terbit }}</td>
-                <td class="py-3 px-4">
-                    <audio controls>
-                        <source src="{{ asset('storage/' . $item->teaser_audio) }}" type="audio/mp3">
-                        Your browser does not support the audio tag.
-                    </audio>
-                </td>
-                <td class="py-3 px-4">{{ Str::limit($item->sinopsis, 100) }}</td>
-                <td class="py-3 px-4">
-                    <audio controls>
-                        <source src="{{ asset('storage/' . $item->ringkasan_audio) }}" type="audio/mp3">
-                        Your browser does not support the audio tag.
-                    </audio>
-                </td>
-                <td class="py-3 px-4">
-                   <a href="{{ route('admin.buku.edit', $item->id_buku) }}">Edit </a>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#table-1').DataTable({
+                responsive: true,
+                columnDefs: [{
+                        targets: [0],
+                        className: 'text-center'
+                    },
+                    {
+                        targets: [7, 9],
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+            });
+        });
 
+        function deleteConfirm(element, action) {
+            let url = $(element).data('delete-url');
+            if (confirm('Apakah Anda yakin ingin ' + action + ' data ini?')) {
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        location.reload();
+                    },
+                    error: function() {
+                        alert('Gagal ' + action + ' data.');
+                    }
+                });
+            }
+            return false;
+        }
+    </script>
 @endsection

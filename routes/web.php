@@ -32,54 +32,52 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
+    Route::middleware(['is_admin'])->prefix('admin')->group(function () {
+        Route::group(['prefix' => 'buku'], function () {
+            Route::get('/index', [BukuController::class, 'index'])->name('admin.buku.index');
+            Route::get('/create', [BukuController::class, 'create'])->name('admin.buku.create');
+            Route::get('/show/{id}', [BukuController::class, 'show'])->name('admin.buku.show');
+            Route::post('/store', [BukuController::class, 'store'])->name('admin.buku.store');
+            Route::get('/edit/{id}', [BukuController::class, 'edit'])->name('admin.buku.edit');
+            Route::put('/update/{id}', [BukuController::class, 'updateBuku'])->name('admin.buku.update');
+            Route::delete('/delete/cover/{id}', [BukuController::class, 'deleteCover'])->name('admin.buku.deleteCover');
+            Route::get('/detail/edit{id}', [BukuController::class, 'editDetailBuku'])->name('admin.detailBuku.edit');
+            Route::put('/detail/update/{id}', [BukuController::class, 'updateDetailBuku'])->name('admin.updateBuku.edit');
+            Route::get('/tags/edit{id}', [BukuController::class, 'editTagsBuku'])->name('admin.tagsBuku.edit');
+            Route::put('/tags/update{id}', [BukuController::class, 'updateTagsBuku'])->name('admin.tagsBuku.update');
+        });
+        Route::group(['prefix' => 'order'], function () {
+            Route::get('/index', [OrderController::class, 'indexOrderAdmin'])->name('admin.order.index');
+        });
 
-Route::middleware(['is_admin'])->prefix('admin')->group(function () {
-    Route::group(['prefix' => 'buku'], function () {
-        Route::get('/index', [BukuController::class, 'index'])->name('admin.buku.index');
-        Route::get('/create', [BukuController::class, 'create'])->name('admin.buku.create');
-        Route::get('/show/{id}', [BukuController::class, 'show'])->name('admin.buku.show');
-        Route::post('/store', [BukuController::class, 'store'])->name('admin.buku.store');
-        Route::get('/edit/{id}', [BukuController::class, 'edit'])->name('admin.buku.edit');
-        Route::put('/update/{id}', [BukuController::class, 'updateBuku'])->name('admin.buku.update');
-        Route::delete('/delete/cover/{id}', [BukuController::class, 'deleteCover'])->name('admin.buku.deleteCover');
-        Route::get('/detail/edit{id}', [BukuController::class, 'editDetailBuku'])->name('admin.detailBuku.edit');
-        Route::put('/detail/update/{id}', [BukuController::class, 'updateDetailBuku'])->name('admin.updateBuku.edit');
-        Route::get('/tags/edit{id}', [BukuController::class, 'editTagsBuku'])->name('admin.tagsBuku.edit');
-        Route::put('/tags/update{id}', [BukuController::class, 'updateTagsBuku'])->name('admin.tagsBuku.update');
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/index', [UserController::class, 'indexUserAdmin'])->name('admin.user.index');
+        });
+
+        Route::group(['prefix' => 'profile'], function () {
+            Route::get('/', [UserController::class, 'profileAdmin'])->name('admin.profile');
+            Route::get('/edit', [UserController::class, 'updateProfileAdmin'])->name('admin.profile.edit'); // error pake profile bawaan aja
+        });
+
+        Route::group(['prefix' => 'tags'], function () {
+            Route::get('/index', [TagsController::class, 'indexTags'])->name('admin.tags.index');
+            Route::post('/store', [TagsController::class, 'storetags'])->name('admin.tags.store');
+            Route::get('/edit/{id}', [TagsController::class, 'editTags'])->name('admin.tags.edit');
+            Route::put('/update/{id}', [TagsController::class, 'updateTags'])->name('admin.tags.update');
+        });
+
+        Route::resource('/quiz', QuizController::class)->except('create');
+        Route::get('/quiz/create/{id}', [QuizController::class, 'create'])->name('quiz.create');
+
+        Route::resource('/soal', SoalController::class)->except('create');
+        Route::get('/soal/create/{id}', [SoalController::class, 'create'])->name('soal.create');
+
+        Route::resource('/opsi', OpsiController::class)->except('create');
+        Route::get('/opsi/create/{id}', [OpsiController::class, 'create'])->name('opsi.create');
+
+        Route::resource('/paket-langganan', PaketLanggananController::class);
     });
-    Route::group(['prefix' => 'order'], function () {
-        Route::get('/index', [OrderController::class, 'indexOrderAdmin'])->name('admin.order.index');
-    });
-
-    Route::group(['prefix' => 'user'], function () {
-        Route::get('/index', [UserController::class, 'indexUserAdmin'])->name('admin.user.index');
-    });
-
-    Route::group(['prefix' => 'profile'], function () {
-        Route::get('/', [UserController::class, 'profileAdmin'])->name('admin.profile');
-        Route::get('/edit', [UserController::class, 'updateProfileAdmin'])->name('admin.profile.edit'); // error pake profile bawaan aja
-    });
-
-    Route::group(['prefix' => 'tags'], function () {
-        Route::get('/index', [TagsController::class, 'indexTags'])->name('admin.tags.index');
-        Route::post('/store', [TagsController::class, 'storetags'])->name('admin.tags.store');
-        Route::get('/edit/{id}', [TagsController::class, 'editTags'])->name('admin.tags.edit');
-        Route::put('/update/{id}', [TagsController::class, 'updateTags'])->name('admin.tags.update');
-    });
-
-    Route::resource('/quiz', QuizController::class)->except('create');
-    Route::get('/quiz/create/{id}', [QuizController::class, 'create'])->name('quiz.create');
-
-    Route::resource('/soal', SoalController::class)->except('create');
-    Route::get('/soal/create/{id}', [SoalController::class, 'create'])->name('soal.create');
-
-    Route::resource('/opsi', OpsiController::class)->except('create');
-    Route::get('/opsi/create/{id}', [OpsiController::class, 'create'])->name('opsi.create');
-
-    Route::resource('/paket-langganan', PaketLanggananController::class);
-
 });
 
 Route::group(['prefix' => 'user'], function () {
@@ -91,20 +89,18 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('/baca/bab/{id}', [LanggananController::class, 'bacaBabBuku'])->name('user.buku.bacaBab');
         Route::get('/quiz/{id}', [QuizController::class, 'kerjakanQuiz'])->name('user.quiz.kerjakan');
         Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
-
     });
 
     Route::group(['prefix' => 'order'], function () {
         Route::get('/index', [OrderController::class, 'indexOrder'])->name('user.order.index');
         Route::get('/show/{id}', [OrderController::class, 'showOrder'])->name('user.order.show');
-        Route::post('/store/{id}', [OrderController::class,'storeOrder'])->name('user.order.store');
-        Route::post('/bayar/{id}', [OrderController::class,'storePayment'])->name('user.payment.store');
-        Route::put('/batal/{id}', [OrderController::class,'batalkanOrder'])->name('user.order.batal');
+        Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
+        Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');
+        Route::put('/batal/{id}', [OrderController::class, 'batalkanOrder'])->name('user.order.batal');
     });
 
     Route::group(['prefix' => 'langganan'], function () {
         Route::get('/index', [LanggananController::class, 'indexUser'])->name('user.langganan.index');
-
     });
 
     Route::group(['prefix' => 'rating'], function () {
@@ -123,4 +119,4 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

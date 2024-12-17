@@ -1,171 +1,119 @@
 @extends('sewa_buku.layouts.app')
 
-@section('content')
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-6">Edit Buku</h1>
-
-    <form action="{{ route('admin.buku.update', $buku->id_buku) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-        @csrf
-        @method('PUT')
-
-        <!-- Nama Buku -->
-        <div>
-            <label for="nama_buku" class="block text-sm font-medium text-gray-700">Nama Buku</label>
-            <input type="text" name="nama_buku" id="nama_buku" value="{{ old('nama_buku', $buku->judul_buku) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-            @error('nama_buku')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Penulis -->
-        <div>
-            <label for="penulis" class="block text-sm font-medium text-gray-700">Penulis</label>
-            <input type="text" name="penulis" id="penulis" value="{{ old('penulis', $buku->penulis) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-            @error('penulis')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-                <!-- Tentang Penulis -->
-        <div>
-            <label for="tentang_penulis" class="block text-sm font-medium text-gray-700">Tentang Penulis</label>
-            <textarea name="tentang_penulis" id="tentang_penulis" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">{{ old('tentang_penulis', $buku->tentang_penulis) }}</textarea>
-            @error('tentang_penulis')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Rating Amazon -->
-        <div>
-            <label for="rating_amazon" class="block text-sm font-medium text-gray-700">Rating Amazon</label>
-            <input type="number" name="rating_amazon" id="rating_amazon" value="{{ old('rating_amazon', $buku->rating_amazon) }}" step="0.1" min="0" max="5" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            @error('rating_amazon')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Link Pembelian -->
-        <div>
-            <label for="link_pembelian" class="block text-sm font-medium text-gray-700">Link Pembelian</label>
-            <input type="url" name="link_pembelian" id="link_pembelian" value="{{ old('link_pembelian', $buku->link_pembelian) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            @error('link_pembelian')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-
-        <!-- Penerbit -->
-        <div>
-            <label for="penerbit" class="block text-sm font-medium text-gray-700">Penerbit</label>
-            <input type="text" name="penerbit" id="penerbit" value="{{ old('penerbit', $buku->penerbit) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-            @error('penerbit')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-             <!-- ISBN -->
-        <div>
-            <label for="isbn" class="block text-sm font-medium text-gray-700">ISBN</label>
-            <input type="text" name="isbn" id="isbn" value="{{ old('isbn', $buku->isbn) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-            @error('isbn')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Tahun Terbit -->
-        <div>
-            <label for="tahun_terbit" class="block text-sm font-medium text-gray-700">Tahun Terbit</label>
-            <input type="text" name="tahun_terbit" id="tahun_terbit" value="{{ old('tahun_terbit', $buku->tahun_terbit) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-            @error('tahun_terbit')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-
-
-
-        <!-- Teaser Audio -->
-        <div>
-            <label for="teaser_audio" class="block text-sm font-medium text-gray-700">Teaser Audio (MP3)</label>
-            <input type="file" name="teaser_audio" id="teaser_audio" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" accept="audio/mp3">
-            <p class="text-xs text-gray-500 mt-2">Current Teaser Audio: {{ $buku->teaser_audio }}</p>
-            @error('teaser_audio')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Ringkasan Audio -->
-        <div>
-            <label for="ringkasan_audio" class="block text-sm font-medium text-gray-700">Ringkasan Audio (MP3)</label>
-            <input type="file" name="ringkasan_audio" id="ringkasan_audio" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" accept="audio/mp3">
-            <p class="text-xs text-gray-500 mt-2">Current Ringkasan Audio: {{ $buku->ringkasan_audio }}</p>
-            @error('ringkasan_audio')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Sinopsis -->
-        <div>
-            <label for="sinopsis" class="block text-sm font-medium text-gray-700">Sinopsis</label>
-            <textarea name="sinopsis" id="sinopsis" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">{{ old('sinopsis', $buku->sinopsis) }}</textarea>
-            @error('sinopsis')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="cover_buku" class="block text-sm font-medium text-gray-700">Cover Buku</label>
-            <input type="file" id="cover_buku" name="cover_buku[]" accept=".jpg,.jpeg,.png" multiple class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
-        </div>
-
-
-
-        <div class="flex justify-end">
-            <a href="{{ route('admin.buku.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-black uppercase tracking-widest hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-2">
-                Cancel
-            </a>
-            <a href="{{ route('admin.detailBuku.edit', $buku->id_buku) }}" class="inline-flex items-center px-4 py-2 bg-green-200 border border-transparent rounded-md font-semibold text-xs text-black uppercase tracking-widest hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-2">
-                Edit Detail Buku
-            </a>
-            <a href="{{ route('admin.tagsBuku.edit', $buku->id_buku) }}" class="inline-flex items-center px-4 py-2 bg-blue-200 border border-transparent rounded-md font-semibold text-xs text-black uppercase tracking-widest hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mr-2">
-                Edit Tags Buku
-            </a>
-            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                Update
-            </button>
-        </div>
-    </form>
-
-    <div class="flex flex-wrap gap-4 mb-4">
-        @foreach ($buku->coverBuku as $cover)
-            <div class="relative">
-                <img src="{{ Storage::url($cover->file_image) }}" alt="Cover Buku" class="w-32 h-48 object-cover border border-gray-300 rounded-md">
-               <form action="{{ route('admin.buku.deleteCover', $cover->id_cover_buku) }}" method="POST" class="absolute top-0 right-0">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-red-600 text-white rounded-full text-xs p-1">Delete</button>
-                </form>
-            </div>
-        @endforeach
-    </div>
-</div>
+@section('style')
 @endsection
 
+@section('title')
+    Edit Buku
+@endsection
 
+@section('content')
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Edit Buku</h3>
+                <p class="text-subtitle text-muted">Perbarui informasi buku</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.buku.index') }}">Daftar Buku</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Buku</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
 
+    <section class="form-section">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{ route('admin.buku.update', $buku->id_buku) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
 
+                            <!-- Nama Buku -->
+                            <div class="mb-3">
+                                <label for="nama_buku" class="form-label">Nama Buku</label>
+                                <input type="text" name="nama_buku" id="nama_buku" class="form-control" value="{{ old('nama_buku', $buku->judul_buku) }}" required>
+                                @error('nama_buku')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-        <!-- Cover Buku -->
-        {{-- <div>
-            <label for="cover_buku" class="block text-sm font-medium text-gray-700">Cover Buku (JPG, PNG)</label>
-            <input type="file" name="cover_buku[]" id="cover_buku" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" multiple>
-            <p class="text-xs text-gray-500 mt-2">Current Cover(s):</p>
-            <ul class="list-disc pl-5">
-                @foreach($buku->coverBuku as $cover)
-                    <li><a href="{{ Storage::url($cover->file_image) }}" target="_blank">{{ $cover->file_image }}</a></li>
-                @endforeach
-            </ul>
-            @error('cover_buku')
-                <p class="text-red-600 text-sm">{{ $message }}</p>
-            @enderror
-        </div> --}}
+                            <!-- Penulis -->
+                            <div class="mb-3">
+                                <label for="penulis" class="form-label">Penulis</label>
+                                <input type="text" name="penulis" id="penulis" class="form-control" value="{{ old('penulis', $buku->penulis) }}" required>
+                                @error('penulis')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <!-- Tentang Penulis -->
+                            <div class="mb-3">
+                                <label for="tentang_penulis" class="form-label">Tentang Penulis</label>
+                                <textarea name="tentang_penulis" id="tentang_penulis" rows="4" class="form-control">{{ old('tentang_penulis', $buku->tentang_penulis) }}</textarea>
+                                @error('tentang_penulis')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <!-- Rating Amazon -->
+                            <div class="mb-3">
+                                <label for="rating_amazon" class="form-label">Rating Amazon</label>
+                                <input type="number" name="rating_amazon" id="rating_amazon" class="form-control" value="{{ old('rating_amazon', $buku->rating_amazon) }}" step="0.1" min="0" max="5">
+                                @error('rating_amazon')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <!-- Teaser Audio -->
+                            <div class="mb-3">
+                                <label for="teaser_audio" class="form-label">Teaser Audio</label>
+                                <input type="file" name="teaser_audio" id="teaser_audio" class="form-control" accept="audio/mp3">
+                                <p class="text-muted">Current: {{ $buku->teaser_audio }}</p>
+                            </div>
+
+                            <!-- Ringkasan Audio -->
+                            <div class="mb-3">
+                                <label for="ringkasan_audio" class="form-label">Ringkasan Audio</label>
+                                <input type="file" name="ringkasan_audio" id="ringkasan_audio" class="form-control" accept="audio/mp3">
+                                <p class="text-muted">Current: {{ $buku->ringkasan_audio }}</p>
+                            </div>
+
+                            <!-- Cover Buku -->
+                            <div class="mb-3">
+                                <label for="cover_buku" class="form-label">Cover Buku (JPG, PNG)</label>
+                                <input type="file" name="cover_buku[]" id="cover_buku" class="form-control" accept=".jpg,.jpeg,.png" multiple>
+                                <div class="d-flex flex-wrap mt-2 gap-2">
+                                    @foreach ($buku->coverBuku as $cover)
+                                        <div class="position-relative">
+                                            <img src="{{ Storage::url($cover->file_image) }}" alt="Cover Buku" class="img-thumbnail" style="width: 100px; height: auto;">
+                                            <form action="{{ route('admin.buku.deleteCover', $cover->id_cover_buku) }}" method="POST" class="position-absolute top-0 end-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                            </form>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="mt-4 text-end">
+                                <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Update Buku</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@endsection

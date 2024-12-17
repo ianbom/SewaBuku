@@ -1,0 +1,27 @@
+#error {
+    background-color: var(--page-error-bg);
+    padding: 2rem 0;
+    min-height: 100vh;
+    /* Flexbox centering */
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    flex-direction: column;
+}
+
+#error .img-error {
+    /* height: 10rem; */
+    object-fit: contain;
+    padding: 3rem 0 3rem 0;
+}
+
+#error .error-title {
+    font-size: 3rem;
+    margin-top: 1rem;
+}
+
+html[data-bs-theme="dark"] #error {
+    background-color: var(--page-error-bg-dark);
+}

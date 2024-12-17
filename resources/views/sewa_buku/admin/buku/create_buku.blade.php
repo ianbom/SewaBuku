@@ -1,155 +1,155 @@
 @extends('sewa_buku.layouts.app')
 
+@section('style')
+@endsection
+
+@section('title')
+    Tambah Buku Baru
+@endsection
+
 @section('content')
-<div class="container mx-auto p-5">
-    <h1 class="text-2xl font-bold mb-5">Tambah Buku Baru</h1>
-    <form action="{{ route('admin.buku.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-
-        <!-- Form untuk Data Buku -->
-        <div class="mb-4">
-            <label for="nama_buku" class="block text-sm font-medium text-gray-700">Judul Buku</label>
-            <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="nama_buku" name="nama_buku" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="penulis" class="block text-sm font-medium text-gray-700">Penulis</label>
-            <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="penulis" name="penulis" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="tentang_penulis" class="block text-sm font-medium text-gray-700">Tentang Penulis</label>
-            <textarea class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="tentang_penulis" name="tentang_penulis" required></textarea>
-        </div>
-
-        <div class="mb-4">
-            <label for="rating_amazon" class="block text-sm font-medium text-gray-700">Rating Amazon</label>
-            <input type="number" step="0.1" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="rating_amazon" name="rating_amazon" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="link_pembelian" class="block text-sm font-medium text-gray-700">Link Pembelian</label>
-            <input type="url" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="link_pembelian" name="link_pembelian" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="penerbit" class="block text-sm font-medium text-gray-700">Penerbit</label>
-            <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="penerbit" name="penerbit" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="isbn" class="block text-sm font-medium text-gray-700">ISBN</label>
-            <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="isbn" name="isbn" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="tahun_terbit" class="block text-sm font-medium text-gray-700">Tahun Terbit</label>
-            <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="tahun_terbit" name="tahun_terbit" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="teaser_audio" class="block text-sm font-medium text-gray-700">Teaser Audio (MP3)</label>
-            <input type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="teaser_audio" name="teaser_audio" accept="audio/mp3" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="sinopsis" class="block text-sm font-medium text-gray-700">Sinopsis</label>
-            <textarea class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="sinopsis" name="sinopsis" required></textarea>
-        </div>
-
-        <div class="mb-4">
-            <label for="ringkasan_audio" class="block text-sm font-medium text-gray-700">Ringkasan Audio (MP3)</label>
-            <input type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" id="ringkasan_audio" name="ringkasan_audio" accept="audio/mp3" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="is_free" class="block text-sm font-medium text-gray-700">Apakah Buku Gratis?</label>
-            <div class="flex items-center space-x-2">
-                <input
-                    type="checkbox"
-                    id="is_free"
-                    name="is_free"
-                    value="1"
-                    class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    {{ old('is_free', false) ? 'checked' : '' }}
-                >
-                <span class="text-gray-600">Ya</span>
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Tambah Buku Baru</h3>
+                <p class="text-subtitle text-muted">Form untuk menambahkan buku baru</p>
             </div>
-            @error('is_free')
-                <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
-
-
-
-        <!-- Form untuk Detail Buku (Multiple Details) -->
-        <div id="detail-buku-container" class="mb-4">
-            <h3 class="text-lg font-semibold mb-2">Detail Buku</h3>
-            <div class="detail-buku-item mb-4">
-                <div class="mb-3">
-                    <label for="bab" class="block text-sm font-medium text-gray-700">Bab</label>
-                    <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="detail_buku[0][bab]" required>
-                </div>
-                <div class="mb-3">
-                    <label for="isi" class="block text-sm font-medium text-gray-700">Isi</label>
-                    <textarea class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="detail_buku[0][isi]" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="audio" class="block text-sm font-medium text-gray-700">Audio (MP3) <small class="text-gray-500">(Optional)</small></label>
-                    <input type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="detail_buku[0][audio]" accept="audio/mp3">
-                </div>
-                <div class="mb-3">
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="detail_buku[0][is_free_detail]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
-                        <span class="ml-2 text-sm text-gray-700">Gratis untuk Bab ini?</span>
-                    </label>
-                </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.buku.index') }}">Daftar Buku</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tambah Buku Baru</li>
+                    </ol>
+                </nav>
             </div>
         </div>
+    </div>
 
+    <section class="form-section">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{ route('admin.buku.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                                <!-- Judul Buku -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="nama_buku" class="form-label">Judul Buku</label>
+                                    <input type="text" name="nama_buku" id="nama_buku" class="form-control" required>
+                                </div>
 
-        <!-- Tombol Tambah Detail Buku -->
-        <button type="button" id="add-detail-buku" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mb-3">Tambah Detail Buku</button>
+                                <!-- Penulis -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="penulis" class="form-label">Penulis</label>
+                                    <input type="text" name="penulis" id="penulis" class="form-control" required>
+                                </div>
 
-        <!-- Form untuk Cover Buku -->
-        <div class="mb-4">
-            <label for="cover_buku" class="block text-sm font-medium text-gray-700">Cover Buku (JPG/PNG)</label>
-            <input type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="cover_buku[]" accept="image/jpeg,image/png" multiple required>
+                                <!-- Tentang Penulis -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="tentang_penulis" class="form-label">Tentang Penulis</label>
+                                    <textarea name="tentang_penulis" id="tentang_penulis" rows="4" class="form-control" required></textarea>
+                                </div>
+
+                                <!-- Rating Amazon -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="rating_amazon" class="form-label">Rating Amazon</label>
+                                    <input type="number" name="rating_amazon" id="rating_amazon" step="0.1" min="0" max="5" class="form-control" required>
+                                </div>
+
+                                <!-- Link Pembelian -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="link_pembelian" class="form-label">Link Pembelian</label>
+                                    <input type="url" name="link_pembelian" id="link_pembelian" class="form-control" required>
+                                </div>
+
+                                <!-- Penerbit -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="penerbit" class="form-label">Penerbit</label>
+                                    <input type="text" name="penerbit" id="penerbit" class="form-control" required>
+                                </div>
+
+                                <!-- ISBN -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="isbn" class="form-label">ISBN</label>
+                                    <input type="text" name="isbn" id="isbn" class="form-control" required>
+                                </div>
+
+                                <!-- Tahun Terbit -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="tahun_terbit" class="form-label">Tahun Terbit</label>
+                                    <input type="text" name="tahun_terbit" id="tahun_terbit" class="form-control" required>
+                                </div>
+
+                                <!-- Teaser Audio -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="teaser_audio" class="form-label">Teaser Audio (MP3)</label>
+                                    <input type="file" name="teaser_audio" id="teaser_audio" accept="audio/mp3" class="form-control" required>
+                                </div>
+
+                                <!-- Ringkasan Audio -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="ringkasan_audio" class="form-label">Ringkasan Audio (MP3)</label>
+                                    <input type="file" name="ringkasan_audio" id="ringkasan_audio" accept="audio/mp3" class="form-control" required>
+                                </div>
+
+                                <!-- Sinopsis -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="sinopsis" class="form-label">Sinopsis</label>
+                                    <textarea name="sinopsis" id="sinopsis" rows="4" class="form-control" required></textarea>
+                                </div>
+
+                                <!-- Cover Buku -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="cover_buku" class="form-label">Cover Buku (JPG/PNG)</label>
+                                    <input type="file" name="cover_buku[]" id="cover_buku" accept="image/jpeg,image/png" class="form-control" multiple required>
+                                </div>
+                            </div>
+
+                            <!-- Is Free -->
+                            <div class="form-check mb-4">
+                                <input type="checkbox" name="is_free" id="is_free" value="1" class="form-check-input">
+                                <label for="is_free" class="form-check-label">Apakah Buku Gratis?</label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">Simpan Buku</button>
+                            </div>
+                        </form>
+
+                        <!-- Dynamic Detail Buku Section -->
+                        <h5 class="mt-5">Detail Buku</h5>
+                        <button type="button" id="add-detail-buku" class="btn btn-secondary mb-3">Tambah Detail Buku</button>
+                        <div id="detail-buku-container"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <!-- Tombol Submit -->
-        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Simpan Buku</button>
-    </form>
+    </section>
 </div>
 
 <script>
-    let detailBukuIndex = 1;
+    let detailBukuIndex = 0;
 
     document.getElementById('add-detail-buku').addEventListener('click', function () {
-        let container = document.getElementById('detail-buku-container');
-        let newDetailBuku = `
-            <div class="detail-buku-item mb-4">
-                <div class="mb-3">
-                    <label for="bab" class="block text-sm font-medium text-gray-700">Bab</label>
-                    <input type="text" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="detail_buku[${detailBukuIndex}][bab]" required>
+        const container = document.getElementById('detail-buku-container');
+        const detailHTML = `
+            <div class="mb-4 border rounded p-3">
+                <label>Bab</label>
+                <input type="text" name="detail_buku[${detailBukuIndex}][bab]" class="form-control mb-2" required>
+                <label>Isi</label>
+                <textarea name="detail_buku[${detailBukuIndex}][isi]" rows="3" class="form-control mb-2" required></textarea>
+                <label>Audio</label>
+                <input type="file" name="detail_buku[${detailBukuIndex}][audio]" class="form-control mb-2" accept="audio/mp3">
+                <div class="form-check">
+                    <input type="checkbox" name="detail_buku[${detailBukuIndex}][is_free_detail]" class="form-check-input">
+                    <label class="form-check-label">Gratis untuk Bab ini?</label>
                 </div>
-                <div class="mb-3">
-                    <label for="isi" class="block text-sm font-medium text-gray-700">Isi</label>
-                    <textarea class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="detail_buku[${detailBukuIndex}][isi]" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="audio" class="block text-sm font-medium text-gray-700">Audio (MP3) <small class="text-gray-500">(Optional)</small></label>
-                    <input type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" name="detail_buku[${detailBukuIndex}][audio]" accept="audio/mp3">
-                </div>
-                <div class="mb-3">
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="detail_buku[0][is_free_detail]" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
-                        <span class="ml-2 text-sm text-gray-700">Gratis untuk Bab ini?</span>
-                    </label>
-                </div>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', newDetailBuku);
+            </div>`;
+        container.insertAdjacentHTML('beforeend', detailHTML);
         detailBukuIndex++;
     });
 </script>

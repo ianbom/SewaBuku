@@ -92,7 +92,7 @@
     <script src="{{ asset('js/initTheme.js') }}"></script>
 
     <div id="app">
-        {{-- @include('sweetalert::alert') --}}
+        @include('sweetalert::alert')
         @include('sewa_buku.layouts.sidebar')
         <div id="main" class="position-relative">
             @include('sewa_buku.layouts.header_admin')

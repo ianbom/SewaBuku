@@ -1,38 +1,48 @@
 @extends('sewa_buku.layouts.app')
 
+@section('title')
+    Daftar Buku
+@endsection
+
 @section('content')
 <div class="container mx-auto mt-10">
     <h1 class="text-3xl font-bold text-center mb-8">Daftar Buku</h1>
 
     <!-- Filter dan Search -->
     <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+        <!-- Filter and Sort Buttons -->
         <div class="flex space-x-4 mb-4 md:mb-0">
             <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">Filter</button>
             <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">Sort</button>
         </div>
-        <div class="w-full md:w-1/3">
-            <form action="{{ route('judulBuku.search') }}" method="GET" class="mb-4">
-                <input type="text" name="query" placeholder="Cari judul buku..." class="border rounded p-2">
-                <button type="submit" class="bg-blue-500 text-white rounded px-4 py-2">Cari</button>
-            </form>
 
+        <!-- Search Bar -->
+        <div class="w-full md:w-1/3">
+            <form action="{{ route('judulBuku.search') }}" method="GET" class="flex items-center">
+                <input type="text" name="query" placeholder="Cari judul buku..." 
+                       class="w-full border rounded-l p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">Cari</button>
+            </form>
         </div>
     </div>
 
-    <!-- Grid untuk daftar buku -->
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    <!-- Grid untuk Daftar Buku -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach($buku as $book)
-        <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-            <!-- Menampilkan cover buku dari relasi coverBuku -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <!-- Cover Buku -->
             @if($book->coverBuku && $book->coverBuku->first())
                 <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Cover Buku" class="w-full h-48 object-cover">
             @else
                 <img src="https://via.placeholder.com/150" alt="Cover Placeholder" class="w-full h-48 object-cover">
             @endif
 
+            <!-- Informasi Buku -->
             <div class="p-4">
                 <h3 class="text-xl font-semibold mb-2">{{ $book->judul_buku }}</h3>
                 <p class="text-gray-600 mb-4">{{ Str::limit($book->sinopsis, 80) }}</p>
+                
+                <!-- Rating -->
                 <div class="mb-4">
                     <span class="text-black font-semibold">Rating:</span>
                     <div class="inline-block ml-2">
@@ -52,33 +62,29 @@
                     </div>
                 </div>
 
-
-                <!-- Harga dan tombol order -->
-                <div class="flex justify-between items-center mb-4">
-                    
-                    <a href="{{ route('user.buku.show', $book->id_buku) }}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Detail</a>
+                <!-- Tombol Detail -->
+                <div class="mb-4">
+                    <a href="{{ route('user.buku.show', $book->id_buku) }}" 
+                       class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Detail</a>
                 </div>
 
-                @if ($book->is_free == true || $checkLangganan)
-                <!-- Jika buku gratis atau user memiliki langganan -->
-                <a href="{{ route('user.buku.baca', $book->id_buku) }}" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 w-full">Baca Buku</a>
-          @else
-                <!-- Jika buku berbayar dan user tidak memiliki langganan -->
-                <span class="bg-yellow-500 text-white py-2 px-4 rounded w-full disabled">Langganan untuk membaca</span>
-            @endif
-
+                <!-- Akses Buku -->
+                @if ($book->is_free || $checkLangganan)
+                    <a href="{{ route('user.buku.baca', $book->id_buku) }}" 
+                       class="block bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 text-center">Baca Buku</a>
+                @else
+                    <span class="block bg-gray-400 text-white py-2 px-4 rounded text-center">Langganan untuk membaca</span>
+                @endif
 
                 <!-- Tombol Favorite -->
                 <form action="{{ route('user.favorite.store', $book->id_buku) }}" method="POST" class="mt-2">
                     @csrf
                     @if(in_array($book->id_buku, $favorites))
-                        <!-- Jika buku sudah ada di favorite -->
-                        <button disabled class="bg-red-500 text-white py-2 px-4 rounded w-full">
+                        <button disabled class="w-full bg-red-500 text-white py-2 px-4 rounded">
                             <i class="fas fa-heart"></i> Favorited
                         </button>
                     @else
-                        <!-- Jika buku belum ada di favorite -->
-                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full">
+                        <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
                             <i class="far fa-heart"></i> Add to Favorite
                         </button>
                     @endif

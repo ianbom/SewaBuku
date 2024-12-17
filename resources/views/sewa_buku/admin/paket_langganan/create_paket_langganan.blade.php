@@ -1,53 +1,85 @@
 @extends('sewa_buku.layouts.app')
 
+@section('title')
+    Buat Paket Langganan Baru
+@endsection
+
 @section('content')
-<div class="container mx-auto mt-8">
-    <h2 class="text-2xl font-semibold mb-4">Buat Paket Langganan Baru</h2>
-    <form id="paketLanggananForm" action="{{ route('paket-langganan.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        @csrf
-        <div class="mb-4">
-            <label for="nama_paket" class="block text-gray-700 text-sm font-bold mb-2">Nama Paket</label>
-            <input type="text" name="nama_paket" id="nama_paket" required
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Nama Paket">
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Buat Paket Langganan Baru</h3>
+                <p class="text-subtitle text-muted">Tambahkan paket langganan baru untuk pengguna.</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('paket-langganan.index') }}">Paket Langganan</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Buat Paket Baru</li>
+                    </ol>
+                </nav>
+            </div>
         </div>
+    </div>
 
-        <div class="mb-4">
-            <label for="harga" class="block text-gray-700 text-sm font-bold mb-2">Harga</label>
-            <input type="number" step="0.01" name="harga" id="harga" required
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Harga Paket">
-        </div>
+    <section class="form-section">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="paketLanggananForm" action="{{ route('paket-langganan.store') }}" method="POST">
+                            @csrf
+                            <div class="row">
+                                <!-- Nama Paket -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="nama_paket" class="form-label">Nama Paket</label>
+                                    <input type="text" name="nama_paket" id="nama_paket" required
+                                        class="form-control" placeholder="Nama Paket">
+                                </div>
 
-        <div class="mb-4">
-            <label for="masa_waktu" class="block text-gray-700 text-sm font-bold mb-2">Masa Waktu (Hari)</label>
-            <input type="number" name="masa_waktu" id="masa_waktu" required
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Masa Waktu Paket">
-        </div>
+                                <!-- Harga -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="harga" class="form-label">Harga</label>
+                                    <input type="number" step="0.01" name="harga" id="harga" required
+                                        class="form-control" placeholder="Harga Paket">
+                                </div>
 
-        <div class="mb-4">
-            <label for="deskripsi" class="block text-gray-700 text-sm font-bold mb-2">Deskripsi</label>
-            <textarea name="deskripsi" id="deskripsi" required rows="5"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Deskripsi Paket"></textarea>
-        </div>
+                                <!-- Masa Waktu -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="masa_waktu" class="form-label">Masa Waktu (Hari)</label>
+                                    <input type="number" name="masa_waktu" id="masa_waktu" required
+                                        class="form-control" placeholder="Masa Waktu Paket">
+                                </div>
 
-        <div class="mb-4">
-            <label for="is_active" class="block text-gray-700 font-bold mb-2">Status Aktif</label>
-            <select id="is_active" name="is_active"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <option value="1" selected>Aktif</option>
-                <option value="0">Nonaktif</option>
-            </select>
-        </div>
+                                <!-- Status Aktif -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="is_active" class="form-label">Status Aktif</label>
+                                    <select id="is_active" name="is_active" class="form-control">
+                                        <option value="1" selected>Aktif</option>
+                                        <option value="0">Nonaktif</option>
+                                    </select>
+                                </div>
 
-        <div class="flex items-center justify-between">
-            <button type="submit"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Simpan Paket
-            </button>
+                                <!-- Deskripsi -->
+                                <div class="col-md-12 mb-3">
+                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <textarea name="deskripsi" id="deskripsi" rows="5" required
+                                        class="form-control" placeholder="Deskripsi Paket"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-end">
+                                <a href="{{ route('paket-langganan.index') }}" class="btn btn-secondary">Batal</a>
+                                <button type="submit" class="btn btn-primary">Simpan Paket</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
+    </section>
 </div>
 @endsection

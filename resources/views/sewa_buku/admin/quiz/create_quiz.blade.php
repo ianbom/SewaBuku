@@ -1,41 +1,69 @@
 @extends('sewa_buku.layouts.app')
 
+@section('title')
+    Buat Quiz
+@endsection
+
 @section('content')
-<div class="container mx-auto mt-8">
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 class="text-2xl font-bold mb-6">Create Quiz</h2>
-        <form action="{{ route('quiz.store', $detailBuku->id_detail_buku) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="id_detail_buku" value="{{ $detailBuku->id_detail_buku }}">
-
-            <!-- Nama Quiz -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="nama_quiz">Nama Quiz</label>
-                <input type="text" name="nama_quiz" id="nama_quiz" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Masukkan nama quiz" required>
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Buat Quiz</h3>
+                <p class="text-subtitle text-muted">Tambahkan quiz untuk bab "{{ $detailBuku->bab }}"</p>
             </div>
-
-            <!-- Deskripsi -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="deskripsi">Deskripsi</label>
-                <textarea name="deskripsi" id="deskripsi" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Masukkan deskripsi quiz"></textarea>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('detail_buku.show', $detailBuku->id_detail_buku) }}">Detail Buku</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Buat Quiz</li>
+                    </ol>
+                </nav>
             </div>
-
-            <!-- File PDF -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="file">File PDF/Image (Opsional)</label>
-                <input type="file" name="file" id="file" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-
-            <!-- Submit Button -->
-            <div class="flex items-center justify-between">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Buat Quiz
-                </button>
-                {{-- <a href="{{ route('detail_buku.show', $detailBuku->id_detail_buku) }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-                    Batal
-                </a> --}}
-            </div>
-        </form>
+        </div>
     </div>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Form Buat Quiz</h4>
+
+                        <form action="{{ route('quiz.store', $detailBuku->id_detail_buku) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                            <input type="hidden" name="id_detail_buku" value="{{ $detailBuku->id_detail_buku }}">
+
+                            <!-- Nama Quiz -->
+                            <div class="mb-3">
+                                <label for="nama_quiz" class="form-label">Nama Quiz</label>
+                                <input type="text" name="nama_quiz" id="nama_quiz" class="form-control" placeholder="Masukkan nama quiz" required>
+                            </div>
+
+                            <!-- Deskripsi -->
+                            <div class="mb-3">
+                                <label for="deskripsi" class="form-label">Deskripsi</label>
+                                <textarea name="deskripsi" id="deskripsi" rows="4" class="form-control" placeholder="Masukkan deskripsi quiz"></textarea>
+                            </div>
+
+                            <!-- File PDF/Image -->
+                            <div class="mb-3">
+                                <label for="file" class="form-label">File PDF/Image (Opsional)</label>
+                                <input type="file" name="file" id="file" class="form-control">
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-end">
+                                <a href="{{ route('detail_buku.show', $detailBuku->id_detail_buku) }}" class="btn btn-secondary">Batal</a>
+                                <button type="submit" class="btn btn-primary">Buat Quiz</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 @endsection

@@ -1,5 +1,4 @@
 @extends('sewa_buku.layouts.app')
-
 @section('style')
 @endsection
 
@@ -39,7 +38,7 @@
                                         <tr>
                                             <th>ID Order</th>
                                             <th>Nama User</th>
-                                            <th>Judul Buku</th>
+                                            <th>Paket</th>
                                             <th>Total Bayar</th>
                                             <th>Status</th>
                                             <th>Tanggal Order</th>
@@ -51,7 +50,7 @@
                                             <tr>
                                                 <td>{{ $item->id_order }}</td>
                                                 <td>{{ $item->user->name }}</td>
-                                                <td>{{ $item->buku->judul_buku }}</td>
+                                                <td>{{ $item->nama_paket ?? '-' }}</td>
                                                 <td>Rp{{ number_format($item->total_bayar, 0, ',', '.') }}</td>
                                                 <td>
                                                     @if ($item->status_order == 'Dibayar')
@@ -64,11 +63,11 @@
                                                 <td>
                                                     <a href="{{ route('admin.order.show', $item->id_order) }}"
                                                         class="btn btn-primary btn-sm">Detail</a>
-                                                    <form action="{{ route('admin.order.delete', $item->id_order) }}" method="POST" class="d-inline-block">
+                                                    {{-- <form action="{{ route('admin.order.delete', $item->id_order) }}" method="POST" class="d-inline-block">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pesanan ini?')">Hapus</button>
-                                                    </form>
+                                                    </form> --}}
                                                 </td>
                                             </tr>
                                         @endforeach

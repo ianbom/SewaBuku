@@ -1,4 +1,4 @@
-@extends('sewa_buku.layouts.app')
+@extends('sewa_buku.layouts.userApp')
 
 @section('title')
     Daftar Order Saya
@@ -49,7 +49,7 @@
 
                             <!-- Aksi -->
                             <td class="py-3 px-4 border-b">
-                                <a href="{{ route('user.order.show', $o->id_order) }}" 
+                                <a href="{{ route('user.order.show', $o->id_order) }}"
                                    class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
                                     Detail
                                 </a>

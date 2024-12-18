@@ -52,10 +52,10 @@
                                     @foreach($tags as $tag)
                                         <div class="col-md-4 mb-2">
                                             <div class="form-check">
-                                                <input 
-                                                    type="checkbox" 
-                                                    name="id_tags[]" 
-                                                    value="{{ $tag->id_tags }}" 
+                                                <input
+                                                    type="checkbox"
+                                                    name="id_tags[]"
+                                                    value="{{ $tag->id_tags }}"
                                                     class="form-check-input"
                                                     id="tag-{{ $tag->id_tags }}"
                                                     {{ in_array($tag->id_tags, $selectedTags) ? 'checked' : '' }}
@@ -71,7 +71,7 @@
 
                             <!-- Submit Button -->
                             <div class="text-end mt-4">
-                                <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.buku.edit', $buku->id_buku) }}" class="btn btn-secondary">Batal</a>
                                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             </div>
                         </form>

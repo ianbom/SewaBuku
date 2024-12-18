@@ -18,7 +18,7 @@ class DetailBuku extends Model
     }
 
     public function quiz(){
-        return $this->hasMany(Quiz::class, 'id_detail_buku', 'id_detail_buku');
+        return $this->hasOne(Quiz::class, 'id_detail_buku', 'id_detail_buku');
     }
 
 

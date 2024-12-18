@@ -106,6 +106,17 @@ class OrderController extends Controller
         return view('sewa_buku.admin.order.index_order', ['order' => $order]);
     }
 
+    public function showOrderAdmin($id){
+        $order = Order::findOrFail($id);
+        return view('sewa_buku.admin.order.show_order', ['order' => $order]);
+    }
+
+    public function deleteOrderAdmin($id){
+        $order = Order::findOrFail($id);
+        $order->delete();
+        return redirect()->back()->with('success', 'Order deleted successfully');
+    }
+
     public function batalkanOrder($id){
         try {
             $order = Order::findOrFail($id);

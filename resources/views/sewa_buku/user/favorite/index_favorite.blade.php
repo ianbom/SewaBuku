@@ -1,4 +1,4 @@
-@extends('sewa_buku.layouts.app')
+@extends('sewa_buku.layouts.userApp')
 
 @section('title')
     Buku Favorit Saya
@@ -18,12 +18,12 @@
             <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <!-- Cover Buku -->
                 @if($fav->buku->coverBuku && $fav->buku->coverBuku->first())
-                    <img src="{{ asset('storage/' . $fav->buku->coverBuku->first()->file_image) }}" 
-                         alt="Cover Buku" 
+                    <img src="{{ asset('storage/' . $fav->buku->coverBuku->first()->file_image) }}"
+                         alt="Cover Buku"
                          class="w-full h-48 object-cover">
                 @else
-                    <img src="https://via.placeholder.com/150" 
-                         alt="Cover Placeholder" 
+                    <img src="https://via.placeholder.com/150"
+                         alt="Cover Placeholder"
                          class="w-full h-48 object-cover">
                 @endif
 
@@ -34,7 +34,7 @@
 
                     <!-- Tombol dan Rating -->
                     <div class="flex flex-col gap-2">
-                        <a href="{{ route('user.buku.show', $fav->buku->id_buku) }}" 
+                        <a href="{{ route('user.buku.show', $fav->buku->id_buku) }}"
                            class="text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
                             Lihat Detail
                         </a>
@@ -42,7 +42,7 @@
                         <form action="{{ route('user.favorite.delete', $fav->id_favorite) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" 
+                            <button type="submit"
                                     class="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
                                 Hapus dari Favorit
                             </button>

@@ -46,7 +46,7 @@
                             <!-- Nama Tags -->
                             <div class="mb-3">
                                 <label for="nama_tags" class="form-label">Nama Tags</label>
-                                <input type="text" id="nama_tags" name="nama_tags" value="{{ old('nama_tags', $tags->nama_tags) }}" 
+                                <input type="text" id="nama_tags" name="nama_tags" value="{{ old('nama_tags', $tags->nama_tags) }}"
                                        class="form-control @error('nama_tags') is-invalid @enderror" required>
                                 @error('nama_tags')
                                     <div class="invalid-feedback">

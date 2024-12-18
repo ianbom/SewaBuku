@@ -1,5 +1,4 @@
 @extends('sewa_buku.layouts.app')
-
 @section('style')
 @endsection
 
@@ -59,7 +58,7 @@
                                                     @if ($u->is_admin)
                                                         <span class="badge bg-success">Admin</span>
                                                     @else
-                                                        <span class="badge bg-secondary">Pengguna</span>
+                                                        <span class="badge bg-primary">Pengguna</span>
                                                     @endif
                                                 </td>
                                                 <td>

@@ -85,6 +85,9 @@
                                                         class="btn btn-warning btn-sm">
                                                         Edit
                                                     </a>
+                                                    <a href="{{ route('admin.buku.show', $item->id_buku) }}" class="btn btn-success">
+                                                        Detail
+                                                    </a>
                                                     <a href="#deleteData" class="btn btn-danger btn-sm"
                                                         {{-- data-delete-url="{{ route('admin.buku.destroy', $item->id_buku) }}" --}}
                                                         onclick="return deleteConfirm(this, 'delete')">

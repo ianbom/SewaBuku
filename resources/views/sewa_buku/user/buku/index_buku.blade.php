@@ -1,8 +1,5 @@
-@extends('sewa_buku.layouts.app')
+@extends('sewa_buku.layouts.userApp')
 
-@section('title')
-    Daftar Buku
-@endsection
 
 @section('content')
 <div class="container mx-auto mt-10">
@@ -19,7 +16,7 @@
         <!-- Search Bar -->
         <div class="w-full md:w-1/3">
             <form action="{{ route('judulBuku.search') }}" method="GET" class="flex items-center">
-                <input type="text" name="query" placeholder="Cari judul buku..." 
+                <input type="text" name="query" placeholder="Cari judul buku..."
                        class="w-full border rounded-l p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">Cari</button>
             </form>
@@ -41,7 +38,7 @@
             <div class="p-4">
                 <h3 class="text-xl font-semibold mb-2">{{ $book->judul_buku }}</h3>
                 <p class="text-gray-600 mb-4">{{ Str::limit($book->sinopsis, 80) }}</p>
-                
+
                 <!-- Rating -->
                 <div class="mb-4">
                     <span class="text-black font-semibold">Rating:</span>
@@ -64,13 +61,13 @@
 
                 <!-- Tombol Detail -->
                 <div class="mb-4">
-                    <a href="{{ route('user.buku.show', $book->id_buku) }}" 
+                    <a href="{{ route('user.buku.show', $book->id_buku) }}"
                        class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Detail</a>
                 </div>
 
                 <!-- Akses Buku -->
                 @if ($book->is_free || $checkLangganan)
-                    <a href="{{ route('user.buku.baca', $book->id_buku) }}" 
+                    <a href="{{ route('user.buku.baca', $book->id_buku) }}"
                        class="block bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 text-center">Baca Buku</a>
                 @else
                     <span class="block bg-gray-400 text-white py-2 px-4 rounded text-center">Langganan untuk membaca</span>

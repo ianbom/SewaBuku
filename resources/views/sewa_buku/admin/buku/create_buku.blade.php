@@ -37,8 +37,8 @@
                             <div class="row">
                                 <!-- Judul Buku -->
                                 <div class="col-md-6 mb-3">
-                                    <label for="nama_buku" class="form-label">Judul Buku</label>
-                                    <input type="text" name="nama_buku" id="nama_buku" class="form-control" required>
+                                    <label for="judul_buku" class="form-label">Judul Buku</label>
+                                    <input type="text" name="judul_buku" id="judul_buku" class="form-control" required>
                                 </div>
 
                                 <!-- Penulis -->
@@ -120,10 +120,7 @@
                             </div>
                         </form>
 
-                        <!-- Dynamic Detail Buku Section -->
-                        <h5 class="mt-5">Detail Buku</h5>
-                        <button type="button" id="add-detail-buku" class="btn btn-secondary mb-3">Tambah Detail Buku</button>
-                        <div id="detail-buku-container"></div>
+
                     </div>
                 </div>
             </div>
@@ -131,26 +128,5 @@
     </section>
 </div>
 
-<script>
-    let detailBukuIndex = 0;
 
-    document.getElementById('add-detail-buku').addEventListener('click', function () {
-        const container = document.getElementById('detail-buku-container');
-        const detailHTML = `
-            <div class="mb-4 border rounded p-3">
-                <label>Bab</label>
-                <input type="text" name="detail_buku[${detailBukuIndex}][bab]" class="form-control mb-2" required>
-                <label>Isi</label>
-                <textarea name="detail_buku[${detailBukuIndex}][isi]" rows="3" class="form-control mb-2" required></textarea>
-                <label>Audio</label>
-                <input type="file" name="detail_buku[${detailBukuIndex}][audio]" class="form-control mb-2" accept="audio/mp3">
-                <div class="form-check">
-                    <input type="checkbox" name="detail_buku[${detailBukuIndex}][is_free_detail]" class="form-check-input">
-                    <label class="form-check-label">Gratis untuk Bab ini?</label>
-                </div>
-            </div>`;
-        container.insertAdjacentHTML('beforeend', detailHTML);
-        detailBukuIndex++;
-    });
-</script>
 @endsection

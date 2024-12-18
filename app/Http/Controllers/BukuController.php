@@ -8,6 +8,7 @@ use App\Models\CoverBuku;
 use App\Models\DetailBuku;
 use App\Models\Favorite;
 use App\Models\Langganan;
+use App\Models\Quiz;
 use App\Models\Rating;
 use App\Models\Tags;
 use Illuminate\Http\Request;
@@ -89,12 +90,9 @@ class BukuController extends Controller
         return view('sewa_buku.admin.buku.create_buku');
     }
 
-    public function store(Request $request)
-{
-    try {
-       
+    public function store2(Request $request){
         $request->validate([
-            'nama_buku' => 'required|string|max:255',
+            'judul_buku' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
             'penerbit' => 'required|string|max:255',
             'tentang_penulis' => 'required|string',
@@ -105,26 +103,19 @@ class BukuController extends Controller
             'teaser_audio' => 'required|file|mimes:mp3',
             'sinopsis' => 'required|string',
             'ringkasan_audio' => 'required|file|mimes:mp3',
-            'detail_buku.*.bab' => 'required|string|max:255',
-            'detail_buku.*.isi' => 'required|string',
-            'detail_buku.*.audio' => 'nullable|file|mimes:mp3', // Nullable audio
             'cover_buku.*' => 'required|file|mimes:jpeg,png,jpg',
-            'is_free' => 'nullable|boolean',
         ]);
 
-        // Handle teaser audio upload
         if ($request->hasFile('teaser_audio')) {
             $teaserAudioPath = $request->file('teaser_audio')->store('voice/teaser', 'public');
         }
 
-        // Handle ringkasan audio upload
         if ($request->hasFile('ringkasan_audio')) {
             $ringkasanAudioPath = $request->file('ringkasan_audio')->store('voice/ringkasan', 'public');
         }
 
-        // Create a new book
         $buku = Buku::create([
-            'judul_buku' => $request->nama_buku,
+            'judul_buku' => $request->judul_buku,
             'penulis' => $request->penulis,
             'penerbit' => $request->penerbit,
             'tentang_penulis' => $request->tentang_penulis,
@@ -138,23 +129,86 @@ class BukuController extends Controller
             'is_free' => $request->has('is_free'),
         ]);
 
-        // Handle detail_buku (multiple book details)
-        foreach ($request->input('detail_buku') as $key => $detail) {
-            $detailAudioPath = null;
-            if ($request->hasFile("detail_buku.$key.audio")) {
-                $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
+        if ($request->hasFile('cover_buku')) {
+            foreach ($request->file('cover_buku') as $cover) {
+                $coverPath = $cover->store('cover_buku', 'public');
+                CoverBuku::create([
+                    'id_buku' => $buku->id_buku,
+                    'file_image' => $coverPath,
+                ]);
             }
-
-            DetailBuku::create([
-                'id_buku' => $buku->id_buku,
-                'bab' => $detail['bab'],
-                'isi' => $detail['isi'],
-                'audio' => $detailAudioPath, // Nullable audio
-                'is_free_detail' => isset($detail['is_free_detail']) ? true : false,
-            ]);
         }
 
-        // Handle cover_buku (multiple covers)
+        return redirect()->route('admin.detailBuku.edit', $buku->id_buku);
+    }
+
+    public function store(Request $request)
+{
+    try {
+        $request->validate([
+            'judul_buku' => 'required|string|max:255',
+            'penulis' => 'required|string|max:255',
+            'penerbit' => 'required|string|max:255',
+            'tentang_penulis' => 'required|string',
+            'rating_amazon' => 'required|numeric',
+            'link_pembelian' => 'required|string',
+            'isbn' => 'required|string|max:255',
+            'tahun_terbit' => 'required|string|max:255',
+            'teaser_audio' => 'required|file|mimes:mp3',
+            'sinopsis' => 'required|string',
+            'ringkasan_audio' => 'required|file|mimes:mp3',
+            'detail_buku' => 'nullable|array',
+            'detail_buku.*.bab' => 'nullable|string|max:255',
+            'detail_buku.*.isi' => 'nullable|string',
+            'detail_buku.*.audio' => 'nullable|file|mimes:mp3',
+            'cover_buku.*' => 'required|file|mimes:jpeg,png,jpg',
+            'is_free' => 'nullable|boolean',
+        ]);
+
+        // Handle teaser audio upload
+        $teaserAudioPath = $request->file('teaser_audio')->store('voice/teaser', 'public');
+
+        // Handle ringkasan audio upload
+        $ringkasanAudioPath = $request->file('ringkasan_audio')->store('voice/ringkasan', 'public');
+
+        // Create a new book
+        $buku = Buku::create([
+            'judul_buku' => $request->judul_buku,
+            'penulis' => $request->penulis,
+            'penerbit' => $request->penerbit,
+            'tentang_penulis' => $request->tentang_penulis,
+            'rating_amazon' => $request->rating_amazon,
+            'link_pembelian' => $request->link_pembelian,
+            'isbn' => $request->isbn,
+            'tahun_terbit' => $request->tahun_terbit,
+            'teaser_audio' => $teaserAudioPath,
+            'sinopsis' => $request->sinopsis,
+            'ringkasan_audio' => $ringkasanAudioPath,
+            'is_free' => $request->has('is_free'),
+        ]);
+
+        // Handle book details (optional)
+        if ($request->has('detail_buku')) {
+            foreach ($request->input('detail_buku') as $key => $detail) {
+                // Only create detail if bab and isi are provided
+                if (!empty($detail['bab']) && !empty($detail['isi'])) {
+                    $detailAudioPath = null;
+                    if ($request->hasFile("detail_buku.$key.audio")) {
+                        $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
+                    }
+
+                    DetailBuku::create([
+                        'id_buku' => $buku->id_buku,
+                        'bab' => $detail['bab'],
+                        'isi' => $detail['isi'],
+                        'audio' => $detailAudioPath,
+                        'is_free_detail' => isset($detail['is_free_detail']) ? true : false,
+                    ]);
+                }
+            }
+        }
+
+        // Handle cover uploads
         if ($request->hasFile('cover_buku')) {
             foreach ($request->file('cover_buku') as $cover) {
                 $coverPath = $cover->store('cover_buku', 'public');
@@ -250,7 +304,7 @@ class BukuController extends Controller
 
 public function editDetailBuku($id)
 {
-    $buku = Buku::findOrFail($id);
+    $buku = Buku::with('detailBuku.quiz')->findOrFail($id);
 
     $detailBuku = DetailBuku::where('id_buku', $buku->id_buku)->get();
 
@@ -258,51 +312,67 @@ public function editDetailBuku($id)
         $detailBuku = collect([new DetailBuku(['id_buku' => $buku->id_buku])]);
     }
 
+    $quizDetailIds = Quiz::pluck('id_detail_buku');
+
+    // Kelompokkan detail berdasarkan keberadaan quiz
+    $groupedDetails = $detailBuku->groupBy(function ($detail) use ($quizDetailIds) {
+        return $quizDetailIds->contains($detail->id_detail_buku) ? 'with_quiz' : 'without_quiz';
+    });
+
+    $detailWithQuiz = $groupedDetails->get('with_quiz', collect());
+    $detailNoQuiz = $groupedDetails->get('without_quiz', collect());
+
     return view('sewa_buku.admin.buku.edit_detail_buku', [
-        'detailBuku' => $detailBuku,
-        'buku' => $buku
+        'buku' => $buku,
+        'detailWithQuiz' => $detailWithQuiz,
+        'detailNoQuiz' => $detailNoQuiz
     ]);
 }
 
 
 
-    public function updateDetailBuku(Request $request, $id)
-    {
-        try {
-            $request->validate([
-                'detail_buku.*.bab' => 'nullable|string|max:255',
-                'detail_buku.*.isi' => 'nullable|string',
-                'detail_buku.*.audio' => 'nullable|file|mimes:mp3',
-                'detail_buku.*.keep_existing_audio' => 'nullable|boolean',
-            ]);
 
-            $buku = Buku::findOrFail($id);
+public function updateDetailBuku(Request $request, $id)
+{
+    try {
+        $request->validate([
+            'detail_buku.*.bab' => 'nullable|string|max:255',
+            'detail_buku.*.isi' => 'nullable|string',
+            'detail_buku.*.audio' => 'nullable|file|mimes:mp3',
+            'detail_buku.*.is_free_detail' => 'nullable|boolean',
+            'detail_buku.*.keep_existing_audio' => 'nullable|boolean',
+        ]);
 
-            $buku->detailBuku()->delete();
+        $buku = Buku::findOrFail($id);
 
-            foreach ($request->input('detail_buku') as $key => $detail) {
-                $detailAudioPath = null;
+        // Hapus detail buku lama
+        $buku->detailBuku()->delete();
 
-                if ($request->hasFile("detail_buku.$key.audio")) {
-                    $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
-                } elseif (isset($detail['keep_existing_audio']) && $detail['keep_existing_audio'] && isset($detail['existing_audio'])) {
+        // Tambahkan detail buku baru
+        foreach ($request->input('detail_buku') as $key => $detail) {
+            $detailAudioPath = null;
 
-                    $detailAudioPath = $detail['existing_audio'];
-                }
-
-                DetailBuku::create([
-                    'id_buku' => $buku->id_buku,
-                    'bab' => $detail['bab'],
-                    'isi' => $detail['isi'],
-                    'audio' => $detailAudioPath,
-                ]);
+            if ($request->hasFile("detail_buku.$key.audio")) {
+                $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
+            } elseif (isset($detail['keep_existing_audio']) && $detail['keep_existing_audio'] && isset($detail['existing_audio'])) {
+                $detailAudioPath = $detail['existing_audio'];
             }
 
-            return redirect()->back()->with('success', 'Detail buku berhasil diperbarui');
-        } catch (\Throwable $th) {
-            return redirect()->back()->withErrors($th->getMessage());
+            DetailBuku::create([
+                'id_buku' => $buku->id_buku,
+                'bab' => $detail['bab'] ?? null,
+                'isi' => $detail['isi'] ?? null,
+                'audio' => $detailAudioPath,
+                'is_free_detail' => isset($detail['is_free_detail']) ? (bool)$detail['is_free_detail'] : false,
+            ]);
         }
+
+        return redirect()->back()->with('success', 'Detail buku berhasil diperbarui');
+    } catch (\Throwable $th) {
+        return redirect()->back()->withErrors($th->getMessage());
     }
+}
+
 
     public function editTagsBuku($id)
 {
@@ -336,7 +406,7 @@ public function editDetailBuku($id)
 
     public function show($id){
         try {
-            $buku = Buku::with('coverBuku')->findOrFail($id);
+            $buku = Buku::findOrFail($id);
         //return response()->json(['buku' => $buku]);
         return view('sewa_buku.admin.buku.show_buku', ['buku' => $buku]);
         } catch (\Throwable $th) {

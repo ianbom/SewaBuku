@@ -133,7 +133,10 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Hapus Quiz</button>
                             </form>
+                            <a href="{{ route('admin.detailBuku.edit', $quiz->detailBuku->id_buku) }}" class="btn btn-warning"> Kembali</a>
                         </div>
+
+
                     </div>
                 </div>
             </div>

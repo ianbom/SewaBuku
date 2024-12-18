@@ -1,4 +1,4 @@
-@extends('sewa_buku.layouts.app')
+@extends('sewa_buku.layouts.userApp')
 
 @section('title')
     Detail Bab

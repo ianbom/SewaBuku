@@ -16,7 +16,7 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('detail_buku.show', $detailBuku->id_detail_buku) }}">Detail Buku</a></li>
+                        {{-- <li class="breadcrumb-item"><a href="{{ route('detail_buku.show', $detailBuku->id_detail_buku) }}">Detail Buku</a></li> --}}
                         <li class="breadcrumb-item active" aria-current="page">Buat Quiz</li>
                     </ol>
                 </nav>
@@ -56,7 +56,7 @@
 
                             <!-- Submit Button -->
                             <div class="text-end">
-                                <a href="{{ route('detail_buku.show', $detailBuku->id_detail_buku) }}" class="btn btn-secondary">Batal</a>
+                                <a href="{{ route('admin.detailBuku.edit', $detailBuku->id_buku) }}" class="btn btn-secondary">Batal</a>
                                 <button type="submit" class="btn btn-primary">Buat Quiz</button>
                             </div>
                         </form>

@@ -13,6 +13,12 @@ class Buku extends Model
     protected $primaryKey = 'id_buku';
     protected $table = 'buku';
 
+
+    public function detailBuku(){
+        return $this->hasMany(DetailBuku::class, 'id_buku', 'id_buku');
+    }
+
+
     public function userLangganan()
     {
         return $this->belongsToMany(User::class, 'langganan', 'id_buku', 'id')
@@ -32,9 +38,7 @@ class Buku extends Model
         return $this->hasMany(Favorite::class, 'id_buku', 'id_buku');
     }
 
-    public function detailBuku(){
-        return $this->hasMany(DetailBuku::class, 'id_buku', 'id_buku');
-    }
+
 
     public function tags(){
         return $this->belongsToMany(Tags::class, 'buku_tags', 'id_buku', 'id_tags');

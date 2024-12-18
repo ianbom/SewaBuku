@@ -28,7 +28,12 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.buku.index', absolute: false));
+        if (Auth::user()->is_admin === true) {
+            return redirect()->intended(route('admin.buku.index', absolute: false));
+        }else {
+            return redirect()->intended(route('user.buku.index', absolute: false));
+        }
+
     }
 
     /**

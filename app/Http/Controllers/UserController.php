@@ -25,25 +25,27 @@ class UserController extends Controller
 
     public function editProfileAdmin(){
         $userId = Auth::id();
-        $user = User::where('id', $userId)->first();
+        $user = User::findOrFail($userId);
 
-        return view('sewa_buku.admin.profile.edit_profile_admin');
+        return view('sewa_buku.admin.profile.edit_profile_admin', ['user' => $user]);
     }
 
     public function updateProfileAdmin(Request $request){
         $userId = Auth::id();
-        $user = User::find($userId);
+        $user = User::findOrFail($userId);
 
         $request->validate([
             'name' => 'required|string',
             'tanggal_lahir' => 'nullable|date',
             'no_hp' => 'nullable|string',
-            'password' => 'required|string'
+            'password' => 'required|string',
+            'email' => 'nullable|email',
         ]);
 
         $user->name = $request->name;
         $user->tanggal_lahir = $request->tanggal_lahir;
         $user->no_hp = $request->no_hp;
+        $user->email = $request->email;
         $user->password =  Hash::make($request->password);
 
         $user->save();

@@ -28,8 +28,7 @@ return new class extends Migration
                 $table->text('ringkasan_audio');
                 $table->boolean('is_free')->default(false);
                 $table->timestamps();
-                // $table->decimal('harga', 15, 2)->nullable();
-                 // $table->string('jumlah_halaman');
+            
             });
     }
 

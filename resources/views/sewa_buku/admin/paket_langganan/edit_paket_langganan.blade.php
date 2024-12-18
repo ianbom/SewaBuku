@@ -1,5 +1,4 @@
 @extends('sewa_buku.layouts.app')
-
 @section('title')
     Edit Paket Langganan
 @endsection

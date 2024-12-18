@@ -1,4 +1,4 @@
-@extends('sewa_buku.layouts.app')
+@extends('sewa_buku.layouts.userApp')
 
 @section('title')
     {{ $buku->judul_buku }}
@@ -14,7 +14,7 @@
             <ul class="space-y-2">
                 @foreach($buku->detailBuku as $detail)
                     <li>
-                        <a href="#bab-{{ $detail->id_detail_buku }}" 
+                        <a href="#bab-{{ $detail->id_detail_buku }}"
                            class="block text-blue-500 hover:text-blue-700 font-medium">
                             {{ $detail->bab }}
                         </a>
@@ -30,7 +30,7 @@
             @foreach($buku->detailBuku as $detail)
                 <!-- Bab Gratis atau Berlangganan -->
                 @if ($detail->is_free_detail || $checkLangganan)
-                    <div id="bab-{{ $detail->id_detail_buku }}" 
+                    <div id="bab-{{ $detail->id_detail_buku }}"
                          class="mb-8 p-6 bg-white shadow-md rounded-md">
                         <h3 class="text-2xl font-semibold mb-2">{{ $detail->bab }}</h3>
 

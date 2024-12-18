@@ -1,4 +1,4 @@
-@extends('sewa_buku.layouts.app')
+@extends('sewa_buku.layouts.userApp')
 
 @section('title')
     Langganan Anda
@@ -12,7 +12,7 @@
         <!-- Pesan jika tidak ada langganan -->
         <div class="text-center">
             <p class="text-lg text-gray-600">Anda belum memiliki paket langganan saat ini.</p>
-            <a href="{{ route('paket-langganan.index') }}" 
+            <a href="{{ route('paket-langganan.index') }}"
                class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
                 Lihat Paket Langganan
             </a>
@@ -38,18 +38,18 @@
 
                     <!-- Tanggal Langganan -->
                     <p class="text-gray-600 mb-1">
-                        <span class="font-semibold">Mulai Langganan:</span> 
+                        <span class="font-semibold">Mulai Langganan:</span>
                         {{ \Carbon\Carbon::parse($item->mulai_langganan)->format('d M Y') }}
                     </p>
                     <p class="text-gray-600 mb-4">
-                        <span class="font-semibold">Akhir Langganan:</span> 
+                        <span class="font-semibold">Akhir Langganan:</span>
                         {{ \Carbon\Carbon::parse($item->akhir_langganan)->format('d M Y') }}
                     </p>
 
                     <!-- Pesan Pembaruan -->
                     @if(\Carbon\Carbon::parse($item->akhir_langganan)->isPast())
                         <p class="text-red-600 font-semibold mb-4">Langganan Anda telah berakhir.</p>
-                        <a href="{{ route('paket-langganan.index') }}" 
+                        <a href="{{ route('paket-langganan.index') }}"
                            class="block bg-yellow-500 text-white text-center py-2 px-4 rounded hover:bg-yellow-600">
                             Perbarui Langganan
                         </a>

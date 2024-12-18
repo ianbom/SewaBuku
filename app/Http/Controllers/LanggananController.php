@@ -45,7 +45,7 @@ class LanggananController extends Controller
         ->where('is_read', true)
         ->latest('updated_at')
         ->first();
-
+        
     $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
 
         $quizStatus = [];
@@ -106,7 +106,7 @@ public function bacaBabBuku($id)
         $user = Auth::user();
         $detailBuku = DetailBuku::findOrFail($id);
 
-       
+
         Dibaca::where('id', $user->id)
             ->where('id_buku', $detailBuku->id_buku)
             ->update(['is_read' => false]);

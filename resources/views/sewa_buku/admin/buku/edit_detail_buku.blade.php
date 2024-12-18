@@ -1,13 +1,13 @@
-@extends('sewa_buku.layouts.app')
+    @extends('sewa_buku.layouts.app')
 
-@section('style')
-@endsection
+    @section('style')
+    @endsection
 
-@section('title')
-    Edit Detail Buku
-@endsection
+    @section('title')
+        Edit Detail Buku
+    @endsection
 
-@section('content')
+    @section('content')
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
@@ -46,12 +46,11 @@
                             </div>
                         @endif
 
-                        <!-- Form for Editing and Adding Book Details -->
                         <form action="{{ route('admin.updateBuku.edit', $buku->id_buku) }}" method="POST" enctype="multipart/form-data" id="detailBukuForm">
                             @csrf
                             @method('PUT')
 
-                            @foreach ($detailBuku as $key => $detail)
+                            @foreach ($detailWithQuiz->merge($detailNoQuiz) as $key => $detail)
                                 <div class="border p-4 mb-4 rounded detail-buku">
                                     <h5 class="text-primary">Detail {{ $key + 1 }}</h5>
 
@@ -72,27 +71,44 @@
                                             <div class="form-check mt-2">
                                                 <input type="checkbox" name="detail_buku[{{ $key }}][keep_existing_audio]" value="1" class="form-check-input" checked>
                                                 <label class="form-check-label">Pertahankan audio yang ada</label>
+                                                <audio controls >
+                                                    <source src="{{ asset('storage/' . $detail->audio) }}" type="audio/mpeg">
+                                                    Browser Anda tidak mendukung pemutar audio.
+                                                </audio>
                                                 <p class="text-muted small">Audio saat ini: {{ $detail->audio }}</p>
                                             </div>
                                         @endif
                                     </div>
 
                                     <div class="mb-3">
-                                        <a href="{{ route('quiz.create', $detail->id_detail_buku) }}" class="btn btn-primary btn-sm">Buat Quiz</a>
-                                        <a href="{{ route('quiz.show', $detail->id_detail_buku) }}" class="btn btn-success btn-sm">Lihat Quiz</a>
+                                        <label for="is_free_detail" class="form-label">Gratis?</label>
+                                        <select name="detail_buku[{{ $key }}][is_free_detail]" id="is_free_detail" class="form-select">
+                                            <option value="0" {{ old("detail_buku.$key.is_free_detail", $detail->is_free_detail) == 0 ? 'selected' : '' }}>Tidak</option>
+                                            <option value="1" {{ old("detail_buku.$key.is_free_detail", $detail->is_free_detail) == 1 ? 'selected' : '' }}>Ya</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        @if ($detailWithQuiz->contains($detail))
+                                            <a href="{{ route('quiz.show', $detail->id_detail_buku) }}" class="btn btn-success btn-sm">Lihat Quiz</a>
+                                        @else
+                                            <a href="{{ route('quiz.create', $detail->id_detail_buku) }}" class="btn btn-primary btn-sm">Buat Quiz</a>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
 
-                            <!-- New Details Section -->
                             <div id="newDetailsContainer"></div>
                             <button type="button" id="addDetailButton" class="btn btn-success mb-3">Tambah Detail Baru</button>
 
-                            <!-- Submit Button -->
                             <div class="text-end">
+                                <a href="{{ route('admin.buku.index') }}" class="btn btn-success"> Kembali</a>
                                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             </div>
                         </form>
+
+
+
 
                         <script>
                             document.getElementById('addDetailButton').addEventListener('click', function() {
@@ -114,8 +130,16 @@
                                             <label for="detail_buku[${index}][audio]" class="form-label">Audio</label>
                                             <input type="file" name="detail_buku[${index}][audio]" class="form-control" accept="audio/mp3">
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="detail_buku[${index}][is_free_detail]" class="form-label">Gratis?</label>
+                                            <select name="detail_buku[${index}][is_free_detail]" id="detail_buku[${index}][is_free_detail]" class="form-select">
+                                                <option value="0">Tidak</option>
+                                                <option value="1">Ya</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 `;
+
                                 container.insertAdjacentHTML('beforeend', newDetailHTML);
                             });
                         </script>

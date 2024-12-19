@@ -77,9 +77,9 @@ class QuizController extends Controller
                 $data['file'] = $path;
             }
 
-            Quiz::create($data);
+            $quiz = Quiz::create($data);
 
-            return response()->json(['data' => $data]);
+            return redirect()->route('admin.detailBuku.edit', $quiz->detailBuku->id_buku)->with('success', 'Quiz created successfully');
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);
         }

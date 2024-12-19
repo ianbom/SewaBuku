@@ -50,7 +50,7 @@
                             @csrf
                             @method('PUT')
 
-                            @foreach ($detailWithQuiz->merge($detailNoQuiz) as $key => $detail)
+                            @foreach ($detailWithQuiz as $key => $detail)
                                 <div class="border p-4 mb-4 rounded detail-buku">
                                     <h5 class="text-primary">Detail {{ $key + 1 }}</h5>
 
@@ -71,10 +71,53 @@
                                             <div class="form-check mt-2">
                                                 <input type="checkbox" name="detail_buku[{{ $key }}][keep_existing_audio]" value="1" class="form-check-input" checked>
                                                 <label class="form-check-label">Pertahankan audio yang ada</label>
-                                                <audio controls >
-                                                    <source src="{{ asset('storage/' . $detail->audio) }}" type="audio/mpeg">
-                                                    Browser Anda tidak mendukung pemutar audio.
-                                                </audio>
+                                                <p class="text-muted small">Audio saat ini: {{ $detail->audio }}</p>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="is_free_detail" class="form-label">Gratis?</label>
+                                        <select name="detail_buku[{{ $key }}][is_free_detail]" id="is_free_detail" class="form-select">
+                                            <option value="0" {{ old("detail_buku.$key.is_free_detail", $detail->is_free_detail) == 0 ? 'selected' : '' }}>Tidak</option>
+                                            <option value="1" {{ old("detail_buku.$key.is_free_detail", $detail->is_free_detail) == 1 ? 'selected' : '' }}>Ya</option>
+                                        </select>
+                                    </div>
+
+                                    @if ($detail && $detail->bab && $detail->isi)
+                                        <div class="mb-3">
+                                            @if ($detailWithQuiz->contains($detail))
+                                                <a href="{{ route('quiz.show', $detail->id_detail_buku) }}" class="btn btn-success btn-sm">Lihat Quiz</a>
+                                            @else
+                                                <a href="{{ route('quiz.create', $detail->id_detail_buku) }}" class="btn btn-primary btn-sm">Buat Quiz</a>
+                                            @endif
+                                        </div>
+                                    @endif
+
+                                </div>
+                            @endforeach
+
+                            @foreach ($detailNoQuiz as $key => $detail)
+                                <div class="border p-4 mb-4 rounded detail-buku">
+                                    <h5 class="text-primary">Detail {{ $key + 1 }}</h5>
+
+                                    <div class="mb-3">
+                                        <label for="detail_buku[{{ $key }}][bab]" class="form-label">Bab</label>
+                                        <input type="text" name="detail_buku[{{ $key }}][bab]" class="form-control" value="{{ old("detail_buku.$key.bab", $detail->bab) }}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="detail_buku[{{ $key }}][isi]" class="form-label">Isi</label>
+                                        <textarea name="detail_buku[{{ $key }}][isi]" rows="3" class="form-control" required>{{ old("detail_buku.$key.isi", $detail->isi) }}</textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="detail_buku[{{ $key }}][audio]" class="form-label">Audio</label>
+                                        <input type="file" name="detail_buku[{{ $key }}][audio]" class="form-control" accept="audio/mp3">
+                                        @if ($detail->audio)
+                                            <div class="form-check mt-2">
+                                                <input type="checkbox" name="detail_buku[{{ $key }}][keep_existing_audio]" value="1" class="form-check-input" checked>
+                                                <label class="form-check-label">Pertahankan audio yang ada</label>
                                                 <p class="text-muted small">Audio saat ini: {{ $detail->audio }}</p>
                                             </div>
                                         @endif
@@ -89,12 +132,9 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        @if ($detailWithQuiz->contains($detail))
-                                            <a href="{{ route('quiz.show', $detail->id_detail_buku) }}" class="btn btn-success btn-sm">Lihat Quiz</a>
-                                        @else
                                             <a href="{{ route('quiz.create', $detail->id_detail_buku) }}" class="btn btn-primary btn-sm">Buat Quiz</a>
-                                        @endif
                                     </div>
+
                                 </div>
                             @endforeach
 

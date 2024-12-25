@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto mt-10 px-4">
+<div class="container mx-auto p-10" >
     <h1 class="text-3xl font-bold text-center mb-8">Buku Favorit Saya</h1>
 
     @if($favorite->isEmpty())

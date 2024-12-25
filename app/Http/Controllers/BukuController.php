@@ -57,7 +57,6 @@ class BukuController extends Controller
         $userId = Auth::id();
 
         $buku = Buku::with('coverBuku', 'tags', 'rating')->findOrFail($id);
-
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
         $rating = Rating::where('id_buku', $buku->id_buku)->get();

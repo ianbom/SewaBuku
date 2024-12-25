@@ -56,7 +56,7 @@ class BukuController extends Controller
     public function detailBukuUser($id) {
         $userId = Auth::id();
 
-        $buku = Buku::with('coverBuku', 'tags', 'order.rating')->findOrFail($id);
+        $buku = Buku::with('coverBuku', 'tags', 'rating')->findOrFail($id);
 
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
@@ -305,26 +305,26 @@ class BukuController extends Controller
     public function editDetailBuku($id)
     {
         $buku = Buku::with('detailBuku.quiz')->findOrFail($id);
-    
+
         $detailBuku = DetailBuku::where('id_buku', $buku->id_buku)->get();
-    
+
         if ($detailBuku->isEmpty()) {
             $detailBuku = collect([new DetailBuku(['id_buku' => $buku->id_buku])]);
         }
-    
+
         $quiz = Quiz::all();
         $quizDetailIds = $quiz->pluck('id_detail_buku');
-    
-    
+
+
         $detailWithQuiz = DetailBuku::where('id_buku', $buku->id_buku)
             ->whereIn('id_detail_buku', $quizDetailIds)
             ->get();
-    
+
         $detailNoQuiz = DetailBuku::where('id_buku', $buku->id_buku)
             ->whereNotIn('id_detail_buku', $quizDetailIds)
             ->get();
-    
-    
+
+
         return view('sewa_buku.admin.buku.edit_detail_buku', [
             'detailBuku' => $detailBuku,
             'buku' => $buku,

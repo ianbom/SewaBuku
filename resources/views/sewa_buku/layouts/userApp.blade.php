@@ -20,11 +20,7 @@
         @include('sewa_buku.layouts.header')
 
 
-        <div class="main-content">
-            <main>
-                @yield('content')
-            </main>
-        </div>
+      
     </body>
 
 </html>

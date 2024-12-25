@@ -88,7 +88,9 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="flex-1 p-6">
-        @yield('content')
-    </div>
+<div class="flex-1" style="background-image: url('{{ asset('images/bg.png') }}'); background-size: cover; background-position: center; background-color: white;">
+
+    @yield('content')
+</div>
+
 </div>

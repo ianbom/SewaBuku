@@ -2,7 +2,7 @@
 
 
 @section('content')
-<div class="container mx-auto mt-10">
+<div class="container mx-auto m-10" >
     <h1 class="text-3xl font-bold text-center mb-8">Daftar Buku</h1>
 
     <!-- Filter dan Search -->

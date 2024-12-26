@@ -28,7 +28,7 @@ class BukuController extends Controller
         $userId = Auth::id();
 
         $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
-
+        $tags = Tags::all();
 
         $buku = Buku::with('coverBuku')
         ->withCount(['rating as ratingRerata' => function ($query) {
@@ -49,7 +49,7 @@ class BukuController extends Controller
             }
         }
 
-        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites, 'checkLangganan' => $checkLangganan]);
+        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites, 'checkLangganan' => $checkLangganan, 'tags' => $tags]);
     }
 
 

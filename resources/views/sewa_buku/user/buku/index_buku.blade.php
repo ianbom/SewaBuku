@@ -1,94 +1,90 @@
 @extends('sewa_buku.layouts.userApp')
 
-
 @section('content')
-<div class="container mx-auto p-10" >
-    <h1 class="text-3xl font-bold text-center mb-8">Daftar Buku</h1>
+<div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold text-blue-900 mb-8">Explore</h1>
 
-    <!-- Filter dan Search -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-        <!-- Filter and Sort Buttons -->
-        <div class="flex space-x-4 mb-4 md:mb-0">
-            <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">Filter</button>
-            <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">Sort</button>
-        </div>
-
-        <!-- Search Bar -->
-        <div class="w-full md:w-1/3">
-            <form action="{{ route('judulBuku.search') }}" method="GET" class="flex items-center">
-                <input type="text" name="query" placeholder="Cari judul buku..."
-                       class="w-full border rounded-l p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">Cari</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Grid untuk Daftar Buku -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @foreach($buku as $book)
-        <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
-            <!-- Cover Buku -->
-            @if($book->coverBuku && $book->coverBuku->first())
-                <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Cover Buku" class="w-full h-48 object-cover">
-            @else
-                <img src="https://via.placeholder.com/150" alt="Cover Placeholder" class="w-full h-48 object-cover">
-            @endif
-
-            <!-- Informasi Buku -->
-            <div class="p-4">
-                <h3 class="text-xl font-semibold mb-2">{{ $book->judul_buku }}</h3>
-                <p class="text-gray-600 mb-4">{{ Str::limit($book->sinopsis, 80) }}</p>
-
-                <!-- Rating -->
-                <div class="mb-4">
-                    <span class="text-black font-semibold">Rating:</span>
-                    <div class="inline-block ml-2">
-                        @if($book->ratingRerata > 0)
-                            @for($i = 1; $i <= 5; $i++)
-                                @if($i <= floor($book->ratingRerata))
-                                    <i class="fas fa-star text-yellow-500"></i>
-                                @elseif($i - $book->ratingRerata < 1)
-                                    <i class="fas fa-star-half-alt text-yellow-500"></i>
-                                @else
-                                    <i class="far fa-star text-yellow-500"></i>
-                                @endif
-                            @endfor
-                        @else
-                            <span class="text-gray-500">Belum ada rating</span>
-                        @endif
+    <!-- Last Pick Up Section -->
+    <div class="mb-10">
+        <h2 class="text-lg font-semibold mb-4">Last Pick Up</h2>
+        {{-- <div class="bg-blue-50 rounded-lg p-4">
+             <div class="flex items-center space-x-4">
+                @if($lastBook && $lastBook->coverBuku->first())
+                    <img src="{{ asset('storage/' . $lastBook->coverBuku->first()->file_image) }}"
+                         alt="Last Book"
+                         class="w-24 h-32 object-cover rounded-lg shadow">
+                @endif
+                <div>
+                    <h3 class="font-medium">{{ $lastBook->judul_buku ?? 'No book found' }}</h3>
+                    <p class="text-gray-600">{{ $lastBook->penulis ?? '' }}</p>
+                    <!-- Audio Player -->
+                    <div class="mt-4 bg-white rounded-full h-10 flex items-center px-4 w-64">
+                        <div class="flex-1 bg-blue-500 h-1 rounded-full"></div>
+                        <button class="ml-4 text-blue-500">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-
-                <!-- Tombol Detail -->
-                <div class="mb-4">
-                    <a href="{{ route('user.buku.show', $book->id_buku) }}"
-                       class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Detail</a>
-                </div>
-
-                <!-- Akses Buku -->
-                @if ($book->is_free || $checkLangganan)
-                    <a href="{{ route('user.buku.baca', $book->id_buku) }}"
-                       class="block bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 text-center">Baca Buku</a>
-                @else
-                    <span class="block bg-gray-400 text-white py-2 px-4 rounded text-center">Langganan untuk membaca</span>
-                @endif
-
-                <!-- Tombol Favorite -->
-                <form action="{{ route('user.favorite.store', $book->id_buku) }}" method="POST" class="mt-2">
-                    @csrf
-                    @if(in_array($book->id_buku, $favorites))
-                        <button disabled class="w-full bg-red-500 text-white py-2 px-4 rounded">
-                            <i class="fas fa-heart"></i> Favorited
-                        </button>
-                    @else
-                        <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-                            <i class="far fa-heart"></i> Add to Favorite
-                        </button>
-                    @endif
-                </form>
             </div>
-        </div>
-        @endforeach
+        </div> --}}
     </div>
+
+    <!-- Book Recommendations -->
+    <div class="mb-10">
+        <h2 class="text-lg font-semibold mb-4">Book Recommendation</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            @foreach($buku as $book)
+                <div class="bg-white rounded-lg overflow-hidden flex flex-col">
+                    @if($book->coverBuku && $book->coverBuku->first())
+                        <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}"
+                             alt="{{ $book->judul_buku }}"
+                             class="w-full aspect-[9/16] object-cover rounded-xl">
+                    @endif
+                    <div class="p-3 flex-1 flex flex-col justify-between">
+                        <h3 class="font-medium text-sm">{{ $book->judul_buku }}</h3>
+                        <p class="text-gray-600 text-xs">{{ $book->penulis }}</p>
+                        <!-- Duration and Rating -->
+                        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+                            <span class="flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                56 Min
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-3 h-3 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                                {{ number_format($book->ratingRerata, 1) }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+
+
+    <!-- Categories -->
+    <div>
+        <h2 class="text-lg font-semibold mb-4">Personal Growth and Career Development</h2>
+        <div class="flex flex-wrap gap-4">
+            @foreach ($tags as $tag)
+                @php
+
+                    $colors = ['purple', 'green', 'red', 'blue', 'orange', 'yellow', 'violet'];
+
+                    $color = $colors[array_rand($colors)];
+                @endphp
+                <span class="px-4 py-2 bg-{{ $color }}-100 text-{{ $color }}-700 rounded-full">
+                    {{ $tag->nama_tags }}
+                </span>
+            @endforeach
+        </div>
+    </div>
+
 </div>
 @endsection

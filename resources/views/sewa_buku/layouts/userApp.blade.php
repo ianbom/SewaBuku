@@ -19,8 +19,6 @@
 
         @include('sewa_buku.layouts.header')
 
-
-      
     </body>
 
 </html>

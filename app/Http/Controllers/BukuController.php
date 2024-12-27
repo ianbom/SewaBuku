@@ -27,30 +27,50 @@ class BukuController extends Controller
     public function indexBukuUser() {
         $userId = Auth::id();
 
+        // Periksa status langganan
         $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
-        $tags = Tags::all();
 
-        $buku = Buku::with('coverBuku')
-        ->withCount(['rating as ratingRerata' => function ($query) {
-            $query->select(DB::raw('coalesce(avg(rating), 0)'));
-        }])
-        ->get();
+        // Ambil parent dan child tags
+        $parentTags = Tags::where('id_child', null)->get();
+        $childTags = Tags::whereNotNull('id_child')->get();
+
+        // Ambil data buku beserta total waktu audio
+        $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
+            ->withCount(['rating as ratingRerata' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->withCount(['detailBuku as totalWaktu' => function ($query) {
+                $query->select(DB::raw('coalesce(sum(audio))'));
+            }])
+            ->get();
+
+        // return response()->json(['buku' => $buku]);
 
         // Ambil data favorit buku untuk user
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
         foreach ($buku as $b) {
-            if ($b->is_free || $checkLangganan) {
+            // Periksa apakah buku dapat dibaca
+            $b->can_read = $b->is_free || $checkLangganan ? true : false;
 
-                $b->can_read = true;
-            } else {
+            // Format total waktu audio menjadi jam, menit, dan detik
+            $totalSeconds = $b->totalWaktu;
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            $seconds = $totalSeconds % 60;
 
-                $b->can_read = false;
-            }
+            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
         }
 
-        return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites, 'checkLangganan' => $checkLangganan, 'tags' => $tags]);
+        return view('sewa_buku.user.buku.index_buku', [
+            'buku' => $buku,
+            'favorites' => $favorites,
+            'checkLangganan' => $checkLangganan,
+            'parentTags' => $parentTags,
+            'childTags' => $childTags
+        ]);
     }
+
 
 
     public function detailBukuUser($id) {
@@ -459,8 +479,45 @@ public function updateDetailBuku(Request $request, $id)
         return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites]);
     }
 
-    public function indexBukuUserSearch(Request $request){
+    public function searchBukuIndex(){
+        $userId = Auth::id();
 
+        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+        $tags = Tags::all();
+
+        $buku = Buku::with('coverBuku')
+        ->withCount(['rating as ratingRerata' => function ($query) {
+            $query->select(DB::raw('coalesce(avg(rating), 0)'));
+        }])
+        ->get();
+
+        // Ambil data favorit buku untuk user
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+
+        foreach ($buku as $b) {
+            if ($b->is_free || $checkLangganan) {
+
+                $b->can_read = true;
+            } else {
+
+                $b->can_read = false;
+            }
+        }
+
+        return view('sewa_buku.user.buku.search_buku', ['buku' => $buku, 'favorites' => $favorites, 'checkLangganan' => $checkLangganan, 'tags' => $tags]);
+    }
+
+    public function searchBuku(Request $request)
+    {
+        $search = $request->input('search');
+
+        $buku = Buku::where('judul_buku', 'like', "%$search%")
+                    ->orWhere('penulis', 'like', "%$search%")
+                    ->get();
+
+        $html = view('sewa_buku.user.buku.grid_search_buku', compact('buku'))->render();
+
+        return response()->json(['html' => $html]);
     }
 
 }

@@ -23,8 +23,9 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="{{ route('user.buku.index') }}"
-                           class="flex items-center px-4 py-2 rounded hover:bg-gray-100">
+                        <a href="{{ route('user.buku.search') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                        {{ Route::currentRouteName() == 'user.buku.search' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
                             <i class="fas fa-search text-blue-500 mr-3"></i>
                             <span class="text-gray-700">Search</span>
                         </a>

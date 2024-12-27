@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Buku>
@@ -14,8 +15,13 @@ class BukuFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+
     public function definition(): array
     {
+        $audioFiles = Storage::disk('public')->files('voice/teaser');
+        $randomAudio = $audioFiles ? $audioFiles[array_rand($audioFiles)] : null;
+
         return [
             'judul_buku' => $this->faker->sentence(3),
             'penulis' => $this->faker->name(),
@@ -25,9 +31,9 @@ class BukuFactory extends Factory
             'tahun_terbit' => $this->faker->year(),
             'rating_amazon' => $this->faker->numberBetween(1,5),
             'link_pembelian' => $this->faker->sentence(),
-            'teaser_audio' => $this->faker->fileExtension(), // Bisa diubah sesuai logika
+            'teaser_audio' => $randomAudio,
             'sinopsis' => $this->faker->paragraph(5),
-            'ringkasan_audio' => $this->faker->paragraph(5)
+            'ringkasan_audio' => $randomAudio
         ];
     }
 }

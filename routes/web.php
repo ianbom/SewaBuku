@@ -83,7 +83,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/search/buku', [BukuController::class, 'searchBuku'])->name('buku.search');
+
 Route::group(['prefix' => 'user'], function () {
     Route::group(['prefix' => 'buku'], function () {
         Route::get('/index', [BukuController::class, 'indexBukuUser'])->name('user.buku.index');
@@ -94,6 +94,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('/quiz/{id}', [QuizController::class, 'kerjakanQuiz'])->name('user.quiz.kerjakan');
         Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
         Route::get('/search', [BukuController::class, 'searchBukuIndex'])->name('user.buku.search');
+        Route::get('/search/buku', [BukuController::class, 'searchBuku'])->name('buku.search');
 
     });
 
@@ -103,6 +104,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
         Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');
         Route::put('/batal/{id}', [OrderController::class, 'batalkanOrder'])->name('user.order.batal');
+        Route::get('/search', [OrderController::class, 'searchOrder'])->name('user.order.search');
     });
 
     Route::group(['prefix' => 'langganan'], function () {

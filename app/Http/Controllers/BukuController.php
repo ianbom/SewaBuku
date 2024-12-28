@@ -42,12 +42,11 @@ class BukuController extends Controller
 
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
-        $getID3 = new getID3(); // Inisialisasi library getID3
+        $getID3 = new getID3();
 
         foreach ($buku as $b) {
             $totalSeconds = 0;
 
-            // Hitung total durasi audio dari detailBuku
             foreach ($b->detailBuku as $detail) {
                 if ($detail->audio) {
                     $filePath = storage_path('app/public/' . $detail->audio);
@@ -86,7 +85,22 @@ class BukuController extends Controller
     public function detailBukuUser($id) {
         $userId = Auth::id();
 
-        $buku = Buku::with('coverBuku', 'tags', 'rating')->findOrFail($id);
+        $buku = Buku::with('detailBuku', 'detailBuku.quiz')
+        ->withCount(['detailBuku as jumlahChapter' => function ($query) {
+            $query->select(DB::raw('coalesce(count(id_detail_buku))'));
+        }])
+        ->findOrFail($id);
+
+        $jumlahQuiz = Quiz::whereIn('id_detail_buku', function ($query) use ($buku) {
+            $query->select('id_detail_buku')
+                ->from('detail_buku')
+                ->where('id_buku', $buku->id_buku);
+        })
+        ->count();
+
+      
+
+
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
         $rating = Rating::where('id_buku', $buku->id_buku)->get();
@@ -101,7 +115,30 @@ class BukuController extends Controller
 
         $averageRating = $rating->isNotEmpty() ? $rating->avg('rating') : null;
 
-        //return response()->json(['data' => $ratings]);
+        $getID3 = new getID3();
+
+        $totalSeconds = 0;
+
+
+        foreach ($buku->detailBuku as $detail) {
+            if ($detail->audio) {
+                $filePath = storage_path('app/public/' . $detail->audio);
+                if (file_exists($filePath)) {
+                    $audioInfo = $getID3->analyze($filePath);
+                    if (isset($audioInfo['playtime_seconds'])) {
+                        $totalSeconds += $audioInfo['playtime_seconds'];
+                    }
+                }
+            }
+        }
+
+        // Simpan total waktu dalam format jam, menit, detik
+        $hours = floor($totalSeconds / 3600);
+        $minutes = floor(($totalSeconds % 3600) / 60);
+        $seconds = $totalSeconds % 60;
+
+        $buku->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        $buku->totalWaktu = $totalSeconds;
 
         return view('sewa_buku.user.buku.detail_buku', [
             'buku' => $buku,
@@ -109,7 +146,8 @@ class BukuController extends Controller
             'averageRating' => $averageRating,
             'ratingCheck' => $ratingCheck,
             'rating' => $rating,
-            'checkLanggananAktif' => $checkLanggananAktif
+            'checkLanggananAktif' => $checkLanggananAktif,
+            'jumlahQuiz' => $jumlahQuiz
         ]);
     }
 

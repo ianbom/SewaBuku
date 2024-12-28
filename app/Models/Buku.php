@@ -51,4 +51,10 @@ class Buku extends Model
     public function dibaca(){
         return $this->hasMany(DetailBuku::class, 'id_buku', 'id_buku');
     }
+
+    public function quizzes()
+{
+    return $this->hasManyThrough(Quiz::class, DetailBuku::class, 'id_buku', 'id_detail_buku', 'id_buku', 'id_detail_buku');
+}
+
 }

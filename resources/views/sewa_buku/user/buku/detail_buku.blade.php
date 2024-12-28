@@ -33,7 +33,7 @@
                         <div class="grid grid-cols-3 gap-4 mb-6">
                             <div class="text-center p-3 bg-gray-50 rounded-lg">
                                 <span class="block text-sm text-gray-500">Reading Time</span>
-                                <span class="block text-lg font-semibold">56 Min</span>
+                                <span class="block text-lg font-semibold"> {{ floor($buku->totalWaktu / 60) }} Min</span>
                             </div>
                             <div class="text-center p-3 bg-gray-50 rounded-lg">
                                 <span class="block text-sm text-gray-500">Rating</span>
@@ -41,16 +41,24 @@
                             </div>
                             <div class="text-center p-3 bg-gray-50 rounded-lg">
                                 <span class="block text-sm text-gray-500">Chapters</span>
-                                <span class="block text-lg font-semibold">3</span>
+                                <span class="block text-lg font-semibold">{{ $buku->jumlahChapter }} </span>
+                            </div>
+                            <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                <span class="block text-sm text-gray-500">Quiz</span>
+                                <span class="block text-lg font-semibold">{{ $jumlahQuiz }}</span>
                             </div>
                         </div>
 
                         <hr class="border-t border-black my-4">
                         <!-- Actions -->
                         <div class="flex gap-4 mb-6">
-                            <button class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700">
-                                Read & Play
-                            </button>
+                            @if ($buku->is_free || $checkLanggananAktif)
+                            <a href="{{ route('user.buku.baca', $buku->id_buku) }}"
+                               class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700">Baca Buku</a>
+                        @else
+                            <span class="block bg-gray-400 text-white py-2 px-4 rounded text-center">Langganan untuk membaca</span>
+                        @endif
+
                             <form
                             action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}"
                             method="POST"

@@ -95,6 +95,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
         Route::get('/search', [BukuController::class, 'searchBukuIndex'])->name('user.buku.search');
         Route::get('/search/buku', [BukuController::class, 'searchBuku'])->name('buku.search');
+        Route::post('/markFinished/{id}', [LanggananController::class, 'tandaiBabDiselesaikan'])->name('user.mark.finished');
+        Route::delete('/deleteMarkFinished/{id}', [LanggananController::class, 'hapusTandaBabDiselesaikan'])->name('user.delete.finished');
 
     });
 

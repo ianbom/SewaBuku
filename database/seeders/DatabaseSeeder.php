@@ -23,7 +23,10 @@ class DatabaseSeeder extends Seeder
             CoverBukuSeeder::class,
             RatingSeeder::class,
             TagsSeeder::class,
-            PaketSeeder::class
+            PaketSeeder::class,
+            QuizSeeder::class,
+            SoalSeeder::class,
+            OpsiSeeder::class
 
         ]);
     }

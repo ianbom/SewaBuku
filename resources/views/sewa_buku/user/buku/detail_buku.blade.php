@@ -53,7 +53,7 @@
                         <!-- Actions -->
                         <div class="flex gap-4 mb-6">
                             @if ($buku->is_free || $checkLanggananAktif)
-                            <a href="{{ route('user.buku.baca', $buku->id_buku) }}"
+                            <a href="{{ route('user.buku.bacaBab', $buku->detailBuku->first()->id_detail_buku) }}"
                                class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700">Baca Buku</a>
                         @else
                             <span class="block bg-gray-400 text-white py-2 px-4 rounded text-center">Langganan untuk membaca</span>

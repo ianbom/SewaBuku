@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_diselesaikan');
             $table->foreignId('id')->constrained('users', 'id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('id_buku')->constrained('buku', 'id_buku')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('id_detail_buku')->constrained('detail_buku', 'id_detail_buku')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('id_detail_buku')->nullable()->constrained('detail_buku', 'id_detail_buku')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('is_finished')->default(false);
             $table->timestamps();
         });

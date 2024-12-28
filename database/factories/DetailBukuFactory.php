@@ -18,9 +18,9 @@ class DetailBukuFactory extends Factory
         $randomAudio = $audioFiles ? $audioFiles[array_rand($audioFiles)] : null;
 
         return [
-            'id_buku' => $this->faker->numberBetween(1, 20), 
+            'id_buku' => $this->faker->numberBetween(1, 10),
             'bab' => $this->faker->sentence(3),
-            'isi' => $this->faker->sentence(),
+            'isi' => $this->faker->sentence(50),
             'audio' => $randomAudio
         ];
     }

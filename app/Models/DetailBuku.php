@@ -25,4 +25,8 @@ class DetailBuku extends Model
     public function dibaca(){
         return $this->hasMany(Dibaca::class, 'id_detail_buku', 'id_detail_buku');
     }
+
+     public function diselesaikan(){
+        return $this->hasMany(Diselesaikan::class, 'id_detail_buku', 'id_detail_buku');
+    }
 }

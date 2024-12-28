@@ -98,8 +98,6 @@ class BukuController extends Controller
         })
         ->count();
 
-      
-
 
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 

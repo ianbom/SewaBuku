@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\View\Composers\SidebarChapter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('sewa_buku.layouts.sidebar_chapter', SidebarChapter::class);
     }
 }

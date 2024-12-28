@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\DetailBuku;
 use App\Models\Dibaca;
+use App\Models\Diselesaikan;
 use App\Models\Jawaban;
 use App\Models\Langganan;
 use App\Models\Quiz;
@@ -45,7 +46,9 @@ class LanggananController extends Controller
         ->where('is_read', true)
         ->latest('updated_at')
         ->first();
-        
+
+        $diselesaikan = Diselesaikan::where('id', $userId)->pluck('id_detail_buku')->toArray();
+
     $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
 
         $quizStatus = [];
@@ -93,6 +96,8 @@ class LanggananController extends Controller
             'quizScores' => $quizScores,
             'checkLangganan' => $checkLangganan,
             'babTerakhirDibaca' => $babTerakhirDibaca,
+            'diselesaikan' => $diselesaikan,
+            'idBuku' => $buku->id_buku,
         ]);
 
     } catch (\Throwable $th) {
@@ -106,11 +111,10 @@ public function bacaBabBuku($id)
         $user = Auth::user();
         $detailBuku = DetailBuku::findOrFail($id);
 
-
+        // Tandai semua bab buku ini sebagai tidak terbaca
         Dibaca::where('id', $user->id)
             ->where('id_buku', $detailBuku->id_buku)
             ->update(['is_read' => false]);
-
 
         $dibaca = Dibaca::where('id', $user->id)
             ->where('id_detail_buku', $detailBuku->id_detail_buku)
@@ -118,11 +122,9 @@ public function bacaBabBuku($id)
             ->first();
 
         if ($dibaca) {
-
             $dibaca->is_read = true;
             $dibaca->save();
         } else {
-
             Dibaca::create([
                 'id' => $user->id,
                 'id_detail_buku' => $detailBuku->id_detail_buku,
@@ -131,13 +133,48 @@ public function bacaBabBuku($id)
             ]);
         }
 
+        return view('sewa_buku.user.buku.baca_bab_buku', [
+            'detailBuku' => $detailBuku,
+            'idBuku' => $detailBuku->id_buku,
 
-        return view('sewa_buku.user.buku.baca_bab_buku', ['detailBuku' => $detailBuku]);
+        ]);
     } catch (\Throwable $th) {
-
         return response()->json(['err' => $th->getMessage()]);
     }
 }
+
+
+    public function tandaiBabDiselesaikan($id){
+        $userId = Auth::id();
+
+        $detailBuku = DetailBuku::findOrFail($id);
+        $buku = Buku::where('id_buku', $detailBuku->id_buku)->first();
+
+
+            Diselesaikan::create([
+                'id' => $userId,
+                'id_buku' => $buku->id_buku,
+                'id_detail' => $detailBuku->id_detail_buku,
+                'is_finished' => true
+            ]);
+
+        return redirect()->back()->with('success', 'Chapter mark as finished');
+    }
+
+    public function hapusTandaBabDiselesaikan($id){
+        $userId = Auth::id();
+
+        $detailBuku = DetailBuku::findOrFail($id);
+        $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+        $diselesaikanCheck->delete();
+
+
+        return redirect()->back()->with('success', 'Chapter mark as unfinished');
+    }
+
+
+
+
 
 
 }

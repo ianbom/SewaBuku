@@ -1,93 +1,113 @@
-@extends('sewa_buku.layouts.userApp')
+@extends('sewa_buku.layouts.userBacaBuku')
 
 @section('title')
     {{ $buku->judul_buku }}
 @endsection
 
 @section('content')
-<div class="container mx-auto py-10 px-4">
-    <div class="flex flex-col md:flex-row">
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row gap-8">
 
-        <!-- Sidebar untuk Daftar Bab -->
-        <div class="w-full md:w-1/4 bg-gray-100 p-4 rounded-md shadow-md">
-            <h2 class="text-xl font-semibold mb-4">Daftar Bab</h2>
-            <ul class="space-y-2">
-                @foreach($buku->detailBuku as $detail)
-                    <li>
-                        <a href="#bab-{{ $detail->id_detail_buku }}"
-                           class="block text-blue-500 hover:text-blue-700 font-medium">
-                            {{ $detail->bab }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
+            <!-- Main Content -->
+            <div class="w-full md:w-3/4">
+                <div class="bg-white rounded-xl p-8 shadow-md">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">{{ $buku->judul_buku }}</h1>
 
-        <!-- Konten Buku -->
-        <div class="w-full md:w-3/4 md:ml-8 mt-6 md:mt-0">
-            <h1 class="text-3xl font-bold mb-6">{{ $buku->judul_buku }}</h1>
+                    <!-- Current Chapter Title -->
+                    @foreach($buku->detailBuku as $detail)
+                        @if ($detail->is_free_detail || $checkLangganan)
+                            <div id="bab-{{ $detail->id_detail_buku }}" class="mb-12">
+                                <div class="flex items-center gap-4 mb-6">
+                                    <h2 class="text-2xl font-bold text-gray-800">{{ $detail->bab }}</h2>
+                                    @if ($detail->id_detail_buku == $babTerakhirDibaca)
+                                        <span class="px-3 py-1 bg-green-100 text-green-600 text-sm rounded-full">Last Read</span>
+                                    @endif
+                                </div>
 
-            @foreach($buku->detailBuku as $detail)
-                <!-- Bab Gratis atau Berlangganan -->
-                @if ($detail->is_free_detail || $checkLangganan)
-                    <div id="bab-{{ $detail->id_detail_buku }}"
-                         class="mb-8 p-6 bg-white shadow-md rounded-md">
-                        <h3 class="text-2xl font-semibold mb-2">{{ $detail->bab }}</h3>
+                                <!-- Audio Player -->
+                                @if($detail->audio)
+                                    <div class="mb-8 bg-gray-50 p-4 rounded-xl">
+                                        <div class="w-full bg-white rounded-lg p-4 shadow-sm">
+                                            <audio controls class="w-full">
+                                                <source src="{{ Storage::url($detail->audio) }}" type="audio/mpeg">
+                                            </audio>
+                                        </div>
+                                    </div>
+                                @endif
 
-                        @if ($detail->id_detail_buku == $babTerakhirDibaca)
-                            <span class="text-sm text-green-500">(Terakhir Dibaca)</span>
-                        @endif
+                                <!-- Chapter Content -->
+                                <div class="prose max-w-none">
+                                    <p class="text-gray-600 leading-relaxed mb-6">
+                                        {{ $detail->isi }}
+                                    </p>
+                                </div>
 
-                        <!-- Tombol Baca -->
-                        <a href="{{ route('user.buku.bacaBab', $detail->id_detail_buku) }}"
-                           class="inline-block bg-gray-700 text-white rounded px-4 py-2 hover:bg-gray-600 mt-3">
-                            Baca Bab {{ $detail->bab }}
-                        </a>
+                                <!-- Action Buttons -->
+                                <div class="flex flex-wrap gap-4 mt-8">
+                                    <a href="{{ route('user.buku.bacaBab', $detail->id_detail_buku) }}"
+                                       class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                        Read Chapter
+                                    </a>
 
-                        <!-- Tombol Quiz -->
-                        @if ($detail->quiz->first())
-                            @if (!$quizStatus[$detail->id_detail_buku])
-                                <a href="{{ route('user.quiz.kerjakan', $detail->id_detail_buku) }}"
-                                   class="inline-block bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 mt-3">
-                                    Kerjakan Soal
-                                </a>
-                            @else
-                                <a href="{{ route('user.quiz.kerjakan', $detail->id_detail_buku) }}"
-                                   class="inline-block bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 mt-3">
-                                    Kerjakan Lagi
-                                </a>
-                                <p class="text-gray-700 mt-2">
-                                    Nilai Anda: <strong>{{ $quizScores[$detail->id_detail_buku] }}</strong>
-                                </p>
-                            @endif
+                                    @if ($detail->quiz)
+                                        @if (!$quizStatus[$detail->id_detail_buku])
+                                            <a href="{{ route('user.quiz.kerjakan', $detail->id_detail_buku) }}"
+                                               class="inline-flex items-center px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+                                                Take Quiz
+                                            </a>
+                                        @else
+                                            <div class="flex flex-col">
+                                                <a href="{{ route('user.quiz.kerjakan', $detail->id_detail_buku) }}"
+                                                   class="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                                                    Retake Quiz
+                                                </a>
+                                                <span class="text-sm text-gray-600 mt-2">
+                                                    Your Score: {{ $quizScores[$detail->id_detail_buku] }}
+                                                </span>
+                                            </div>
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
                         @else
-                            <p class="text-red-500 mt-2">Tidak ada quiz untuk bab ini.</p>
-                        @endif
-
-                        <!-- Isi Bab -->
-                        <p class="text-gray-700 leading-relaxed mt-4">
-                            {{ $detail->isi }}
-                        </p>
-
-                        <!-- Audio Bab -->
-                        @if($detail->audio)
-                            <div class="mt-4">
-                                <h4 class="text-lg font-semibold">Dengarkan Audio Bab</h4>
-                                <audio controls class="w-full mt-2">
-                                    <source src="{{ Storage::url($detail->audio) }}" type="audio/mpeg">
-                                    Browser Anda tidak mendukung pemutar audio.
-                                </audio>
+                            <div class="bg-gray-50 rounded-xl p-8 text-center mb-8">
+                                <span class="text-gray-500">
+                                    Subscribe to read this chapter
+                                </span>
                             </div>
                         @endif
-                    </div>
-                @else
-                    <div class="mb-8 p-6 bg-gray-200 text-center rounded-md">
-                        <span class="text-red-500 font-medium">
-                            Langganan diperlukan untuk membaca bab ini.
-                        </span>
-                    </div>
-                @endif
-            @endforeach
+                    @endforeach
+
+                    <!-- Chapter Navigation -->
+                    @if($checkLangganan)
+                        <div class="flex justify-between items-center mt-12 pt-6 border-t">
+                            <form
+                                action="{{ in_array($buku->id_detail_buku, $diselesaikan) ? route('user.delete.finished', $buku->id_buku) : route('user.mark.finished', $buku->id_buku) }}"
+                                method="POST"
+                                class="mt-2 w-full flex justify-between gap-4">
+                                @csrf
+
+                                @if(in_array($buku->id_buku, $diselesaikan))
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full flex items-center justify-center gap-2">
+                                        <i class="fas fa-trash-alt"></i> Batalkan Tanda Selesai
+                                    </button>
+                                @else
+                                    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-full flex items-center justify-center gap-2">
+                                        <i class="far fa-check-circle"></i> Tandai Selesai
+                                    </button>
+                                @endif
+                            </form>
+
+                            <button class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                Lanjutkan Membaca
+                            </button>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

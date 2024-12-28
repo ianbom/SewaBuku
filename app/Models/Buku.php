@@ -49,7 +49,11 @@ class Buku extends Model
     }
 
     public function dibaca(){
-        return $this->hasMany(DetailBuku::class, 'id_buku', 'id_buku');
+        return $this->hasMany(Dibaca::class, 'id_buku', 'id_buku');
+    }
+
+    public function diselesaikan(){
+        return $this->hasMany(Diselesaikan::class, 'id_buku', 'id_buku');
     }
 
     public function quizzes()

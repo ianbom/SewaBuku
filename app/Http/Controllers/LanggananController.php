@@ -49,7 +49,7 @@ class LanggananController extends Controller
 
         $diselesaikan = Diselesaikan::where('id', $userId)->pluck('id_detail_buku')->toArray();
 
-    $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
+        $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
 
         $quizStatus = [];
         $quizScores = [];
@@ -111,7 +111,6 @@ public function bacaBabBuku($id)
         $user = Auth::user();
         $detailBuku = DetailBuku::findOrFail($id);
 
-        // Tandai semua bab buku ini sebagai tidak terbaca
         Dibaca::where('id', $user->id)
             ->where('id_buku', $detailBuku->id_buku)
             ->update(['is_read' => false]);
@@ -133,15 +132,44 @@ public function bacaBabBuku($id)
             ]);
         }
 
+        
+
+
+        $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+        $quizStatus = null;
+        $quizScore = null;
+
+        if ($quiz) {
+            $isAttempted = Jawaban::where('id_quiz', $quiz->id_quiz)
+                ->where('id', $user->id)
+                ->exists();
+
+            if ($isAttempted) {
+                $totalSoal = Soal::where('id_quiz', $quiz->id_quiz)->count();
+                $benar = Jawaban::where('id_quiz', $quiz->id_quiz)
+                    ->where('id', $user->id)
+                    ->where('is_correct', true)
+                    ->count();
+                $quizScore = "{$benar}/{$totalSoal}";
+            } else {
+                $quizStatus = 'Quiz belum dikerjakan';
+            }
+        } else {
+            $quizStatus = 'Quiz belum tersedia';
+        }
+
         return view('sewa_buku.user.buku.baca_bab_buku', [
             'detailBuku' => $detailBuku,
+            'quiz' => $quiz,
+            'quizStatus' => $quizStatus,
+            'quizScore' => $quizScore,
             'idBuku' => $detailBuku->id_buku,
-
         ]);
     } catch (\Throwable $th) {
         return response()->json(['err' => $th->getMessage()]);
     }
 }
+
 
 
     public function tandaiBabDiselesaikan($id){

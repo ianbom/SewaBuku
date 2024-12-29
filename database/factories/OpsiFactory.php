@@ -17,7 +17,7 @@ class OpsiFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_soal' => $this->faker->numberBetween(1, 100),
+            'id_soal' => $this->faker->numberBetween(1, 200),
             'opsi' => $this->faker->sentence(5),
             'is_correct' => $this->faker->numberBetween(0,1),
         ];

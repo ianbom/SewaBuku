@@ -19,6 +19,12 @@
                             <a href="{{ route('user.buku.bacaBab', $detail->id_detail_buku) }}"
                                class="flex items-center px-4 py-2 rounded hover:bg-gray-100">
                                 <span class="text-gray-700">{{ $detail->bab }}</span>
+
+                                @if ($detail->dibaca && $detail->dibaca->first() && $detail->dibaca->first()->is_read)
+                                <p>Terakhir dibaca</p>
+                            @endif
+
+
                             </a>
                             <hr class=" border-t-1 border-[#1E90FF]">
                         </li>

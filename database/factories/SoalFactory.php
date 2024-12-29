@@ -17,7 +17,7 @@ class SoalFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_quiz' => $this->faker->numberBetween(1, 100),
+            'id_quiz' => $this->faker->numberBetween(1, 20),
             'soal' => $this->faker->sentence(7),
         ];
     }

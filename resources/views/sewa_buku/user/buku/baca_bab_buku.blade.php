@@ -18,6 +18,7 @@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Isi Bab</h2>
                 <p class="text-gray-600 leading-relaxed">{{ $detailBuku->isi ?? 'Isi tidak tersedia.' }}</p>
+                <button class="bg-blue-500 rounded-md p-1 text-white"> Mark as finished</button>
             </div>
 
             <!-- Audio Bab -->
@@ -33,10 +34,27 @@
                 @endif
             </div>
 
-            <div>
-                <h2> QQuiz</h2>
-
+            <div class="mb-8">
+                @if ($quiz)
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Quiz</h2>
+                    <h3 class="text-lg font-medium text-black mb-4">{{ $quiz->nama_quiz }}</h3>
+                    @if ($quizScore)
+                        <p class="text-green-600 font-bold mb-4">Nilai Anda: {{ $quizScore }}</p>
+                    @else
+                        <p class="text-yellow-500 font-bold mb-4">{{ $quizStatus }}</p>
+                    @endif
+                    <a href="{{ route('user.quiz.kerjakan', $detailBuku->id_detail_buku) }}" class="bg-green-500 rounded-md p-2 text-white">
+                        @if ($quizScore)
+                            Kerjakan Ulang Quiz
+                        @else
+                            Kerjakan Quiz
+                        @endif
+                    </a>
+                @else
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Tidak ada quiz</h2>
+                @endif
             </div>
+
 
             <!-- Tombol Navigasi -->
             <div class="flex justify-between items-center mt-8 pt-6 border-t">

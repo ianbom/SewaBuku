@@ -13,6 +13,6 @@ class QuizSeeder extends Seeder
      */
     public function run(): void
     {
-        Quiz::factory()->count(100)->create();
+        Quiz::factory()->count(20)->create();
     }
 }

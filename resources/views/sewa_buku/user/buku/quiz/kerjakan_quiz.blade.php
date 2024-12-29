@@ -1,85 +1,67 @@
-@extends('sewa_buku.layouts.userApp')
+@extends('sewa_buku.layouts.userBacaBuku')
 
 @section('title')
-    Kerjakan Quiz
+    'Kerjakan Quiz'
 @endsection
 
 @section('content')
-<div class="page-heading">
-    <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Kerjakan Quiz</h3>
-                <p class="text-subtitle text-muted">Jawab pertanyaan untuk quiz ini.</p>
-            </div>
-            <div class="col-12 col-md-6 order-md-2 order-first">
-                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('quiz.index') }}">Quiz</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Kerjakan Quiz</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+<div class="container mx-auto px-6 py-8">
+    <!-- Quiz Title -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-blue-900">Quiz: {{ $quiz->nama_quiz }}</h1>
+        <p class="text-gray-600 italic mt-2">{{ $quiz->deskripsi }}</p>
     </div>
 
-    <section class="section">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <!-- Informasi Quiz -->
-                        <h4 class="card-title mb-4">Informasi Quiz</h4>
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <h6>Nama Quiz:</h6>
-                                <p>{{ $quiz->nama_quiz }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6>Deskripsi Quiz:</h6>
-                                <p>{{ $quiz->deskripsi }}</p>
-                            </div>
-                        </div>
+    <!-- Quiz Content -->
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <form action="{{ route('user.quiz.submit', $quiz->id_quiz) }}" method="POST">
+            @csrf
 
-                        <!-- Daftar Soal -->
-                        <form action="{{ route('user.quiz.submit', $quiz->id_quiz) }}" method="POST">
-                            @csrf
-                            <h4 class="card-title mb-4">Daftar Soal</h4>
-                            @foreach ($soal as $key => $item)
-                                <div class="mb-4">
-                                    <h5>Soal {{ $key + 1 }}</h5>
-                                    <p>{{ $item->soal }}</p>
-                                    @if ($item->image)
-                                        <img src="{{ asset('storage/' . $item->image) }}" alt="Gambar Soal" class="img-thumbnail mb-3" style="max-width: 200px;">
-                                    @endif
+            <!-- Question Section -->
+            @foreach ($soal as $key => $item)
+                <div class="p-8 border-b border-gray-200">
+                    <!-- Question -->
+                    <p class="text-xl font-semibold text-gray-800 mb-6">
+                        {{ $key + 1 }}. {{ $item->pertanyaan }}
+                    </p>
 
-                                    <!-- Opsi -->
-                                    <div>
-                                        @foreach ($item->opsi as $opsi)
-                                            <div class="form-check mb-2">
-                                                <input type="radio" name="jawaban[{{ $item->id_soal }}]" value="{{ $opsi->id_opsi }}" id="opsi-{{ $opsi->id_opsi }}" class="form-check-input" required>
-                                                <label for="opsi-{{ $opsi->id_opsi }}" class="form-check-label">
-                                                    {{ $opsi->opsi }}
-                                                    @if ($opsi->image)
-                                                        <img src="{{ asset('storage/' . $opsi->image) }}" alt="Gambar Opsi" class="img-thumbnail mt-2" style="max-width: 100px;">
-                                                    @endif
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endforeach
+                    <!-- Options -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach ($item->opsi as $opsi)
+                            <label class="flex items-center p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors group">
+                                <input
+                                    type="radio"
+                                    name="jawaban[{{ $item->id_soal }}]"
+                                    value="{{ $opsi->id_opsi }}"
+                                    class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                    required
+                                >
+                                <span class="ml-4 text-gray-700 group-hover:text-gray-900">{{ $opsi->opsi }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
 
-                            <!-- Tombol Submit -->
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary">Submit Quiz</button>
-                            </div>
-                        </form>
+            <!-- Submit Section -->
+            <div class="p-8 bg-blue-50 flex justify-between items-center">
+                <button type="submit" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+                    SUBMIT
+                </button>
+
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl font-bold text-gray-800">1</span>
+                        <span class="text-gray-500">True</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl font-bold text-gray-800">0</span>
+                        <span class="text-gray-500">False</span>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </form>
+    </div>
 </div>
 @endsection
+

@@ -3,6 +3,7 @@
 namespace App\Http\View\Composers;
 
 use App\Models\Buku;
+use App\Models\Dibaca;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,13 +17,15 @@ class SidebarChapter
      */
     public function compose(View $view)
     {
-        // Ambil ID dari view data (jika dikirim oleh controller ke view)
+        $userId = Auth::id();
+
         $idBuku = $view->getData()['idBuku'] ?? null;
 
-        // Jika ID tersedia, ambil buku dari database
         $buku = $idBuku ? Buku::findOrFail($idBuku) : null;
 
-        // Bagikan data ke view
+        $dibaca = Dibaca::where('id', $userId)->get();
+
         $view->with('buku', $buku);
+        $view->with('dibaca', $dibaca);
     }
 }

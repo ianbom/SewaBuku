@@ -17,7 +17,7 @@ class QuizFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_detail_buku' => $this->faker->unique()->numberBetween(1, 100),
+            'id_detail_buku' => $this->faker->unique()->numberBetween(1, 20),
             'nama_quiz' => $this->faker->sentence(5),
             'deskripsi' => $this->faker->sentence(20),
         ];

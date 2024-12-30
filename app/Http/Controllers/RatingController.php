@@ -40,7 +40,8 @@ class RatingController extends Controller
                     'komentar' => $request->komentar,
                 ]);
 
-                return redirect()->back(['success', 'Rating berhasil disimpan.']);
+                return redirect()->back()->with('success', 'Rating berhasil disimpan.');
+
             } else {
                 return response()->json(['error', 'Anda perlu memiliki langganan aktif untuk memberikan rating.']);
             }

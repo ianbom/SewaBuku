@@ -132,7 +132,9 @@ public function bacaBabBuku($id)
             ]);
         }
 
-        
+        $diselesaikanCheck = Diselesaikan::where('id_buku', $detailBuku->id_buku)->where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+        // return response()->json(['status' => $diselesaikanCheck]);
+
 
 
         $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
@@ -164,6 +166,7 @@ public function bacaBabBuku($id)
             'quizStatus' => $quizStatus,
             'quizScore' => $quizScore,
             'idBuku' => $detailBuku->id_buku,
+            'diselesaikanCheck' => $diselesaikanCheck,
         ]);
     } catch (\Throwable $th) {
         return response()->json(['err' => $th->getMessage()]);
@@ -178,11 +181,10 @@ public function bacaBabBuku($id)
         $detailBuku = DetailBuku::findOrFail($id);
         $buku = Buku::where('id_buku', $detailBuku->id_buku)->first();
 
-
             Diselesaikan::create([
                 'id' => $userId,
                 'id_buku' => $buku->id_buku,
-                'id_detail' => $detailBuku->id_detail_buku,
+                'id_detail_buku' => $detailBuku->id_detail_buku,
                 'is_finished' => true
             ]);
 
@@ -200,6 +202,31 @@ public function bacaBabBuku($id)
         return redirect()->back()->with('success', 'Chapter mark as unfinished');
     }
 
+    public function tandaiBukuDiselesaikan($id){
+        $userId = Auth::id();
+
+        $buku = Buku::findOrFail($id);
+
+            Diselesaikan::create([
+                'id' => $userId,
+                'id_buku' => $buku->id_buku,
+                'id_detail_buku' => null,
+                'is_finished' => true
+            ]);
+
+        return redirect()->back()->with('success', 'Book mark as finished');
+    }
+
+    public function hapusTandaBukuDiselesaikan($id){
+        $userId = Auth::id();
+
+        $buku = Buku::findOrFail($id);
+        $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
+        $diselesaikanCheck->delete();
+
+
+        return redirect()->back()->with('success', 'Book mark as unfinished');
+    }
 
 
 

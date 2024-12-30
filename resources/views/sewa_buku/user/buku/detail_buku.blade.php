@@ -59,6 +59,19 @@
                             <span class="block bg-gray-400 text-white py-2 px-4 rounded text-center">Langganan untuk membaca</span>
                         @endif
 
+                        @if ($diselesaikanCheck)
+                        <form action="{{ route('user.delete.bookFinished', $buku->id_buku) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-500 rounded-md p-1 text-white"> Delete mark</button>
+                        </form>
+                        @else
+                        <form action="{{ route('user.mark.bookFinished', $buku->id_buku) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="bg-blue-500 rounded-md p-1 text-white"> Mark as finished</button>
+                        </form>
+                        @endif
+
                             <form
                             action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}"
                             method="POST"

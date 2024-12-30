@@ -6,6 +6,8 @@ use App\Models\Buku;
 use App\Models\BukuTags;
 use App\Models\CoverBuku;
 use App\Models\DetailBuku;
+use App\Models\Dibaca;
+use App\Models\Diselesaikan;
 use App\Models\Favorite;
 use App\Models\Langganan;
 use App\Models\Quiz;
@@ -69,6 +71,11 @@ class BukuController extends Controller
 
             // Tentukan apakah buku dapat dibaca
             $b->can_read = $b->is_free || $checkLangganan ? true : false;
+
+            $terakhirDibaca = Dibaca::where('id', $userId)
+                                        ->orderBy('updated_at', 'desc')
+                                        ->first();
+
         }
 
         return view('sewa_buku.user.buku.index_buku', [
@@ -76,7 +83,8 @@ class BukuController extends Controller
             'favorites' => $favorites,
             'checkLangganan' => $checkLangganan,
             'parentTags' => $parentTags,
-            'childTags' => $childTags
+            'childTags' => $childTags,
+            'terakhirDibaca' => $terakhirDibaca
         ]);
     }
 
@@ -138,6 +146,8 @@ class BukuController extends Controller
         $buku->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
         $buku->totalWaktu = $totalSeconds;
 
+        $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
+
         return view('sewa_buku.user.buku.detail_buku', [
             'buku' => $buku,
             'favorites' => $favorites,
@@ -145,7 +155,8 @@ class BukuController extends Controller
             'ratingCheck' => $ratingCheck,
             'rating' => $rating,
             'checkLanggananAktif' => $checkLanggananAktif,
-            'jumlahQuiz' => $jumlahQuiz
+            'jumlahQuiz' => $jumlahQuiz,
+            'diselesaikanCheck' => $diselesaikanCheck
         ]);
     }
 
@@ -592,6 +603,115 @@ public function updateDetailBuku(Request $request, $id)
         $html = view('sewa_buku.user.buku.grid_search_buku', compact('buku'))->render();
 
         return response()->json(['html' => $html]);
+    }
+
+    public function myCollection(){
+        $userId = Auth::id();
+
+        // Periksa status langganan
+        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+
+
+
+
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+
+        $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
+        ->withCount(['rating as ratingRerata' => function ($query) {
+            $query->select(DB::raw('coalesce(avg(rating), 0)'));
+        }])
+        ->whereIn('id_buku', $favorites)
+        ->get();
+
+
+
+        $getID3 = new getID3();
+
+        foreach ($buku as $b) {
+            $totalSeconds = 0;
+
+            foreach ($b->detailBuku as $detail) {
+                if ($detail->audio) {
+                    $filePath = storage_path('app/public/' . $detail->audio);
+                    if (file_exists($filePath)) {
+                        $audioInfo = $getID3->analyze($filePath);
+                        if (isset($audioInfo['playtime_seconds'])) {
+                            $totalSeconds += $audioInfo['playtime_seconds'];
+                        }
+                    }
+                }
+            }
+
+            // Simpan total waktu dalam format jam, menit, detik
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            $seconds = $totalSeconds % 60;
+
+            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+            $b->totalWaktu = $totalSeconds;
+
+            // Tentukan apakah buku dapat dibaca
+            $b->can_read = $b->is_free || $checkLangganan ? true : false;
+
+        }
+
+        $diselesaikan = Diselesaikan::where('id', $userId)->pluck('id_buku');
+
+        $bukuDiselesaikan = Buku::with('coverBuku', 'rating', 'detailBuku')
+        ->withCount(['rating as ratingRerata' => function ($query) {
+            $query->select(DB::raw('coalesce(avg(rating), 0)'));
+        }])
+        ->whereIn('id_buku', $diselesaikan)
+        ->get();
+
+
+
+        $getID3 = new getID3();
+
+        foreach ($bukuDiselesaikan as $b) {
+            $totalSeconds = 0;
+
+            foreach ($b->detailBuku as $detail) {
+                if ($detail->audio) {
+                    $filePath = storage_path('app/public/' . $detail->audio);
+                    if (file_exists($filePath)) {
+                        $audioInfo = $getID3->analyze($filePath);
+                        if (isset($audioInfo['playtime_seconds'])) {
+                            $totalSeconds += $audioInfo['playtime_seconds'];
+                        }
+                    }
+                }
+            }
+
+            // Simpan total waktu dalam format jam, menit, detik
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            $seconds = $totalSeconds % 60;
+
+            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+            $b->totalWaktu = $totalSeconds;
+
+            // Tentukan apakah buku dapat dibaca
+            $b->can_read = $b->is_free || $checkLangganan ? true : false;
+
+        }
+
+
+        $terakhirDibaca = Dibaca::where('id', $userId)
+                                        ->orderBy('updated_at', 'desc')
+                                        ->first();
+
+        // return response()->json(['disimpan' => $disimpan]);
+
+        return view('sewa_buku.user.buku.my_collection.index_collection', [
+            'terakhirDibaca' => $terakhirDibaca,
+            'buku' => $buku,
+            'favorites' => $favorites,
+            'checkLangganan' => $checkLangganan,
+            'bukuDiselesaikan' => $bukuDiselesaikan
+
+
+        ]);
     }
 
 }

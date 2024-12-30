@@ -76,12 +76,15 @@
             <hr style="margin-top:30px; margin-bottom:30px; height: 1px; background-color: #1E90FF;">
 
             <div>
-                <img src="{{ asset('images/library.png') }}" class="w-24 h-24 mb-2">
+                <a href="{{ route('user.myCollection') }}">
+                    <img src="{{ asset('images/library.png') }}" class="w-24 h-24 mb-2">
+                </a>
+
 
                 <a href="{{ route('user.favorite.index') }}"
                    class="flex flex-col
                    {{ Route::currentRouteName() == 'user.favorite.index' ? 'text-[#052D6E] font-semibold' : 'text-gray-700' }}">
-                    <span class="text-sm">MY COLLECTION</span>
+                    <span class="text-sm">My Favorite</span>
                 </a>
             </div>
 

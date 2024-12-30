@@ -5,7 +5,7 @@
     <aside class="w-64 bg-white shadow-md flex flex-col">
         <!-- Logo -->
         <div class="py-4">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-32 h-auto ml-2"> <!-- Logo aligned to the left -->
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-32 h-auto ml-2">
         </div>
 
 
@@ -23,12 +23,12 @@
                                 @if ($detail->dibaca && $detail->dibaca->first() && $detail->dibaca->first()->is_read)
                                 <p>Terakhir dibaca</p>
                             @endif
-
-
                             </a>
                             <hr class=" border-t-1 border-[#1E90FF]">
+
                         </li>
                     @endforeach
+                    <a href="{{ route('user.buku.show', $detail->id_buku) }}" class="bg-blue-200 rounded-md p-2 mt-4"> Back</a>
                 </ul>
             </div>
 

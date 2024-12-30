@@ -18,7 +18,20 @@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Isi Bab</h2>
                 <p class="text-gray-600 leading-relaxed">{{ $detailBuku->isi ?? 'Isi tidak tersedia.' }}</p>
-                <button class="bg-blue-500 rounded-md p-1 text-white"> Mark as finished</button>
+                @if ($diselesaikanCheck)
+                <form action="{{ route('user.delete.finished', $detailBuku->id_detail_buku) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="bg-red-500 rounded-md p-1 text-white"> Delete mark</button>
+                </form>
+                @else
+                <form action="{{ route('user.mark.finished', $detailBuku->id_detail_buku) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="bg-blue-500 rounded-md p-1 text-white"> Mark as finished</button>
+                </form>
+                @endif
+
+
             </div>
 
             <!-- Audio Bab -->

@@ -416,46 +416,59 @@ class BukuController extends Controller
 
 
 
-public function updateDetailBuku(Request $request, $id)
-{
-    try {
-        $request->validate([
-            'detail_buku.*.bab' => 'nullable|string|max:255',
-            'detail_buku.*.isi' => 'nullable|string',
-            'detail_buku.*.audio' => 'nullable|file|mimes:mp3',
-            'detail_buku.*.is_free_detail' => 'nullable|boolean',
-            'detail_buku.*.keep_existing_audio' => 'nullable|boolean',
-        ]);
+    public function updateDetailBuku(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'detail_buku.*.bab' => 'nullable|string|max:255',
+                'detail_buku.*.isi' => 'nullable|string',
+                'detail_buku.*.audio' => 'nullable|file|mimes:mp3',
+                'detail_buku.*.is_free_detail' => 'nullable|boolean',
+                'detail_buku.*.keep_existing_audio' => 'nullable|boolean',
+            ]);
 
-        $buku = Buku::findOrFail($id);
+            $buku = Buku::findOrFail($id);
 
-        // Hapus detail buku lama
-        $buku->detailBuku()->delete();
+            foreach ($request->input('detail_buku') as $key => $detail) {
+                $detailAudioPath = null;
 
-        // Tambahkan detail buku baru
-        foreach ($request->input('detail_buku') as $key => $detail) {
-            $detailAudioPath = null;
+                // Cek apakah ini adalah update untuk detail yang sudah ada
+                $existingDetail = DetailBuku::where('id_buku', $buku->id_buku)
+                                          ->where('bab', $detail['bab'])
+                                          ->first();
 
-            if ($request->hasFile("detail_buku.$key.audio")) {
-                $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
-            } elseif (isset($detail['keep_existing_audio']) && $detail['keep_existing_audio'] && isset($detail['existing_audio'])) {
-                $detailAudioPath = $detail['existing_audio'];
+                // Jika ada file audio baru
+                if ($request->hasFile("detail_buku.$key.audio")) {
+                    // Hapus file audio lama jika ada
+                    if ($existingDetail && $existingDetail->audio) {
+                        Storage::disk('public')->delete($existingDetail->audio);
+                    }
+                    $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
+                }
+                // Jika tidak ada file baru dan checkbox keep_existing_audio dicentang
+                elseif (isset($detail['keep_existing_audio']) && $detail['keep_existing_audio'] && $existingDetail) {
+                    $detailAudioPath = $existingDetail->audio;
+                }
+
+                // Update atau create detail buku
+                DetailBuku::updateOrCreate(
+                    [
+                        'id_buku' => $buku->id_buku,
+                        'bab' => $detail['bab']
+                    ],
+                    [
+                        'isi' => $detail['isi'] ?? null,
+                        'audio' => $detailAudioPath,
+                        'is_free_detail' => isset($detail['is_free_detail']) ? (bool)$detail['is_free_detail'] : false,
+                    ]
+                );
             }
 
-            DetailBuku::create([
-                'id_buku' => $buku->id_buku,
-                'bab' => $detail['bab'] ?? null,
-                'isi' => $detail['isi'] ?? null,
-                'audio' => $detailAudioPath,
-                'is_free_detail' => isset($detail['is_free_detail']) ? (bool)$detail['is_free_detail'] : false,
-            ]);
+            return redirect()->back()->with('success', 'Detail buku berhasil diperbarui');
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors($th->getMessage());
         }
-
-        return redirect()->back()->with('success', 'Detail buku berhasil diperbarui');
-    } catch (\Throwable $th) {
-        return redirect()->back()->withErrors($th->getMessage());
     }
-}
 
 
     public function editTagsBuku($id)

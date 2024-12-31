@@ -72,6 +72,7 @@
                                                 <input type="checkbox" name="detail_buku[{{ $key }}][keep_existing_audio]" value="1" class="form-check-input" checked>
                                                 <label class="form-check-label">Pertahankan audio yang ada</label>
                                                 <p class="text-muted small">Audio saat ini: {{ $detail->audio }}</p>
+                                                <input type="hidden" name="detail_buku[{{ $key }}][existing_audio]" value="{{ $detail->audio }}">
                                             </div>
                                         @endif
                                     </div>

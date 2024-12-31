@@ -1,9 +1,11 @@
 @forelse($buku as $book)
     <div class="bg-white rounded-lg overflow-hidden flex flex-col">
         @if($book->coverBuku && $book->coverBuku->first())
+        <a href="{{ route('user.buku.show', $book->id_buku) }}">
             <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}"
                  alt="{{ $book->judul_buku }}"
                  class="w-full aspect-[9/16] object-cover rounded-xl">
+        </a>
         @endif
         <div class="p-3 flex-1 flex flex-col justify-between">
             <h3 class="font-medium text-sm">{{ $book->judul_buku }}</h3>

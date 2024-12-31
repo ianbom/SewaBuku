@@ -112,6 +112,15 @@
             </div>
             @endif
 
+            {{-- Highlight --}}
+            <div class="mb-6 mx-4">
+                <h1 class="text-xl font-semibold mb-3 text-red-800">Your Highlight</h1>
+               @forelse ($highlight as $highlight)
+               <h3 class="text-gray-600">{{ $highlight->highlight }}</h3>
+               @empty
+                <p>Anda tidak memiliki highlight</p>
+               @endforelse
+            </div>
 
             <!-- Reviews Section -->
             @if($rating)

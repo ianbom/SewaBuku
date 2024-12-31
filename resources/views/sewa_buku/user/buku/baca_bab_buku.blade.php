@@ -78,4 +78,113 @@
         </div>
     </div>
 </div>
+
+        <style>
+            .hidden {
+            display: none;
+        }
+
+        #custom-context-menu {
+            min-width: 150px;
+        }
+
+        </style>
+        <div id="custom-context-menu" class="hidden absolute bg-white shadow-lg border rounded-md z-50">
+            <ul>
+                <li id="copy-text" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Copy</li>
+                <li id="highlight-text" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Highlight</li>
+            </ul>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+    const isiBab = document.querySelector('p.text-gray-600');
+    const contextMenu = document.getElementById('custom-context-menu');
+    let selectedText = ''; // Untuk menyimpan teks yang diseleksi
+
+    // Fungsi untuk menampilkan menu konteks
+    function showContextMenu(e) {
+        e.preventDefault();
+
+        // Dapatkan teks yang diseleksi
+        selectedText = window.getSelection().toString().trim();
+
+        // Hanya tampilkan menu jika ada teks yang diseleksi
+        if (selectedText) {
+            contextMenu.style.top = `${e.pageY}px`;
+            contextMenu.style.left = `${e.pageX}px`;
+            contextMenu.classList.remove('hidden');
+        }
+    }
+
+    // Fungsi untuk menyembunyikan menu konteks
+    function hideContextMenu() {
+        contextMenu.classList.add('hidden');
+    }
+
+    // Event Listener untuk klik kanan pada teks
+    isiBab.addEventListener('contextmenu', showContextMenu);
+
+    // Event Listener untuk klik di luar menu konteks
+    document.addEventListener('click', (e) => {
+        if (!contextMenu.contains(e.target)) {
+            hideContextMenu();
+        }
+    });
+
+    // Fungsi untuk menyalin teks ke clipboard
+    document.getElementById('copy-text').addEventListener('click', function () {
+        navigator.clipboard.writeText(selectedText).then(() => {
+            alert('Teks berhasil disalin!');
+        });
+        hideContextMenu();
+    });
+
+    // Fungsi untuk menandai teks sebagai highlight
+    document.getElementById('highlight-text').addEventListener('click', function () {
+        const idBuku = '{{ $detailBuku->id_buku }}';
+        const idDetailBuku = '{{ $detailBuku->id_detail_buku }}';
+
+        fetch('{{ route('user.highlight.text') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                highlight: selectedText,
+                id_buku: idBuku,
+                id_detail_buku: idDetailBuku
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.highlight) {
+                // Buat span baru dengan background kuning untuk highlight
+                const span = document.createElement('span');
+                span.textContent = selectedText;
+                span.style.backgroundColor = 'yellow';
+
+                // Ganti teks yang diseleksi dengan span yang di-highlight
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(span);
+
+                alert('Teks berhasil di-highlight!');
+            } else {
+                alert('Gagal menandai teks.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menandai teks.');
+        });
+
+        hideContextMenu();
+    });
+});
+        </script>
+
+
 @endsection

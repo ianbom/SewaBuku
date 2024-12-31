@@ -6,6 +6,7 @@ use App\Models\Buku;
 use App\Models\DetailBuku;
 use App\Models\Dibaca;
 use App\Models\Diselesaikan;
+use App\Models\Highlight;
 use App\Models\Jawaban;
 use App\Models\Langganan;
 use App\Models\Quiz;
@@ -226,6 +227,23 @@ public function bacaBabBuku($id)
 
 
         return redirect()->back()->with('success', 'Book mark as unfinished');
+    }
+
+
+    public function highlightText(Request $request){
+        $userId = Auth::id();
+
+        $highlight = Highlight::create([
+            'id' => $userId,
+            'id_buku' => $request->id_buku,
+            'id_detail_buku' => $request->id_detail_buku,
+            'highlight' => $request->highlight
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'highlight' => $highlight
+        ]);
     }
 
 

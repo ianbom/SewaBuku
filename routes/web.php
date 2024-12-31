@@ -100,6 +100,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('/markBookFinished/{id}', [LanggananController::class, 'tandaiBukuDiselesaikan'])->name('user.mark.bookFinished');
         Route::delete('/deleteMarkBookFinished/{id}', [LanggananController::class, 'hapusTandaBukuDiselesaikan'])->name('user.delete.bookFinished');
         Route::get('/collection', [BukuController::class, 'myCollection'])->name('user.myCollection');
+        Route::post('/highlight-text', [LanggananController::class, 'highlightText'])->name('user.highlight.text');
+
     });
 
     Route::group(['prefix' => 'order'], function () {

@@ -9,6 +9,7 @@ use App\Models\DetailBuku;
 use App\Models\Dibaca;
 use App\Models\Diselesaikan;
 use App\Models\Favorite;
+use App\Models\Highlight;
 use App\Models\Langganan;
 use App\Models\Quiz;
 use App\Models\Rating;
@@ -148,6 +149,8 @@ class BukuController extends Controller
 
         $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
 
+        $highlight = Highlight::where('id', $userId)->where('id_buku', $buku->id_buku)->get();
+
         return view('sewa_buku.user.buku.detail_buku', [
             'buku' => $buku,
             'favorites' => $favorites,
@@ -156,7 +159,8 @@ class BukuController extends Controller
             'rating' => $rating,
             'checkLanggananAktif' => $checkLanggananAktif,
             'jumlahQuiz' => $jumlahQuiz,
-            'diselesaikanCheck' => $diselesaikanCheck
+            'diselesaikanCheck' => $diselesaikanCheck,
+            'highlight' => $highlight
         ]);
     }
 

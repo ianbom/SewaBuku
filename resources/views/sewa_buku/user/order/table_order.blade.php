@@ -1,3 +1,12 @@
+<head>
+    <style>
+        .pagination-info {
+    display: none;
+}
+
+    </style>
+</head>
+
 <table class="table table-striped bg-white w-full">
     <thead>
         <tr class="bg-[#1E90FF] text-white uppercase text-sm font-semibold">
@@ -27,8 +36,6 @@
             <td class="py-6 px-4">
                 {{ \Carbon\Carbon::parse($o->created_at)->translatedFormat('d F Y') }}
             </td>
-
-
             <!-- Aksi -->
             <td class="py-3 px-4">
                 <a href="{{ route('user.order.show', $o->id_order) }}"
@@ -38,14 +45,14 @@
             </td>
         </tr>
         @empty
-        <p>Kosong</p>
+        <tr>
+            <td colspan="6" class="py-6 text-center text-gray-500">Data tidak ditemukan.</td>
+        </tr>
         @endforelse
-
     </tbody>
 </table>
 
-
-<div class="mt-4">
-    {{ $order->links() }}
-</div>
-
+@if($order->isNotEmpty())
+    <div class="mt-4">
+    </div>
+@endif

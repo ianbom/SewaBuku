@@ -5,9 +5,7 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-xl shadow-lg p-8">
+<div class="container mx-auto mt-10 p-10">
             <!-- Header Bab -->
             <div class="text-center border-b pb-6 mb-6">
                 <h1 class="text-3xl font-bold text-gray-800"> {{ $detailBuku->buku->judul_buku ?? 'Judul Buku Tidak Tersedia' }}</h1>

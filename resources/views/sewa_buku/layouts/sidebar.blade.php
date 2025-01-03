@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
                     <a href="{{ route('dashboard') }}">
-                        <img src="{{ asset('images/white-kpspam.png') }}" alt="Logo" srcset="">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" srcset="">
                     </a>
                 </div>
             </div>

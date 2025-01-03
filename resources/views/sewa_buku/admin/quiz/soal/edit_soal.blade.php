@@ -59,16 +59,53 @@
                                 @enderror
                             </div>
 
+                            <!-- Input Opsi -->
+                            <div id="opsi-container">
+                                @foreach($soal->opsi as $index => $opsi)
+                                    <div class="mb-3 opsi-item">
+                                        <label for="opsi_{{ $index }}" class="form-label">Opsi {{ $index + 1 }}</label>
+                                        <input type="text" name="opsi[{{ $opsi->id_opsi }}]" id="opsi_{{ $index }}" value="{{ $opsi->opsi }}" class="form-control" required>
+                                        <input type="radio" name="is_correct" value="{{ $opsi->id_opsi }}" {{ $opsi->is_correct ? 'checked' : '' }}> Benar
+                                        <button type="button" class="btn btn-danger btn-sm remove-opsi">Hapus</button>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <button type="button" id="add-opsi" class="btn btn-success btn-sm">Tambah Opsi</button>
+
                             <!-- Tombol Submit -->
-                            <div class="text-end">
+                            <div class="text-end mt-4">
                                 <a href="{{ route('quiz.show', $soal->id_quiz) }}" class="btn btn-secondary">Batal</a>
                                 <button type="submit" class="btn btn-primary">Update Soal</button>
                             </div>
                         </form>
+
+
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+
+<script>
+    let opsiCount = {{ $soal->opsi->count() }};
+    document.getElementById('add-opsi').addEventListener('click', () => {
+        const container = document.getElementById('opsi-container');
+        const newOpsi = `
+            <div class="mb-3 opsi-item">
+                <label for="opsi_${opsiCount}" class="form-label">Opsi ${opsiCount + 1}</label>
+                <input type="text" name="opsi[new][${opsiCount}]" id="opsi_${opsiCount}" class="form-control" required>
+                <input type="radio" name="is_correct" value="new_${opsiCount}"> Benar
+                <button type="button" class="btn btn-danger btn-sm remove-opsi">Hapus</button>
+            </div>`;
+        container.insertAdjacentHTML('beforeend', newOpsi);
+        opsiCount++;
+
+        document.querySelectorAll('.remove-opsi').forEach(button => {
+            button.addEventListener('click', (e) => e.target.closest('.opsi-item').remove());
+        });
+    });
+</script>
 @endsection

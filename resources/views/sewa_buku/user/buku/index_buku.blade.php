@@ -20,11 +20,10 @@
                     <!-- Audio Player -->
                     <div class="mt-4 bg-white rounded-full h-10 flex items-center px-4 w-64">
                         <div class="flex-1 bg-blue-500 h-1 rounded-full"></div>
-                        <button class="ml-4 text-blue-500">
-                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-                            </svg>
-                        </button>
+                        <audio controls class="w-100">
+                            <source src="{{ asset('storage/' . $terakhirDibaca->buku->ringkasan_audio) }}" type="audio/mpeg">
+                            Browser Anda tidak mendukung pemutar audio.
+                        </audio>
                     </div>
                 </div>
             </div>
@@ -74,7 +73,7 @@
     <div>
         @foreach ($parentTags as $parentTags)
             @php
-                $colors = ['red', 'blue', 'green', 'yellow'];
+                $colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple'];
             @endphp
 
             <h2 class="text-lg font-semibold mb-4">{{ $parentTags->nama_tags }}</h2>

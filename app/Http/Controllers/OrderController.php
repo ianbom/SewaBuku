@@ -148,7 +148,7 @@ class OrderController extends Controller
             ->latest()
             ->paginate(5)
             ->appends(['search' => $search]);
-            
+
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('sewa_buku.user.order.table_order', compact('order'))->render()

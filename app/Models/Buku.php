@@ -13,8 +13,8 @@ class Buku extends Model
     protected $primaryKey = 'id_buku';
     protected $table = 'buku';
 
-
-    public function detailBuku(){
+    public function detailBuku()
+    {
         return $this->hasMany(DetailBuku::class, 'id_buku', 'id_buku');
     }
 
@@ -22,43 +22,47 @@ class Buku extends Model
     public function userLangganan()
     {
         return $this->belongsToMany(User::class, 'langganan', 'id_buku', 'id')
-                    ->withPivot('status_langganan', 'mulai_langganan', 'akhir_langganan')
-                    ->withTimestamps();
+            ->withPivot('status_langganan', 'mulai_langganan', 'akhir_langganan')
+            ->withTimestamps();
     }
 
-    public function coverBuku(){
+    public function coverBuku()
+    {
         return $this->hasMany(CoverBuku::class, 'id_buku', 'id_buku');
     }
 
-    public function order(){
+    public function order()
+    {
         return $this->hasMany(Order::class, 'id_buku', 'id_buku');
     }
 
-    public function favorite(){
+    public function favorite()
+    {
         return $this->hasMany(Favorite::class, 'id_buku', 'id_buku');
     }
 
-
-
-    public function tags(){
+    public function tags()
+    {
         return $this->belongsToMany(Tags::class, 'buku_tags', 'id_buku', 'id_tags');
     }
 
-    public function rating(){
+    public function rating()
+    {
         return $this->hasMany(Rating::class, 'id_buku', 'id_buku');
     }
 
-    public function dibaca(){
+    public function dibaca()
+    {
         return $this->hasMany(Dibaca::class, 'id_buku', 'id_buku');
     }
 
-    public function diselesaikan(){
+    public function diselesaikan()
+    {
         return $this->hasMany(Diselesaikan::class, 'id_buku', 'id_buku');
     }
 
     public function quizzes()
-{
-    return $this->hasManyThrough(Quiz::class, DetailBuku::class, 'id_buku', 'id_detail_buku', 'id_buku', 'id_detail_buku');
-}
-
+    {
+        return $this->hasManyThrough(Quiz::class, DetailBuku::class, 'id_buku', 'id_detail_buku', 'id_buku', 'id_detail_buku');
+    }
 }

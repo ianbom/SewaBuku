@@ -85,7 +85,7 @@ class BukuController extends Controller
             'checkLangganan' => $checkLangganan,
             'parentTags' => $parentTags,
             'childTags' => $childTags,
-            'terakhirDibaca' => $terakhirDibaca
+            'terakhirDibaca' => $terakhirDibaca ?? NULL
         ]);
     }
 

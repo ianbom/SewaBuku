@@ -5,60 +5,88 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto p-10" >
-    <h1 class="text-3xl font-bold text-center mb-8">Daftar Order Saya</h1>
+<div class="container mx-auto mt-10 p-10">
+    <!-- Judul Halaman -->
+    <div class="flex justify-between items-center mb-12">
+        <h1 class="text-3xl font-bold text-left text-[052D6E]" style="font-family: 'Libre Baskerville', serif; color: #052D6E;">Pesanan</h1>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-wrapper mb-12">
+        <div class="search-box relative shadow-lg rounded-full transition-all duration-300 max-w-xl w-full">
+            <i class="fas fa-search search-icon absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+            <input id="search-input" type="text" class="form-control search-input rounded-[12px] pl-12 pr-4 py-4 w-full border-2 border-transparent transition-all duration-300 focus:border-[#1E90FF] focus:ring-0" placeholder="Cari order yang Anda inginkan...">
+            <button class="btn btn-primary search-button absolute right-4 top-1/2 transform -translate-y-1/2 rounded-[12px] py-2 px-6 bg-[#1E90FF] text-white hover:bg-[#052D6E] transition duration-300">
+                Cari
+            </button>
+        </div>
+    </div>
 
     @if($order->isEmpty())
         <!-- Pesan jika tidak ada order -->
-        <p class="text-center text-gray-500 text-lg">Belum ada order yang dilakukan.</p>
+        <p class="text-center text-gray-500 text-lg mt-6">Belum ada order yang dilakukan.</p>
     @else
         <!-- Tabel Order -->
-        <div class="overflow-x-auto shadow-md rounded-lg">
-            <table class="min-w-full bg-white rounded-lg overflow-hidden">
-                <thead>
-                    <tr class="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
-                        <th class="py-3 px-4 text-left">ID Order</th>
-                        <th class="py-3 px-4 text-left">Nama Paket</th>
-                        <th class="py-3 px-4 text-left">Total Bayar</th>
-                        <th class="py-3 px-4 text-left">Status</th>
-                        <th class="py-3 px-4 text-left">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($order as $o)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <!-- ID Order -->
-                            <td class="py-3 px-4 border-b">{{ $o->id_order }}</td>
-
-                            <!-- Nama Paket -->
-                            <td class="py-3 px-4 border-b">{{ $o->paketLangganan->nama_paket ?? '-' }}</td>
-
-                            <!-- Total Bayar -->
-                            <td class="py-3 px-4 border-b">Rp{{ number_format($o->total_bayar, 0, ',', '.') }}</td>
-
-                            <!-- Status Order -->
-                            <td class="py-3 px-4 border-b">
-                                @if($o->status_order === 'Proses')
-                                    <span class="inline-block bg-yellow-100 text-yellow-700 py-1 px-2 rounded text-sm font-semibold">{{ $o->status_order }}</span>
-                                @elseif($o->status_order === 'Selesai')
-                                    <span class="inline-block bg-green-100 text-green-700 py-1 px-2 rounded text-sm font-semibold">{{ $o->status_order }}</span>
-                                @else
-                                    <span class="inline-block bg-red-100 text-red-700 py-1 px-2 rounded text-sm font-semibold">{{ $o->status_order }}</span>
-                                @endif
-                            </td>
-
-                            <!-- Aksi -->
-                            <td class="py-3 px-4 border-b">
-                                <a href="{{ route('user.order.show', $o->id_order) }}"
-                                   class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
-                                    Detail
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div id="order-table-container" class="overflow-x-auto shadow-lg rounded-2xl mt-6 border border-[#1E90FF] border-2" style="font-family: 'Inter', sans-serif;">
+            @include('sewa_buku.user.order.table_order', ['order' => $order])
         </div>
     @endif
+
 </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.querySelector('#search-input');
+        const tableContainer = document.querySelector('#order-table-container');
+        let currentSearchTerm = '';
+    
+        function fetchOrders(url) {
+            // Append search term to pagination URLs if exists
+            if (currentSearchTerm && !url.includes('search=')) {
+                const separator = url.includes('?') ? '&' : '?';
+                url = `${url}${separator}search=${encodeURIComponent(currentSearchTerm)}`;
+            }
+        
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                tableContainer.innerHTML = data.html;
+                // Update URL without reloading page
+                const newUrl = new URL(url, window.location.origin);
+                window.history.pushState({ path: newUrl.href }, '', newUrl.href);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    
+        // Handle search input with debounce
+        let searchTimer;
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                currentSearchTerm = searchInput.value;
+                fetchOrders(`{{ route('user.order.search') }}?search=${encodeURIComponent(currentSearchTerm)}`);
+            }, 300);
+        });
+    
+        // Handle pagination clicks
+        tableContainer.addEventListener('click', function (event) {
+            const link = event.target.closest('.pagination a');
+            if (link) {
+                event.preventDefault();
+                fetchOrders(link.href);
+            }
+        });
+    
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function () {
+            fetchOrders(window.location.href);
+        });
+    });
+    
+    </script>
+
 @endsection

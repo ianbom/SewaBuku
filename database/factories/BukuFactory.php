@@ -32,7 +32,7 @@ class BukuFactory extends Factory
             'rating_amazon' => $this->faker->numberBetween(1,5),
             'link_pembelian' => $this->faker->sentence(),
             'teaser_audio' => $randomAudio,
-            'sinopsis' => $this->faker->paragraph(5),
+            'sinopsis' => $this->faker->paragraph(10),
             'ringkasan_audio' => $randomAudio
         ];
     }

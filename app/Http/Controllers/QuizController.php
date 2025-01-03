@@ -95,8 +95,9 @@ class QuizController extends Controller
         $detailBuku = DetailBuku::findOrFail($id);
         $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
         $soal = Soal::where('id_quiz', $quiz->id_quiz)->get();
+        // return response()->json(['idBuku' => $detailBuku->id_buku]);
 
-        return view('sewa_buku.user.buku.quiz.kerjakan_quiz', ['quiz' => $quiz, 'soal' => $soal]);
+        return view('sewa_buku.user.buku.quiz.kerjakan_quiz', ['quiz' => $quiz, 'soal' => $soal, 'idBuku' => $detailBuku->id_buku]);
     }
 
     public function submitQuiz(Request $request, $id)

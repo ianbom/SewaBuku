@@ -72,5 +72,9 @@ class User extends Authenticatable
         return $this->hasMany(Dibaca::class, 'id', 'id');
     }
 
+    public function diselesaikan(){
+        return $this->hasMany(Diselesaikan::class, 'id', 'id');
+    }
+
 
 }

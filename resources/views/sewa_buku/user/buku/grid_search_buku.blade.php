@@ -1,9 +1,11 @@
 @forelse($buku as $book)
     <div class="bg-white rounded-lg overflow-hidden flex flex-col">
         @if($book->coverBuku && $book->coverBuku->first())
+        <a href="{{ route('user.buku.show', $book->id_buku) }}">
             <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}"
                  alt="{{ $book->judul_buku }}"
                  class="w-full aspect-[9/16] object-cover rounded-xl">
+        </a>
         @endif
         <div class="p-3 flex-1 flex flex-col justify-between">
             <h3 class="font-medium text-sm">{{ $book->judul_buku }}</h3>
@@ -13,7 +15,7 @@
                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    56 Min
+                    {{ floor($book->totalWaktu / 60) }} Min
                 </span>
                 <span class="flex items-center">
                     <svg class="w-3 h-3 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">

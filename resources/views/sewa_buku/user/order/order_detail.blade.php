@@ -1,79 +1,159 @@
 @extends('sewa_buku.layouts.userApp')
 
 @section('title')
-    Order Detail
+    Detail Order
 @endsection
 
 @section('content')
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold text-blue-900 mb-8 mt-16">Subscription Package</h1>
+<div class="container mx-auto mt-10 p-10">
+    <!-- Judul Halaman -->
+    <div class="flex justify-between items-center mb-12">
+        <h1 class="text-3xl font-bold text-left text-[052D6E]" style="font-family: 'Libre Baskerville', serif; color: #052D6E;">Detail Pesanan</h1>
+    </div>
 
-    <div class="bg-white rounded-2xl shadow p-6 w-full border border-blue-400">
-        <div class="flex items-center mb-6">
-            <button onclick="history.back()" class="text-gray-600 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-                Order Detail
-            </button>
+    <!-- Card Detail Order -->
+    <div class="bg-white shadow-lg rounded-3xl p-6 border-2 border-[#1E90FF] style="font-family: 'Libre Baskerville', serif;">
+        <!-- Tombol Kembali Icon -->
+        <div class="flex items-center mb-5 mt-2">
+            <!-- Tombol Kembali Icon -->
+            <a href="{{ url()->previous() }}" class="text-[#052D6E] hover:text-[#1E90FF] mr-4">
+                <i class="fa fa-angle-left text-xl"></i> <!-- Back Arrow Icon -->
+            </a>
+
+            <!-- Judul -->
+            <h1 class="text-xl font-bold text-left text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Detail Pesanan</h1>
         </div>
 
-        <div class="bg-blue-100 rounded-xl p-6">
-            <h2 class="text-lg font-semibold text-gray-700 mb-6">No. {{ $order->id_order }}</h2>
-
-            <!-- Divider bawah No -->
-            <hr class="border-t border-black my-4 ">
-
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-600">Package Name</span>
-                    <span class="text-gray-900">{{ $order->paketLangganan->nama_paket }}</span>
+        <!-- Section Order Details -->
+        <div class="bg-[#D3E9FF] p-6 rounded-2xl mb-6" style="font-family: 'Inter', sans-serif;">
+            <div class="grid grid-cols-1 gap-3">
+                 <!-- Id order -->
+                <div class="flex justify-between items-start">
+                    <h2 class="text-xl font-bold text-[#052D6E]">No. {{ $order->id_order }}</h2>
                 </div>
 
+                <!-- Garis Pembatas -->
+                <hr class="my-1 border-t-2 border-[#052D6E]">
+
+                <!-- Nama Paket -->
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-600">On behalf of</span>
-                    <span class="text-gray-900">{{ $order->user->name }}</span>
+                    <p class="text-[#052D6E] font-bold">Nama Paket</p>
+                    <p class="text-[#979797] font-semibold">{{ $order->nama_paket }}</p>
                 </div>
 
+                <!-- Pembeli -->
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-600">Order Date</span>
-                    <span class="text-gray-900">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</span>
+                    <p class="text-[#052D6E] font-bold">Nama Pembeli</p>
+                    <p class="text-[#979797] font-semibold">{{ $order->user->name }}</p>
                 </div>
 
+                <!-- Tanggal Order -->
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-600">Total Payment</span>
-                    <span class="text-gray-900">Rp{{ number_format($order->total_bayar, 0, ',', '.') }}</span>
+                    <p class="text-[#052D6E] font-bold">Tanggal Order</p>
+                    <p class="text-[#979797] font-semibold">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</p>
                 </div>
 
-                <!-- Divider atas Order Status -->
-                <hr class="border-t border-black my-4">
-
+                {{-- Total Bayar --}}
+                <!-- Total Bayar -->
                 <div class="flex justify-between items-center">
-                    <span class="text-gray-600">Order Status</span>
-                    <span class="text-blue-500 font-medium">{{ strtoupper($order->status_order) }}</span>
+                    <p class="text-[#052D6E] font-bold">Total Bayar</p>
+                    <p class="text-[#979797] font-semibold">Rp{{ number_format($order->total_bayar, 0, ',', '.') }}</p>
+                </div>
+
+                <!-- Garis Pembatas -->
+                <hr class="my-1 border-t-2 border-[#052D6E]">
+
+               <!-- Status Order -->
+                <div class="flex justify-between items-center">
+                    <p class="text-[#052D6E] font-bold mb-2">Status Pesanan</p>
+                    @if($order->status_order === 'Proses')
+                        <span class="py-1 px-2 rounded font-bold text-[#1E90FF]" style="text-transform: uppercase;">{{ $order->status_order }}</span>
+                    @elseif($order->status_order === 'Selesai')
+                        <span class="py-1 px-2 rounded font-bold text-[#DC3545]" style="text-transform: uppercase;">{{ $order->status_order }}</span>
+                    @else
+                        <span class="py-1 px-2 rounded font-bold text-[#4DAF84]" style="text-transform: uppercase;">{{ $order->status_order }}</span>
+                    @endif
                 </div>
             </div>
         </div>
 
 
-        <div class="flex justify-end space-x-4 mt-6">
-            @if ($order->status_order == 'Proses')
-                <form action="{{ route('user.order.batal', $order->id_order) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit" class="px-6 py-2 rounded-lg bg-red-100 text-red-500 hover:bg-red-200 transition">
-                        Cancle
-                    </button>
-                </form>
+        <!-- Aksi -->
+        <div class="flex flex-wrap gap-3 justify-end mt-6">
+            <!-- Tombol Kembali -->
+            {{-- <a href="{{ url()->previous() }}" class="bg-gray-500 text-white py-2 px-4 rounded-xl shadow-md hover:bg-transparent hover:border-gray-500 hover:text-gray-500 border-2 transition-all duration-300">
+                Kembali
+            </a> --}}
 
-                <form action="{{ route('user.payment.store', $order->id_order) }}" method="POST">
+            <!-- Cetak Invoice -->
+            <a href="#" class="bg-[#1E90FF] text-white py-2 px-4 rounded-2xl shadow-md hover:bg-transparent hover:border-[#1E90FF] hover:text-[#1E90FF] border-2 transition-all duration-300">
+                Cetak Invoice
+            </a>
+
+            <!-- Tombol Batalkan Order -->
+            @if ($order->status_order == 'Proses')
+            <form action="{{ route('user.order.batal', $order->id_order) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <button type="submit" class="bg-[#982B1C] text-white py-2 px-4 rounded-2xl shadow-md hover:bg-transparent hover:border-[#982B1C] hover:text-[#982B1C] border-2 transition-all duration-300">
+                    Batalkan Pesanan
+                </button>
+            </form>
+            @endif
+
+            <!-- Tombol Bayar -->
+            @if ($order->status_order == 'Proses')
+            <form action="{{ route('user.payment.store', $order->id_order) }}" method="POST">
+                @csrf
+                <button type="submit" class="bg-[#FDA403] text-white py-2 px-4 rounded-2xl shadow-md hover:bg-transparent hover:border-[#FDA403] hover:text-[#FDA403] border-2 transition-all duration-300">
+                    Bayar Sekarang
+                </button>
+            </form>
+            @endif
+        </div>
+
+
+        <!-- Section Rating -->
+        @if ($order->status_order === 'Selesai')
+        <div class="mt-10 border-t pt-6">
+            <h3 class="text-xl font-bold mb-4">Berikan Rating untuk Order Ini:</h3>
+            @if ($rating)
+                <!-- Tampilkan Rating Jika Sudah Ada -->
+                <div class="mb-4">
+                    <p class="text-gray-700 font-semibold">Rating:</p>
+                    <p class="text-yellow-500">{{ $rating->rating }} / 5</p>
+                </div>
+                @if ($rating->komentar)
+                <div>
+                    <p class="text-gray-700 font-semibold">Komentar:</p>
+                    <p class="text-gray-900">{{ $rating->komentar }}</p>
+                </div>
+                @endif
+            @else
+                <!-- Form untuk Memberikan Rating -->
+                <form action="{{ route('user.rating.store', $order->id_order) }}" method="POST">
                     @csrf
-                    <button type="submit" class="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition">
-                        Pay Now
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Rating (1-5):</label>
+                        <select name="rating" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Komentar:</label>
+                        <textarea name="komentar" rows="3" class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200"></textarea>
+                    </div>
+                    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded shadow-md hover:bg-green-600">
+                        Submit Rating
                     </button>
                 </form>
             @endif
         </div>
+        @endif
     </div>
 </div>
 @endsection

@@ -21,7 +21,7 @@ class CoverBukuFactory extends Factory
         $randomCover = $coverPhoto ? $coverPhoto[array_rand($coverPhoto)] : null;
 
         return [
-            'id_buku' => $this->faker->numberBetween(1, 20),
+            'id_buku' => $this->faker->numberBetween(1, 5),
             'file_image' => $randomCover
         ];
     }

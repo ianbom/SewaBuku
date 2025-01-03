@@ -17,7 +17,7 @@ class OrderController extends Controller
 
     public function indexOrder(){
         $userId = Auth::id();
-        $order = Order::where('id', $userId)->get();
+        $order = Order::where('id', $userId)->paginate(5);
         return view('sewa_buku.user.order.index_order', ['order' => $order]);
     }
 
@@ -127,4 +127,35 @@ class OrderController extends Controller
             return response()->json(['error' => $th->getMessage()]);
         }
     }
+
+
+    public function searchOrder(Request $request)
+    {
+        $userId = Auth::id();
+        $search = $request->input('search');
+
+        $order = Order::where('id', $userId)  // Assuming the column is user_id, not id
+            ->when($search, function ($query) use ($search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->whereHas('paketLangganan', function ($subQuery) use ($search) {
+                        $subQuery->where('nama_paket', 'like', "%{$search}%");
+                    })
+                    ->orWhere('total_bayar', 'like', "%{$search}%")
+                    ->orWhere('created_at', 'like', "%{$search}%")
+                    ->orWhere('id_order', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(5)
+            ->appends(['search' => $search]);
+            
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('sewa_buku.user.order.table_order', compact('order'))->render()
+            ]);
+        }
+
+        return view('sewa_buku.user.order.index_order', compact('order'));
+    }
+
 }

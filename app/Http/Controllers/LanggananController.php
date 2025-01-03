@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\DetailBuku;
 use App\Models\Dibaca;
+use App\Models\Diselesaikan;
+use App\Models\Highlight;
 use App\Models\Jawaban;
 use App\Models\Langganan;
 use App\Models\Quiz;
@@ -45,8 +47,10 @@ class LanggananController extends Controller
         ->where('is_read', true)
         ->latest('updated_at')
         ->first();
-        
-    $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
+
+        $diselesaikan = Diselesaikan::where('id', $userId)->pluck('id_detail_buku')->toArray();
+
+        $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
 
         $quizStatus = [];
         $quizScores = [];
@@ -93,6 +97,8 @@ class LanggananController extends Controller
             'quizScores' => $quizScores,
             'checkLangganan' => $checkLangganan,
             'babTerakhirDibaca' => $babTerakhirDibaca,
+            'diselesaikan' => $diselesaikan,
+            'idBuku' => $buku->id_buku,
         ]);
 
     } catch (\Throwable $th) {
@@ -106,11 +112,9 @@ public function bacaBabBuku($id)
         $user = Auth::user();
         $detailBuku = DetailBuku::findOrFail($id);
 
-
         Dibaca::where('id', $user->id)
             ->where('id_buku', $detailBuku->id_buku)
             ->update(['is_read' => false]);
-
 
         $dibaca = Dibaca::where('id', $user->id)
             ->where('id_detail_buku', $detailBuku->id_detail_buku)
@@ -118,11 +122,9 @@ public function bacaBabBuku($id)
             ->first();
 
         if ($dibaca) {
-
             $dibaca->is_read = true;
             $dibaca->save();
         } else {
-
             Dibaca::create([
                 'id' => $user->id,
                 'id_detail_buku' => $detailBuku->id_detail_buku,
@@ -131,13 +133,121 @@ public function bacaBabBuku($id)
             ]);
         }
 
+        $diselesaikanCheck = Diselesaikan::where('id_buku', $detailBuku->id_buku)->where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+        // return response()->json(['status' => $diselesaikanCheck]);
 
-        return view('sewa_buku.user.buku.baca_bab_buku', ['detailBuku' => $detailBuku]);
+
+
+        $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+        $quizStatus = null;
+        $quizScore = null;
+
+        if ($quiz) {
+            $isAttempted = Jawaban::where('id_quiz', $quiz->id_quiz)
+                ->where('id', $user->id)
+                ->exists();
+
+            if ($isAttempted) {
+                $totalSoal = Soal::where('id_quiz', $quiz->id_quiz)->count();
+                $benar = Jawaban::where('id_quiz', $quiz->id_quiz)
+                    ->where('id', $user->id)
+                    ->where('is_correct', true)
+                    ->count();
+                $quizScore = "{$benar}/{$totalSoal}";
+            } else {
+                $quizStatus = 'Quiz belum dikerjakan';
+            }
+        } else {
+            $quizStatus = 'Quiz belum tersedia';
+        }
+
+        return view('sewa_buku.user.buku.baca_bab_buku', [
+            'detailBuku' => $detailBuku,
+            'quiz' => $quiz,
+            'quizStatus' => $quizStatus,
+            'quizScore' => $quizScore,
+            'idBuku' => $detailBuku->id_buku,
+            'diselesaikanCheck' => $diselesaikanCheck,
+        ]);
     } catch (\Throwable $th) {
-
         return response()->json(['err' => $th->getMessage()]);
     }
 }
+
+
+
+    public function tandaiBabDiselesaikan($id){
+        $userId = Auth::id();
+
+        $detailBuku = DetailBuku::findOrFail($id);
+        $buku = Buku::where('id_buku', $detailBuku->id_buku)->first();
+
+            Diselesaikan::create([
+                'id' => $userId,
+                'id_buku' => $buku->id_buku,
+                'id_detail_buku' => $detailBuku->id_detail_buku,
+                'is_finished' => true
+            ]);
+
+        return redirect()->back()->with('success', 'Chapter mark as finished');
+    }
+
+    public function hapusTandaBabDiselesaikan($id){
+        $userId = Auth::id();
+
+        $detailBuku = DetailBuku::findOrFail($id);
+        $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+        $diselesaikanCheck->delete();
+
+
+        return redirect()->back()->with('success', 'Chapter mark as unfinished');
+    }
+
+    public function tandaiBukuDiselesaikan($id){
+        $userId = Auth::id();
+
+        $buku = Buku::findOrFail($id);
+
+            Diselesaikan::create([
+                'id' => $userId,
+                'id_buku' => $buku->id_buku,
+                'id_detail_buku' => null,
+                'is_finished' => true
+            ]);
+
+        return redirect()->back()->with('success', 'Book mark as finished');
+    }
+
+    public function hapusTandaBukuDiselesaikan($id){
+        $userId = Auth::id();
+
+        $buku = Buku::findOrFail($id);
+        $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
+        $diselesaikanCheck->delete();
+
+
+        return redirect()->back()->with('success', 'Book mark as unfinished');
+    }
+
+
+    public function highlightText(Request $request){
+        $userId = Auth::id();
+
+        $highlight = Highlight::create([
+            'id' => $userId,
+            'id_buku' => $request->id_buku,
+            'id_detail_buku' => $request->id_detail_buku,
+            'highlight' => $request->highlight
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'highlight' => $highlight
+        ]);
+    }
+
+
+
 
 
 }

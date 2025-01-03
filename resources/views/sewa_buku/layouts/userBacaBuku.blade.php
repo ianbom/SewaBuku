@@ -17,26 +17,8 @@
     </head>
     <body class="font-sans antialiased">
 
-        @include('sewa_buku.layouts.header')
+        @include('sewa_buku.layouts.sidebar_chapter')
 
     </body>
 
 </html>
-
-{{-- Ini kalo pake cdn --}}
-
-    {{-- <!doctype html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>{{ config('app.name', 'Laravel') }}</title>
-      <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="font-sans antialiased">
-
-        @include('sewa_buku.layouts.header')
-
-    </body>
-
-    </html> --}}

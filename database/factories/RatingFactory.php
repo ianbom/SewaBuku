@@ -18,7 +18,7 @@ class RatingFactory extends Factory
     {
         return [
             'id' => $this->faker->numberBetween(1, 20),
-            'id_buku' => $this->faker->numberBetween(1, 20),
+            'id_buku' => $this->faker->numberBetween(1, 5),
             'rating' => $this->faker->numberBetween(1, 5),
             'komentar' => $this->faker->sentence(),
         ];

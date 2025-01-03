@@ -83,17 +83,24 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/search/buku', [BukuController::class, 'searchBuku'])->name('buku.search');
+
 Route::group(['prefix' => 'user'], function () {
     Route::group(['prefix' => 'buku'], function () {
         Route::get('/index', [BukuController::class, 'indexBukuUser'])->name('user.buku.index');
         Route::get('/search/judulBuku', [BukuController::class, 'searchJudulBuku'])->name('judulBuku.search');
         Route::get('/show/{id}', [BukuController::class, 'detailBukuUser'])->name('user.buku.show');
-        Route::get('/baca/{id}', [LanggananController::class, 'bacaBuku'])->name('user.buku.baca');
+        Route::get('/baca/{id}', [LanggananController::class, 'bacaBuku'])->name('user.buku.baca'); // kayae wes ga kepake
         Route::get('/baca/bab/{id}', [LanggananController::class, 'bacaBabBuku'])->name('user.buku.bacaBab');
         Route::get('/quiz/{id}', [QuizController::class, 'kerjakanQuiz'])->name('user.quiz.kerjakan');
         Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
         Route::get('/search', [BukuController::class, 'searchBukuIndex'])->name('user.buku.search');
+        Route::get('/search/buku', [BukuController::class, 'searchBuku'])->name('buku.search');
+        Route::post('/markFinished/{id}', [LanggananController::class, 'tandaiBabDiselesaikan'])->name('user.mark.finished');
+        Route::delete('/deleteMarkFinished/{id}', [LanggananController::class, 'hapusTandaBabDiselesaikan'])->name('user.delete.finished');
+        Route::post('/markBookFinished/{id}', [LanggananController::class, 'tandaiBukuDiselesaikan'])->name('user.mark.bookFinished');
+        Route::delete('/deleteMarkBookFinished/{id}', [LanggananController::class, 'hapusTandaBukuDiselesaikan'])->name('user.delete.bookFinished');
+        Route::get('/collection', [BukuController::class, 'myCollection'])->name('user.myCollection');
+        Route::post('/highlight-text', [LanggananController::class, 'highlightText'])->name('user.highlight.text');
 
     });
 
@@ -103,6 +110,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
         Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');
         Route::put('/batal/{id}', [OrderController::class, 'batalkanOrder'])->name('user.order.batal');
+        Route::get('/search', [OrderController::class, 'searchOrder'])->name('user.order.search');
     });
 
     Route::group(['prefix' => 'langganan'], function () {
@@ -116,7 +124,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::group(['prefix' => 'favorite'], function () {
         Route::get('/index', [FavoriteController::class, 'indexFavorite'])->name('user.favorite.index');
         Route::post('/store/{id}', [FavoriteController::class, 'storeFavorite'])->name('user.favorite.store');
-        Route::delete('/delete/{id}', [FavoriteController::class, 'deleteFavortie'])->name('user.favorite.delete');
+        Route::delete('/delete/{id}', [FavoriteController::class, 'deleteFavorite'])->name('user.favorite.delete');
     });
 
     Route::group(['prefix' => 'paket-langganan'], function () {

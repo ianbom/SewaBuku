@@ -11,6 +11,6 @@ class DetailBukuSeeder extends Seeder
 
     public function run(): void
     {
-        DetailBuku::factory()->count(50)->create();
+        DetailBuku::factory()->count(20)->create();
     }
 }

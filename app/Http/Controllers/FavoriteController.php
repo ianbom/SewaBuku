@@ -35,10 +35,17 @@ class FavoriteController extends Controller
         return redirect()->back()->with('success', 'Buku berhasil ditambahkan ke daftar favorit!');
     }
 
-    public function deleteFavortie($id){
-        $favorite = Favorite::findOrFail($id);
+    public function deleteFavorite($id){
+        try {
+        $userId = Auth::id();
+        $buku = Buku::findOrFail($id);
+        $favorite = Favorite::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
+        // return response()->json(['buku' => $buku]);
         $favorite->delete();
-
         return redirect()->back()->with('success', 'Buku berhasil dihapus dari daftar favorit!');
+        } catch (\Throwable $th) {
+           return response()->json(['error' => $th->getMessage()]);
+        }
+
     }
 }

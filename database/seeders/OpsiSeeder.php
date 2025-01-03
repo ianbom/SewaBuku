@@ -2,20 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Buku;
-use App\Models\User;
+use App\Models\Opsi;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class BukuSeeder extends Seeder
+class OpsiSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Buku::factory()->count(5)->create();
-
+        Opsi::factory()->count(500)->create();
     }
 }

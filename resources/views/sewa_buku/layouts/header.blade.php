@@ -2,7 +2,7 @@
 
 <div class="flex h-screen bg-gray-100">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md flex flex-col">
+    <aside class="w-64 bg-white  flex flex-col">
         <!-- Logo -->
         <div class="py-4">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-32 h-auto ml-2"> <!-- Logo aligned to the left -->
@@ -55,14 +55,6 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="{{ route('user.langganan.index') }}"
-                           class="flex items-center px-4 py-2 rounded hover:bg-gray-100
-                           {{ Route::currentRouteName() == 'user.langganan.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
-                            <i class="fas fa-users text-blue-500 mr-3"></i>
-                            <span class="text-gray-700">Subscriber</span>
-                        </a>
-                    </li>
-                    <li class="mb-2">
                         <a href="{{ route('user.order.index') }}"
                            class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                            {{ Route::currentRouteName() == 'user.order.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
@@ -72,8 +64,30 @@
                     </li>
                 </ul>
             </div>
+            <hr class="my-8 border-t-1 border-[#1E90FF]">
 
-            <hr style="margin-top:30px; margin-bottom:30px; height: 1px; background-color: #1E90FF;">
+            <div>
+            <ul>
+            <li class="mb-2">
+                <a href="{{ route('user.langganan.index') }}"
+                   class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                   {{ Route::currentRouteName() == 'user.langganan.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
+                    <i class="fas fa-users text-blue-500 mr-3"></i>
+                    <span class="text-gray-700">Profile Anda</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a href="{{ route('user.langganan.index') }}"
+                   class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                  'bg-[#D3E9FF] text-[#1E90FF] font-semibold' : '' }}">
+                  <i class="fas fa-sign-out-alt mr-2"></i>
+                  <span class="text-gray-700">Logout</span>
+                </a>
+            </li>
+            </ul>
+
+            </div>
+            <hr class="my-8 border-t-1 border-[#1E90FF]">
 
             <div>
                 <a href="{{ route('user.myCollection') }}">
@@ -81,9 +95,9 @@
                 </a>
 
 
-                <a href="{{ route('user.favorite.index') }}"
+                <a href="{{ route('user.myCollection') }}"
                    class="flex flex-col
-                   {{ Route::currentRouteName() == 'user.favorite.index' ? 'text-[#052D6E] font-semibold' : 'text-gray-700' }}">
+                   {{ Route::currentRouteName() == 'user.myCollection' ? 'text-[#052D6E] font-semibold' : 'text-gray-700' }}">
                     <span class="text-sm">My Favorite</span>
                 </a>
             </div>

@@ -42,7 +42,7 @@
     <div class="col-lg-5 col-12 d-flex flex-column">
         <div id="auth-left">
             <div class="auth-logo">
-                <a href="/"><img src="{{ asset('images/logo-kpspam.png') }}" alt="Logo"></a>
+                <a href="/"><img src="{{ asset('images/logo.png') }}" alt="Logo"></a>
             </div>
             <h1 class="auth-title mb-0">Masuk.</h1>
             <p class="auth-subtitle mb-4 mt-0">Masuk menggunakan akun yang telah terdaftar</p>

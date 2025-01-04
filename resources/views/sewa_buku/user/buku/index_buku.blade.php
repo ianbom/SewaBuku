@@ -62,6 +62,7 @@
                     <p class="text-sm text-[#979797] font-bold"> {{ $terakhirDibaca->buku->penulis ?? '' }}</p>
 
                     <!-- Audio Player -->
+
                     <div class="mt-4 bg-white rounded-[16px] h-16 flex items-center px-4 w-full">
                         <audio controls controlsList="nodownload" class="custom-audio">
                             <source src="{{ asset('storage/' . $terakhirDibaca->buku->ringkasan_audio) }}" type="audio/mpeg">

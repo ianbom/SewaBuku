@@ -1,27 +1,42 @@
 @extends('sewa_buku.layouts.userApp')
 
 @section('content')
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold text-blue-900 mb-8 mt-16">Explore</h1>
+<div class="container mx-auto p-10">
 
-    <div class="mb-10">
+    <!-- Header Section -->
+    <div class="mb-4">
+        <h1 class="text-[40px] font-bold text-left text-[#052D6E] mb-10" style="font-family: 'Libre Baskerville', serif;">Pencarian</h1>
 
-        <div class="relative max-w-xl">
-            <input type="text"
-                   id="search-input"
-                   placeholder="Find a book you like..."
-                   class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                   <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-6 py-1.5 rounded-lg">
+        <!-- Search Bar -->
+        <div class="search-wrapper mb-12 flex items-center w-full"> <!-- Changed width to full -->
+            <div class="search-box relative rounded-full transition-all duration-300 max-w-xl w-full mr-4">
+                <i class="fas fa-search search-icon absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                <input id="search-input" type="text" class="form-control search-input rounded-[12px] pl-12 pr-4 py-4 w-full border-2 border-transparent transition-all duration-300 focus:border-[#1E90FF] focus:ring-0" placeholder="Cari buku kesukaan anda...">
+                <button class="btn btn-primary search-button absolute right-4 top-1/2 transform -translate-y-1/2 rounded-[12px] py-2 px-6 bg-[#1E90FF] text-white hover:bg-[#052D6E] transition duration-300">
                     Cari
                 </button>
+            </div>
+
+            <!-- Filter Dropdown -->
+            <div class="filter-dropdown relative w-1/5 ">
+                <select id="filter-select" class="form-control rounded-[12px] pl-4 pr-4 py-4 w-full border-2 border-transparent transition-all duration-300 focus:border-[#1E90FF]  text-[#1E90FF]">
+                    <option value="all">Semua Kategori</option>
+                    <option value="fiction">Fiksi</option>
+                    <option value="non-fiction">Non-Fiksi</option>
+                    <option value="science">Sains</option>
+                    <option value="history">Sejarah</option>
+                    <!-- GANTI INI -->
+                </select>
+            </div>
         </div>
+
     </div>
 
     <!-- Book Search -->
     <div class="mb-10">
-        <h2 class="text-lg font-semibold mb-4">Search</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-12">
-           @include('sewa_buku.user.buku.grid_search_buku', ['buku' => $buku])
+        <p class="text-[18px] text-[#052D6E] font-bold mb-6 ">Hasil Buku</p>
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            @include('sewa_buku.user.buku.grid_search_buku', ['buku' => $buku])
         </div>
     </div>
 </div>
@@ -43,6 +58,5 @@
         });
     });
 </script>
-
 
 @endsection

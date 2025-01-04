@@ -1,75 +1,101 @@
 @extends('sewa_buku.layouts.userApp')
 
 @section('content')
-<div class="container mx-auto p-6">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+@php
+    // Array gambar yang tersedia
+    $images = [
+        asset('images/paket1.png'),
+        asset('images/paket2.png'),
+        asset('images/paket3.png'),
+    ];
+@endphp
 
+<div class="container mx-auto mt-10 p-10">
 
+ <!-- Judul Halaman -->
+ <div class="flex justify-between items-center mb-12">
+    <h1 class="text-3xl font-bold text-left text-[052D6E]" style="font-family: 'Libre Baskerville', serif; color: #052D6E;">Paket Langganan</h1>
+</div>
 
-    <h1 class="text-2xl font-bold text-blue-900 mb-8 mt-16">Subscription Package</h1>
+<!-- Package Cards -->
+@if($paketLangganan->isEmpty())
+    <p class="text-[#E46B61] py-2">Belum ada paket langganan yang tersedia</p>
+@else
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach($paketLangganan as $paket)
+        @php
+            // Pilih gambar secara acak
+            $randomImage = $images[array_rand($images)];
+        @endphp
+        <div class="bg-[#1E90FF] rounded-[16px] p-6 text-white">
+            <!-- Gambar Acak -->
+            <div class="mb-4">
+                <img src="{{ $randomImage }}" alt="Package Image" class="rounded-lg w-full h-50 object-cover">
+            </div>
 
-    <!-- Search Bar -->
-    <div class="mb-10">
-        <div class="relative max-w-xl">
-            <input type="text"
-                   placeholder="Find a package you like..."
-                   class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-6 py-1.5 rounded-lg">
-                Cari
-            </button>
+            <h3 class="text-[16px] font-bold mb-2">{{ $paket->nama_paket }}</h3>
+            <p class="mb-6 text-[14px] text-white">{{ $paket->deskripsi }}</p>
+
+            <!-- Time and Price -->
+            <div class="flex justify-between items-center mb-6 p-3 border rounded-[8px]">
+                <div class="flex items-center space-x-2">
+                    <span class="text-[14px]">Waktu: {{ $paket->masa_waktu }} Hari</span>
+                </div>
+                <div class="text-[16px] font-bold">
+                    <bold>Rp. {{ number_format($paket->harga, 0, ',', '.') }}</bold>
+                </div>
+            </div>
+
+            @if($paket->is_active)
+                <button type="button"
+                        class="w-full bg-[#D3E9FF] text-[#1E90FF] py-4 rounded-[12px] font-bold hover:bg-white transition"
+                        onclick="showModal('{{ route('user.order.store', $paket->id_paket_langganan) }}', '{{ $paket->nama_paket }}')">
+                    Berlanggan Sekarang
+                </button>
+            @else
+                <p class="text-[#E46B61] text-center py-2">Paket tidak tersedia</p>
+            @endif
+        </div>
+        @endforeach
+    </div>
+@endif
+
+<!-- Modal -->
+<div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+    <div class="bg-white rounded-[16px] p-6 w-[90%] max-w-md">
+        <h3 class="text-[16px] font-bold text-[#052D6E] mb-4" style="font-family: 'Inter', sans-serif;">Konfirmasi Langganan</h3>
+        <p class="text-[#979797] mb-6 text-[14px]" style="font-family: 'Inter', sans-serif;">Apa kamu yakin ingin membeli  <span id="modalPackageName" class="font-bold"></span>?</p>
+        <div class="flex justify-end space-x-4">
+            <button type="button" class="px-4 text-bold py-2 bg-[#FFCFC2] text-[#E46B61] rounded-[12px] hover:bg-[#E46B61] hover:text-white" onclick="closeModal()"><strong> Batal </strong></button>
+            <form id="orderForm" method="POST">
+                @csrf
+                <button type="submit" class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
+                    <strong>Konfirmasi</strong>
+                </button>
+            </form>
         </div>
     </div>
-
-    <!-- Package Cards -->
-    @if($paketLangganan->isEmpty())
-        <p class="text-gray-600">Belum ada paket langganan yang tersedia.</p>
-    @else
-        <h2 class="text-lg font-semibold text-gray-800 mb-6">Last Pick Up</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach($paketLangganan as $paket)
-                <div class="bg-blue-500 rounded-xl p-6 text-white">
-                    <!-- Icons -->
-                    <div class="flex gap-4 mb-4">
-                        <div class="bg-white/20 rounded-lg px-3 py-1 flex items-center space-x-1">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/>
-                            </svg>
-                            <span>Online</span>
-                        </div>
-                        <div class="bg-white/20 rounded-lg px-3 py-1 flex items-center space-x-1">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/>
-                            </svg>
-                            <span>Audiobooks</span>
-                        </div>
-                    </div>
-
-                    <h3 class="text-xl font-bold mb-2">{{ $paket->nama_paket }}</h3>
-                    <p class="mb-6 text-white/90">{{ $paket->deskripsi }}</p>
-
-                    <!-- Time and Price -->
-                    <div class="flex justify-between items-center mb-6">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-sm">Time: {{ $paket->masa_waktu }} Days</span>
-                        </div>
-                        <div class="text-lg font-bold">
-                            Rp. {{ number_format($paket->harga, 0, ',', '.') }}
-                        </div>
-                    </div>
-
-                    @if($paket->is_active)
-                        <form action="{{ route('user.order.store', $paket->id_paket_langganan) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                    class="w-full bg-white text-blue-500 py-2 rounded-lg font-medium hover:bg-blue-50 transition">
-                                Subscribe Now
-                            </button>
-                        </form>
-                    @else
-                        <p class="text-red-200 text-center py-2">Paket tidak tersedia</p>
-                    @endif
-                </div>
-            @endforeach
-        </div>
-    @endif
 </div>
+
+</div>
+
+<script>
+    function showModal(actionUrl, packageName) {
+        document.getElementById('orderForm').action = actionUrl;
+        document.getElementById('modalPackageName').textContent = packageName;
+        document.getElementById('orderModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('orderModal').classList.add('hidden');
+    }
+</script>
 @endsection

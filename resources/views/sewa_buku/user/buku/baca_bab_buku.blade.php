@@ -5,28 +5,44 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto mt-10 p-10">
-            <!-- Header Bab -->
-            <div class="text-center border-b pb-6 mb-6">
-                <h1 class="text-3xl font-bold text-gray-800"> {{ $detailBuku->buku->judul_buku ?? 'Judul Buku Tidak Tersedia' }}</h1>
-                <p class="text-gray-500 mt-2"> {{ $detailBuku->bab ?? 'Bab Tidak Ditemukan' }}</p>
-            </div>
+<div class="container mx-auto p-10 bg-white">
+
+    <!-- Judul Halaman -->
+ <div class="flex justify-between items-center mb-4 mt-10">
+    <h1 class="text-3xl font-bold text-left text-[052D6E]" style="font-family: 'Libre Baskerville', serif; color: #052D6E;"> {{ $detailBuku->buku->judul_buku ?? 'Judul Buku Tidak Tersedia' }}</h1>
+</div>
+
+<h2 class="text-[18px] font-bold text-[#052D6E] mb-4 " style="font-family: 'Libre Baskerville', serif;">{{ $detailBuku->bab ?? 'Bab Tidak Ditemukan' }}</h2>
 
             <!-- Isi Bab -->
             <div class="mb-8">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Isi Bab</h2>
-                <p class="text-gray-600 leading-relaxed">{{ $detailBuku->isi ?? 'Isi tidak tersedia.' }}</p>
+                <p class="text-[#979797] leading-relaxed">{{ $detailBuku->isi ?? 'Isi tidak tersedia.' }}</p>
                 @if ($diselesaikanCheck)
                 <form action="{{ route('user.delete.finished', $detailBuku->id_detail_buku) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="bg-red-500 rounded-md p-1 text-white"> Delete mark</button>
+                    <div class="flex justify-end mt-10">
+                        <button
+                            type="submit"
+                            class="flex items-center gap-2 px-4 py-2 text-white bg-[#E46B61] rounded-[12px] hover:bg-[#FFCFC2] hover:text-[#E46B61]">
+                            <strong>Delete Mark</strong>
+                        </button>
+                    </div>
                 </form>
                 @else
                 <form action="{{ route('user.mark.finished', $detailBuku->id_detail_buku) }}" method="POST">
                     @csrf
-                    <button type="submit" class="bg-blue-500 rounded-md p-1 text-white"> Mark as finished</button>
-                </form>
+                    <div class="flex justify-end mt-10">
+                        <button
+                            type="submit"
+                            class="flex items-center gap-2 px-4 py-2 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#1E90FF]">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <strong>Mark as finished</strong>
+                        </button>
+                    </div>
+                                    </form>
                 @endif
 
 
@@ -34,45 +50,55 @@
 
             <!-- Audio Bab -->
             <div class="mb-8">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Audio Bab</h2>
                 @if (!empty($detailBuku->audio))
-                    <audio controls class="w-full rounded-md border">
+                    <audio
+                        controls
+                        controlsList="nodownload"
+                        class="w-full bg-[#D3E9FF] rounded-[16px]  px-4 py-2 ">
                         <source src="{{ asset('storage/' . $detailBuku->audio) }}" type="audio/mpeg">
                         Browser Anda tidak mendukung pemutar audio.
                     </audio>
                 @else
-                    <p class="text-gray-500">Tidak ada audio untuk bab ini.</p>
+                <p class="text-[#E46B61] py-2">Tidak ada audio untuk bab ini</p>
                 @endif
             </div>
 
-            <div class="mb-8">
+
+
+            <div class="flex items-center justify-between p-4 border border-[#1E90FF] border-2 rounded-[16px] mt-10 mb-8">
                 @if ($quiz)
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Quiz</h2>
-                    <h3 class="text-lg font-medium text-black mb-4">{{ $quiz->nama_quiz }}</h3>
-                    @if ($quizScore)
-                        <p class="text-green-600 font-bold mb-4">Nilai Anda: {{ $quizScore }}</p>
-                    @else
-                        <p class="text-yellow-500 font-bold mb-4">{{ $quizStatus }}</p>
-                    @endif
-                    <a href="{{ route('user.quiz.kerjakan', $detailBuku->id_detail_buku) }}" class="bg-green-500 rounded-md p-2 text-white">
+                    <h3 class="text-lg font-medium text-[#052D6E]">
+                        Quiz: {{ $quiz->nama_quiz }}
+
+                    </h3>
+                    <div class="flex items-center space-x-8">
                         @if ($quizScore)
-                            Kerjakan Ulang Quiz
+                        <button
+                        class="w-full bg-[#1E90FF] text-white py-2 text-sm rounded-[12px] font-bold">
+                        Nilai : {{ $quizScore }}
+                    </button>
                         @else
-                            Kerjakan Quiz
+                            {{-- <p class="text-yellow-500 text-sm font-bold">{{ $quizStatus }}</p> --}}
                         @endif
-                    </a>
+                        <a href="{{ route('user.quiz.kerjakan', $detailBuku->id_detail_buku) }}"
+                            class="w-full bg-[#052D6E] text-sm text-center text-white py-2 px-4 rounded-[12px] font-bold hover:bg-[#AFC4E7FF] hover:text-[#052D6E] transition">
+                            @if ($quizScore)
+                                Kerjakan Ulang
+                            @else
+                                Kerjakan Quiz
+                            @endif
+                        </a>
+                    </div>
                 @else
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Tidak ada quiz</h2>
+                    <h2 class="text-lg font-bold text-[#052D6E]">
+                        Tidak ada quiz
+                    </h2>
                 @endif
             </div>
 
 
-            <!-- Tombol Navigasi -->
-            <div class="flex justify-between items-center mt-8 pt-6 border-t">
-                <a href="{{ route('user.buku.show', $detailBuku->id_buku) }}" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali
-                </a>
-            </div>
+
+
         </div>
     </div>
 </div>
@@ -87,12 +113,29 @@
         }
 
         </style>
-        <div id="custom-context-menu" class="hidden absolute bg-white shadow-lg border rounded-md z-50">
-            <ul>
-                <li id="copy-text" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Copy</li>
-                <li id="highlight-text" class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Highlight</li>
-            </ul>
-        </div>
+       <div id="custom-context-menu"
+       class="hidden absolute bg-white shadow-lg border-2 rounded-md z-50"
+       style="padding: 10px; border-color: #052D6E; background-color: #CFE2FF; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+      <ul style="list-style: none; margin: 0; padding: 0; font-family: 'Inter', sans-serif; font-size: 14px; color: #0c3c78;">
+          <li id="copy-text"
+              class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              style="padding: 8px 16px; margin-bottom: 4px; border-radius: 8px; transition: background-color 0.3s ease; display: flex; align-items: center; gap: 8px;">
+              <span class="material-icons" style="font-size: 16px; font-weight:700; color: #052D6E;">content_copy</span>
+              <strong>Coppy</strong>
+          </li>
+          <li id="highlight-text"
+              class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              style="padding: 8px 16px; border-radius: 8px; transition: background-color 0.3s ease; display: flex; align-items: center; gap: 8px;">
+              <span class="material-icons" style="font-size: 16px; font-weight:700; color: #052D6E;">highlight</span>
+              <strong>Highlight</strong>
+          </li>
+      </ul>
+  </div>
+
+  <!-- Tambahkan link ke Material Icons jika belum ada -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {

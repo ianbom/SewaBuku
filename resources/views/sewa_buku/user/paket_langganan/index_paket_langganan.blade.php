@@ -22,7 +22,7 @@
 
  <!-- Judul Halaman -->
  <div class="flex justify-between items-center mb-12">
-    <h1 class="text-3xl font-bold text-left text-[052D6E]" style="font-family: 'Libre Baskerville', serif; color: #052D6E;">Subscription Package</h1>
+    <h1 class="text-3xl font-bold text-left text-[052D6E]" style="font-family: 'Libre Baskerville', serif; color: #052D6E;">Paket Langganan</h1>
 </div>
 
 <!-- Package Cards -->
@@ -47,7 +47,7 @@
             <!-- Time and Price -->
             <div class="flex justify-between items-center mb-6 p-3 border rounded-[8px]">
                 <div class="flex items-center space-x-2">
-                    <span class="text-[14px]">Time: {{ $paket->masa_waktu }} Days</span>
+                    <span class="text-[14px]">Waktu: {{ $paket->masa_waktu }} Hari</span>
                 </div>
                 <div class="text-[16px] font-bold">
                     <bold>Rp. {{ number_format($paket->harga, 0, ',', '.') }}</bold>
@@ -58,7 +58,7 @@
                 <button type="button"
                         class="w-full bg-[#D3E9FF] text-[#1E90FF] py-4 rounded-[12px] font-bold hover:bg-white transition"
                         onclick="showModal('{{ route('user.order.store', $paket->id_paket_langganan) }}', '{{ $paket->nama_paket }}')">
-                    Subscribe Now
+                    Berlanggan Sekarang
                 </button>
             @else
                 <p class="text-[#E46B61] text-center py-2">Paket tidak tersedia</p>
@@ -71,14 +71,14 @@
 <!-- Modal -->
 <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
     <div class="bg-white rounded-[16px] p-6 w-[90%] max-w-md">
-        <h3 class="text-[16px] font-bold text-[#052D6E] mb-4" style="font-family: 'Inter', sans-serif;">Confirm Subscription</h3>
-        <p class="text-[#979797] mb-6 text-[14px]" style="font-family: 'Inter', sans-serif;">Are you sure you want to subscribe to <span id="modalPackageName" class="font-bold"></span>?</p>
+        <h3 class="text-[16px] font-bold text-[#052D6E] mb-4" style="font-family: 'Inter', sans-serif;">Konfirmasi Langganan</h3>
+        <p class="text-[#979797] mb-6 text-[14px]" style="font-family: 'Inter', sans-serif;">Apa kamu yakin ingin membeli  <span id="modalPackageName" class="font-bold"></span>?</p>
         <div class="flex justify-end space-x-4">
-            <button type="button" class="px-4 text-bold py-2 bg-[#FFCFC2] text-[#E46B61] rounded-[12px] hover:bg-[#E46B61] hover:text-white" onclick="closeModal()"><strong> Cancel</strong></button>
+            <button type="button" class="px-4 text-bold py-2 bg-[#FFCFC2] text-[#E46B61] rounded-[12px] hover:bg-[#E46B61] hover:text-white" onclick="closeModal()"><strong> Batal </strong></button>
             <form id="orderForm" method="POST">
                 @csrf
                 <button type="submit" class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
-                    <strong>Confirm</strong>
+                    <strong>Konfirmasi</strong>
                 </button>
             </form>
         </div>

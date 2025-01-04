@@ -1,195 +1,372 @@
     @extends('sewa_buku.layouts.userApp')
 
     @section('title')
-        {{ $buku->judul_buku }}
+    {{ $buku->judul_buku }}
     @endsection
 
     @section('content')
-    <div class="container mx-8 px-4 py-8">
-        <div class="max-w-6xl">
-            <!-- Main Content -->
-            <div class=" max-w">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 p-8">
-                    <!-- Left Column - Image -->
-                    <div>
-                        @if($buku->coverBuku && $buku->coverBuku->count() > 0)
-                            <img src="{{ asset('storage/' . $buku->coverBuku->first()->file_image) }}"
-                                alt="Cover Buku"
-                                class="w-full h-[500px] object-cover rounded-lg ">
-                        @endif
-                    </div>
 
-                    <!-- Right Column - Book Info -->
+    <style>
+        .star {
+            font-size: 3rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .star:hover {
+            color: #052D6E; /* Hover color */
+            transform: scale(1.2); /* Slightly enlarge on hover for a fun effect */
+        }
+
+        .active {
+            color: #052D6E !important; /* Active rating color */
+        }
+        .custom-audio {
+            background-color: #D3E9FF;
+            border-radius: 16px;
+            color: #1E90FF  !important; /* Warna teks bawaan */
+        }
+        .custom-audio::-webkit-media-controls-panel {
+            background-color: #D3E9FF; /* Background panel transparan */
+        }
+        .custom-audio::-webkit-media-controls-play-button {
+            background-color: white;
+            border-radius: 50px;
+            color: #1E90FF  !important; /* Warna tombol play */
+        }
+        .custom-audio::-webkit-media-controls-timeline {
+            color: #1E90FF  !important;
+        }
+        .custom-audio::-webkit-media-controls-current-time-display,
+        .custom-audio::-webkit-media-controls-time-remaining-display {
+            color: #1E90FF  !important;
+        }
+        .custom-audio::-webkit-media-controls-play-button,
+        .custom-audio::-webkit-media-controls-pause-button,
+        .custom-audio::-webkit-media-controls-mute-button,
+        .custom-audio::-webkit-media-controls-timeline,
+        .custom-audio::-webkit-media-controls-volume-slider-container,
+        .custom-audio::-webkit-media-controls-current-time-display,
+        .custom-audio::-webkit-media-controls-time-remaining-display,
+        .custom-audio::-webkit-media-controls-button,
+        .custom-audio::-webkit-media-controls-panel {
+            color: #1E90FF  !important;
+        }
+
+        /* Tambahan untuk ikon titik tiga */
+        .custom-audio::-webkit-media-controls {
+            color: #1E90FF  !important;
+        }
+        .bg-[#F1F8FF] {
+            background-color: #F1F8FF !important;
+        }
+
+        .border-[#A3D8FF] {
+            border-color: #A3D8FF !important;
+        }
+    </style>
+    <div class="container mx-auto mt-10 p-10">
+        <!-- Main Content -->
+        <div class=" max-w">
+            <div class="grid grid-cols-12 gap-12">
+                <!-- Left Column - Image -->
+                <div class="col-span-3">
+                    @if($buku->coverBuku && $buku->coverBuku->count() > 0)
+                    <img src="{{ asset('storage/' . $buku->coverBuku->first()->file_image) }}"
+                    alt="Cover Buku"
+                    class="w-full h-[300px] object-cover rounded-[16px] ">
+                    @endif
+                </div>
+
+                <!-- Right Column - Book Info -->
+                <div class="col-span-9">
                     <div class="flex flex-col">
                         <div class="mb-6">
-                            <h1 class="text-3xl font-bold mb-2">{{ $buku->judul_buku }}</h1>
-                            <p class="text-gray-600">{{ $buku->penulis }}</p>
-                            <p class="text-sm text-gray-500">Published by {{ $buku->penerbit }}</p>
-                            <p class="text-sm text-black"> {{ $buku->tentang_penulis }}</p>
-
-                            <hr class="border-t border-black my-4">
-
-                        <!-- Stats -->
-                        <div class="grid grid-cols-3 gap-4 mb-6">
-                            <div class="text-center p-3 bg-gray-50 rounded-lg">
-                                <span class="block text-sm text-gray-500">Reading Time</span>
-                                <span class="block text-lg font-semibold"> {{ floor($buku->totalWaktu / 60) }} Min</span>
-                            </div>
-                            <div class="text-center p-3 bg-gray-50 rounded-lg">
-                                <span class="block text-sm text-gray-500">Rating</span>
-                                <span class="block text-lg font-semibold">{{ number_format($averageRating, 1) }}</span>
-                            </div>
-                            <div class="text-center p-3 bg-gray-50 rounded-lg">
-                                <span class="block text-sm text-gray-500">Chapters</span>
-                                <span class="block text-lg font-semibold">{{ $buku->jumlahChapter }} </span>
-                            </div>
-                            <div class="text-center p-3 bg-gray-50 rounded-lg">
-                                <span class="block text-sm text-gray-500">Quiz</span>
-                                <span class="block text-lg font-semibold">{{ $jumlahQuiz }}</span>
-                            </div>
+                            <h2 class="text-[28px] font-bold text-[#052D6E] mb-3 " style="font-family: 'Libre Baskerville', serif;">{{ $buku->judul_buku }}</h2>
+                            <p class="text-[#052D6E] font-bold mb-2 ">AUTHOR - {{ $buku->penulis }} / PUBLISHER - {{ $buku->penerbit }}</p>
+                            <p class="text-sm text-[#979797] font-bold"> {{ $buku->tentang_penulis }}</p>
                         </div>
+                        <hr class="w-full border-t border-[#052D6E] ">
 
-                        <hr class="border-t border-black my-4">
-                        <!-- Actions -->
-                        <div class="flex gap-4 mb-6">
-                            @if ($buku->is_free || $checkLanggananAktif)
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+                            <div class="flex mt-6 items-center">
+                                <div class="text-center  bg-[#D3E9FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                    <i class="fas fa-clock text-[#1E90FF] text-[12px]"></i>
+                                </div>
+                                <span class="text-[12px] text-[#979797] font-bold">{{ floor($buku->totalWaktu / 60) }} Menit</span>
+                            </div>
+
+
+                            <div class="flex mt-6 items-center">
+                                <div class="text-center  bg-[#FAFAD8] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                    <i class="fas fa-star text-[#B79F54] text-[12px]"></i>
+                                </div>
+                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ number_format($averageRating, 1) }} </span>
+                            </div>
+
+                            <div class="flex mt-6 items-center">
+                                <div class="text-center bg-[#FFE8E2] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                    <i class="fas fa-book text-[#DD7971] text-[12px]"></i>
+                                </div>
+                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ $buku->jumlahChapter }} Tipe</span>
+                            </div>
+
+                            <div class="flex  mt-6 items-center">
+                                <div class="text-center  bg-[#EBE4FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                    <i class="fas fa-question-circle text-[#8F7CC1] text-[12px]"></i>
+                                </div>
+                                <span class="text-[12px] text-[#979797] font-bold">{{ $jumlahQuiz }} Bab</span>
+                            </div>
+
+                        </div>                        <hr class="border-t border-[#052D6E] ">
+
+
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex gap-4 mb-6">
+
+                        @if ($buku->is_free || $checkLanggananAktif)
+
+                        <div class="flex justify-end mt-6">
                             <a href="{{ route('user.buku.bacaBab', $buku->detailBuku->first()->id_detail_buku) }}"
-                               class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700">Baca Buku</a>
+                                type="submit"
+                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#052D6E]">
+                                <strong>Baca Buku</strong>
+                            </a>
+                        </div>
                         @else
-                            <span class="block bg-gray-400 text-white py-2 px-4 rounded text-center">Langganan untuk membaca</span>
+                        <div class="flex justify-end mt-6">
+                            <a href="{{ route('user.buku.bacaBab', $buku->detailBuku->first()->id_detail_buku) }}"
+                                type="submit"
+                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#052D6E]">
+                                <strong>Langganan untuk membaca</strong>
+                            </a>
+                        </div>
                         @endif
 
                         @if ($diselesaikanCheck)
                         <form action="{{ route('user.delete.bookFinished', $buku->id_buku) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="bg-red-500 rounded-md p-1 text-white"> Delete mark</button>
-                        </form>
-                        @else
-                        <form action="{{ route('user.mark.bookFinished', $buku->id_buku) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="bg-blue-500 rounded-md p-1 text-white"> Mark as finished</button>
-                        </form>
-                        @endif
-
-                            <form
-                            action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}"
-                            method="POST"
-                            class="mt-2">
-                            @csrf
-
-                            @if(in_array($buku->id_buku, $favorites))
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full flex items-center justify-center gap-2">
-                                    <i class="fas fa-trash-alt"></i> Hapus Favorite
-                                </button>
-                            @else
-                                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full flex items-center justify-center gap-2">
-                                    <i class="far fa-heart"></i> Tambah ke Favorite
-                                </button>
-                            @endif
-                        </form>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mx-8">
-             <!-- Synopsis -->
-            <div class="mb-6 mx-4">
-                <h2 class="text-xl font-semibold mb-3">Synopsis of the Book</h2>
-                <p class="text-gray-600">{{ $buku->sinopsis }}</p>
-            </div>
-
-            <!-- Audio Preview -->
-            @if($buku->teaser_audio)
-            <div class="w-full bg-gray-50 p-4 rounded-lg">
-                <audio controls class="w-full">
-                    <source src="{{ asset('storage/' . $buku->teaser_audio) }}" type="audio/mp3">
-                </audio>
-            </div>
-            @endif
-
-            {{-- Highlight --}}
-            <div class="mb-6 mx-4">
-                <h1 class="text-xl font-semibold mb-3 text-red-800">Your Highlight</h1>
-               @forelse ($highlight as $highlight)
-               <h3 class="text-gray-600">{{ $highlight->highlight }}</h3>
-               @empty
-                <p>Anda tidak memiliki highlight</p>
-               @endforelse
-            </div>
-
-            <!-- Reviews Section -->
-            @if($rating)
-            <div class="mt-8  rounded-xl p-8">
-                <h2 class="text-2xl font-semibold mb-6">Reviews</h2>
-                <div class="space-y-6">
-                    @foreach($rating as $review)
-                    <div class="border-b border-gray-200 pb-6">
-                        <div class="flex items-center mb-2">
-                            <span class="font-semibold mr-2">{{ $review->user->name }}</span>
-                            <span class="text-yellow-400">★</span>
-                            <span class="ml-1">{{ $review->rating }}/5</span>
-                        </div>
-                        <p class="text-gray-600">{{ $review->komentar }}</p>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-            @endif
-
-            <div class="mt-10 mx-8">
-                @if ($checkLanggananAktif)
-                    @if ($ratingCheck)
-                        <h3 class="text-xl font-semibold mb-4">Rating Anda:</h3>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-bold mb-2">Rating:</label>
-                            <p class="text-gray-900">{{ $ratingCheck->rating }} / 5</p>
-                        </div>
-
-                        @if ($ratingCheck->komentar)
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-bold mb-2">Komentar:</label>
-                                <p class="text-gray-900">{{ $ratingCheck->komentar }}</p>
-                            </div>
-                        @endif
-                    @else
-                        <h3 class="text-xl font-semibold mb-4">Berikan Rating untuk Buku Ini:</h3>
-                        <form action="{{ route('user.rating.store', $buku->id_buku) }}" method="POST" class="bg-gray-50 p-6 rounded-lg">
-                            @csrf
-                            <div class="mb-4">
-                                <label for="rating" class="block text-gray-700 font-bold mb-2">Rating (1-5):</label>
-                                <select id="rating" name="rating" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label for="komentar" class="block text-gray-700 font-bold mb-2">Komentar:</label>
-                                <textarea id="komentar" name="komentar" rows="3" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm"></textarea>
-                            </div>
-                            <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-                                Submit Rating
+                            <div class="flex justify-end mt-6">
+                                <button
+                                type="submit"
+                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#1E90FF] rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
+                                <i class="fas fa-trash-alt"></i>
+                                <strong>Hapus Tanda Selesai</strong>
                             </button>
-                        </form>
-                    @endif
-                @else
-                    <div class="bg-yellow-50 p-4 rounded-lg text-yellow-800">
-                        Anda belum berlangganan. Silakan berlangganan untuk memberikan rating.
-                    </div>
+                        </div>
+
+                    </form>
+                    @else
+                    <form action="{{ route('user.mark.bookFinished', $buku->id_buku) }}" method="POST">
+                        @csrf
+                        <button
+                        type="submit"
+                        class="flex mt-6 items-center gap-2 px-4 py-3 text-white bg-[#1E90FF] rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <strong>Tandai Selesai</strong>
+                    </button>
+                </form>
                 @endif
-            </div>
 
+                <form
+                action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}"
+                method="POST"
+                class="mt-2">
+                @csrf
+
+                @if(in_array($buku->id_buku, $favorites))
+                @method('DELETE')
+                <button type="submit" class="flex mt-4 items-center gap-2 px-4 py-3 text-white bg-[#DD7971] rounded-[12px] hover:bg-[#FFE8E2] hover:text-[#DD7971]">
+                    <i class="fas fa-trash-alt"></i> <strong> Hapus Favorite </strong>
+                </button>
+                @else
+                <button type="submit" class="flex mt-4 items-center gap-2 px-4 py-3 text-white bg-[#DD7971] rounded-[12px] hover:bg-[#FFE8E2] hover:text-[#DD7971]">
+                    <i class="far fa-heart"></i> <strong> Tambah ke Favorite </strong>
+                </button>
+                @endif
+            </form>
+
+            <div class="flex justify-end mt-6">
+                <button
+                type="button"
+                onclick="toggleModal('ratingModal')"
+                class="flex items-center gap-2 px-4 py-3 text-white bg-[#B79F54] rounded-[12px] hover:bg-[#FAFAD8] hover:text-[#B79F54]">
+                <i class="fas fa-pen"></i>
+                <strong>Beri Ulasan</strong>
+            </button>
         </div>
-
-
 
 
     </div>
-    @endsection
+</div>
+</div>
+</div>
+
+<div class="mt-12">
+    <!-- Synopsis -->
+    <div class="mb-10 ">
+        <p class="text-[18px] text-[#052D6E] font-bold mb-2 ">Sinopsis Buku</p>
+        <p class=" text-[#979797] leading-relaxed"> {{ $buku->sinopsis }}</p>
+    </div>
+
+
+    <!-- Audio Preview -->
+    @if($buku->teaser_audio)
+    <div class="mt-8 mb-8">
+
+        <audio controls controlsList="nodownload" class="custom-audio w-full">
+            <source src="{{ asset('storage/' . $buku->teaser_audio) }}" type="audio/mp3">
+            </audio>
+        </div>
+        @endif
+
+        {{-- Highlight --}}
+        <div class="mt-10">
+            <p class="text-[18px] text-[#052D6E] font-bold mb-4 ">Highlight</p>
+            @forelse ($highlight as $index => $item)
+            <div class="flex items-center justify-between p-4 rounded-[16px] mb-4 {{ $index % 2 === 0 ? 'bg-[#D3E9FF] text-[#1E90FF]' : 'bg-[#EBE4FF] text-[#8F7CC1]' }}">
+                <h3 class="flex-1 text-sm font-semibold text-inherit">{{ $item->highlight }}</h3>
+                <!-- Div Ikon -->
+                <div onclick="copyToClipboard('{{ $item->highlight }}')"  class="text-center {{ $index % 2 === 0 ? 'bg-[#1E90FF]' : 'bg-[#8F7CC1]' }} p-2 rounded-[6px] flex items-center justify-center">
+                    <i class="fas fa-copy text-white text-[12px]"></i>
+                </div>
+            </div>
+            @empty
+            <p class="text-[#E46B61]">Anda tidak memiliki highlight</p>
+            @endforelse
+        </div>
+
+        <script>
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Highlight berhasil disalin!');
+                }).catch(err => {
+                    console.error('Error copying text: ', err);
+                });
+            }
+        </script>
+
+        <!-- Reviews Section -->
+        @if($rating)
+        <div class="mt-8 rounded-xl">
+            <p class="text-[18px] text-[#052D6E] font-bold mb-4">Ulasan</p>
+            <!-- Grid container with 2 columns -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @foreach($rating as $review)
+                <div
+                class="border p-4 rounded-lg
+            @if(auth()->check() && $review->id == auth()->id()) bg-[#F1F8FF] border-[#A3D8FF] @else bg-white border-[#D3E9FF] @endif">
+                <div class="flex items-center mb-2">
+                    <span class="font-semibold text-[#1E90FF] text-sm mr-2">{{ $review->user->name }}</span>
+                    <span class="text-[#B79F54] ml-2">★</span>
+                    <span class="text-sm text-[#979797] ml-1">{{ $review->rating }}/5</span>
+                </div>
+                <p class="text-[#979797] text-sm">{{ $review->komentar }}</p>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    <!-- add ratting section  -->
+    <div class="mt-10">
+        @if ($checkLanggananAktif)
+
+
+        <div id="ratingModal" class="hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-8 rounded-lg w-full max-w-md">
+                @if ($ratingCheck)
+                <h3 class="text-[16px] font-bold text-[#052D6E] mb-4" style="font-family: 'Inter', sans-serif;">Peringatan</h3>
+                <p class="text-[#979797] mb-6 text-[14px]" style="font-family: 'Inter', sans-serif;">Anda sudah memberikan rating untuk buku ini. Terima kasih atas partisipasi Anda!</p>
+                <div class="flex justify-end">
+                    <button onclick= "toggleModal('ratingModal')"  class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
+                        <strong>OK</strong>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        @else
+        <h3 class="text-[16px] font-bold text-[#052D6E] mb-4" style="font-family: 'Inter', sans-serif;">Berikan Rating untuk Buku Ini:</h3>
+        <form action="{{ route('user.rating.store', $buku->id_buku) }}" method="POST">
+            @csrf
+            <!-- Rating Stars -->
+            <div class="flex justify-center mb-4">
+                <div class="flex items-center space-x-2">
+                    <input type="hidden" id="rating" name="rating" value="5">
+                    <div class="flex text-[#1E90FF] space-x-1">
+                        <span class="cursor-pointer star" onclick="setRating(1)">★</span>
+                        <span class="cursor-pointer star" onclick="setRating(2)">★</span>
+                        <span class="cursor-pointer star" onclick="setRating(3)">★</span>
+                        <span class="cursor-pointer star" onclick="setRating(4)">★</span>
+                        <span class="cursor-pointer star" onclick="setRating(5)">★</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Komentar Section -->
+            <div class="mb-4">
+                <textarea id="komentar" name="komentar" rows="3" placeholder="Tuliskan komentar Anda..." class="block text-[14px] w-full p-4 border rounded-[16px] text-[#979797] border-[#1E90FF] focus:outline-none focus:ring-1 focus:ring-[#1E90FF]"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="button" onclick="toggleModal('ratingModal')" class=" mr-4 px-4 text-bold py-2 bg-[#FFCFC2] text-[#E46B61] rounded-[12px] hover:bg-[#E46B61] hover:text-white">
+                    <strong>Batal</strong>
+                </button>
+                <button type="submit" class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
+                    <strong>Kirim</strong>
+                </button>
+                @endif
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@else
+<div class="bg-yellow-50 p-4 rounded-lg text-yellow-800">
+    Anda belum berlangganan. Silakan berlangganan untuk memberikan rating.
+</div>
+@endif
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+<script>
+    function toggleModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.toggle('hidden');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+
+    function setRating(value) {
+        document.getElementById('rating').value = value;
+        const stars = document.querySelectorAll('.star');
+        stars.forEach((star, index) => {
+            if (index < value) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+
+
+</script>
+@endsection

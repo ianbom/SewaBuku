@@ -1,108 +1,161 @@
 @extends('sewa_buku.layouts.userApp')
 
 @section('content')
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold text-blue-900 mb-8 mt-16">Collection</h1>
 
-    <!-- Last Pick Up Section -->
-    <div class="mb-10">
-        <h2 class="text-lg font-semibold mb-4">Last Pick Up</h2>
-        <div class="bg-blue-50 rounded-lg p-4">
-            <div class="flex items-center space-x-4">
-                @if($terakhirDibaca && $terakhirDibaca->buku->coverBuku->first())
-                    <img src="{{ asset('storage/' . $terakhirDibaca->buku->coverBuku->first()->file_image) }}"
-                         alt="Last Book"
-                         class="w-24 h-32 object-cover rounded-lg shadow">
-                @endif
-                <div>
-                    <h3 class="font-medium">{{ $terakhirDibaca->buku->judul_buku ?? 'No book found' }}</h3>
-                    <p class="text-gray-600">{{ $terakhirDibaca->buku->penulis ?? '' }}</p>
-                    <!-- Audio Player -->
-                    <div class="mt-4 bg-white rounded-full h-10 flex items-center px-4 w-64">
-                        <div class="flex-1 bg-blue-500 h-1 rounded-full"></div>
-                        <button class="ml-4 text-blue-500">
-                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<head>
+    <style>
+        .custom-audio {
+            background-color: white;
+            color: #1E90FF  !important; /* Warna teks bawaan */
+        }
+        .custom-audio::-webkit-media-controls-panel {
+            background-color: white; /* Background panel transparan */
+        }
+        .custom-audio::-webkit-media-controls-play-button {
+            background-color: white; /* Transparansi tombol play */
+            color: #1E90FF  !important; /* Warna tombol play */
+        }
+        .custom-audio::-webkit-media-controls-timeline {
+            color: #1E90FF  !important;
+        }
+        .custom-audio::-webkit-media-controls-current-time-display,
+        .custom-audio::-webkit-media-controls-time-remaining-display {
+            color: #1E90FF  !important;
+        }
+        .custom-audio::-webkit-media-controls-play-button,
+    .custom-audio::-webkit-media-controls-pause-button,
+    .custom-audio::-webkit-media-controls-mute-button,
+    .custom-audio::-webkit-media-controls-timeline,
+    .custom-audio::-webkit-media-controls-volume-slider-container,
+    .custom-audio::-webkit-media-controls-current-time-display,
+    .custom-audio::-webkit-media-controls-time-remaining-display,
+    .custom-audio::-webkit-media-controls-button,
+    .custom-audio::-webkit-media-controls-panel {
+        color: #1E90FF  !important;
+    }
+
+    /* Tambahan untuk ikon titik tiga */
+    .custom-audio::-webkit-media-controls {
+        color: #1E90FF  !important;
+    }
+        </style>
+
+</head>
+<div class="container mx-auto p-10">
+
+    <!-- Header Section -->
+    <div class="mb-4">
+        <h1 class="text-[40px] font-bold text-left text-[#052D6E] mb-10" style="font-family: 'Libre Baskerville', serif;">Koleksi</h1>
+
+
+     <!-- Last Pickup Section -->
+     <h2 class="text-[18px] font-semibold mb-4 text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Terakhir di baca</h2>
+     <div class="bg-[#D3E9FF] rounded-[16px] p-4 inline-block mb-10">
+         <div class="flex items-center space-x-4">
+             @if($terakhirDibaca && $terakhirDibaca->buku->coverBuku->first())
+                 <img src="{{ asset('storage/' . $terakhirDibaca->buku->coverBuku->first()->file_image) }}"
+                     alt="Last Book"
+                     class="w-32 h-280 object-cover rounded-[16px] ">
+             @else
+                 <img src="https://via.placeholder.com/150" alt="Last Book" class="rounded-[16px]">
+             @endif
+
+             <div>
+                 <p class="text-[#052D6E] font-bold mb-2 ">{{ $terakhirDibaca->buku->judul_buku ?? 'No book found' }}</p>
+                 <p class="text-sm text-[#979797] font-bold"> {{ $terakhirDibaca->buku->penulis ?? '' }}</p>
+
+                 <!-- Audio Player -->
+                 <div class="mt-4 bg-white rounded-[16px] h-16 flex items-center px-4 w-full">
+                     <audio controls controlsList="nodownload" class="custom-audio">
+                         <source src="{{ asset('storage/' . $terakhirDibaca->buku->ringkasan_audio) }}" type="audio/mpeg">
+                         Browser Anda tidak mendukung pemutar audio.
+                     </audio>
+                 </div>
+             </div>
+         </div>
+     </div>
     </div>
 
     <!-- Saved -->
-    <div class="mb-10">
-        <h2 class="text-lg font-semibold mb-4">Saved</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-12 ">
+    <div class="mb-20">
+        <div class="flex mt-6 mb-6 items-center">
+            <div class="text-center bg-[#052D6E] p-2 rounded-[6px] mr-4 flex items-center justify-center">
+                <i class="fas fa-save text-white text-[18px]"></i>
+            </div>
+            <h2 class="text-[18px] font-semibold text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Tersimpan</h2>
+
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             @foreach($buku as $book)
-            <div class="bg-white rounded-lg overflow-hidden flex flex-col">
-                @if($book->coverBuku && $book->coverBuku->first())
-                    <a href="{{ route('user.buku.show', $book->id_buku) }}">
-                        <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}"
-                             alt="{{ $book->judul_buku }}"
-                             class="w-full aspect-[9/16] object-cover rounded-xl">
-                    </a>
-                @endif
-                <div class="p-3 flex-1 flex flex-col justify-between">
-                    <h3 class="font-medium text-sm">{{ $book->judul_buku }}</h3>
-                    <p class="text-gray-600 text-xs">{{ $book->penulis }}</p>
-                    <!-- Duration and Rating -->
-                    <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
-                        <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            {{ floor($book->totalWaktu / 60) }} Min
-                        </span>
-                        <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            {{ number_format($book->ratingRerata, 1) }}
-                        </span>
+<div class="bg-white rounded-[16px] overflow-hidden border-2 border-transparent hover:border-[#D3E9FF] transition-all">
+                <!-- Wrap the entire book card in a link to the book detail page -->
+                <a href="{{ route('user.buku.show', $book->id_buku) }}">
+                    @if($book->coverBuku && $book->coverBuku->first())
+                        <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Cover Buku" class="w-full h-128 object-cover rounded-[16px]">
+                    @else
+                        <img src="https://via.placeholder.com/150" alt="Cover Placeholder" class="w-full h-64 object-cover">
+                    @endif
+                </a>
+
+                <div class="p-4">
+                    <h3 class="text-[#052D6E] text-[14px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">{{ $book->judul_buku }}</h3>
+                    <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">{{ $book->penulis }}</p>
+
+                    <div class="flex justify-between items-center text-[#979797] text-sm mt-4">
+                        <div class="flex items-center">
+                            <i class="fa fa-clock mr-2 p-2 rounded-[8px] text-[12px]" style="background-color: #D3E9FF; color: #1E90FF;"></i>
+                            <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif;">{{ floor($book->totalWaktu / 60) }} Min</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-star mr-2 p-2 rounded-[8px] text-[12px]" style="background-color: #FAFAD8; color: #B79F54; "></i>
+                            <span class="font-inter font-medium text-[12px]" style="color: #979797;font-family: 'Inter', sans-serif;">{{ number_format($book->ratingRerata, 1) }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
-
             @endforeach
         </div>
-    </div>
+
+
+
 
     <!-- Finished -->
-    <div class="mb-10">
-        <h2 class="text-lg font-semibold mb-4">Finished</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-12 ">
+    <div class="mt-10">
+        <div class="flex mt-6 mb-6 items-center">
+            <div class="text-center bg-[#052D6E] p-2 rounded-[6px] mr-4 flex items-center justify-center">
+                <i class="fas fa-check-circle text-white text-[18px]"></i>
+            </div>
+            <h2 class="text-[18px] font-semibold text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Selesai</h2>
+
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             @foreach($bukuDiselesaikan as $book)
-            <div class="bg-white rounded-lg overflow-hidden flex flex-col">
-                @if($book->coverBuku && $book->coverBuku->first())
-                    <a href="{{ route('user.buku.show', $book->id_buku) }}">
-                        <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}"
-                             alt="{{ $book->judul_buku }}"
-                             class="w-full aspect-[9/16] object-cover rounded-xl">
-                    </a>
-                @endif
-                <div class="p-3 flex-1 flex flex-col justify-between">
-                    <h3 class="font-medium text-sm">{{ $book->judul_buku }}</h3>
-                    <p class="text-gray-600 text-xs">{{ $book->penulis }}</p>
-                    <!-- Duration and Rating -->
-                    <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
-                        <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            {{ floor($book->totalWaktu / 60) }} Min
-                        </span>
-                        <span class="flex items-center">
-                            <svg class="w-3 h-3 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            {{ number_format($book->ratingRerata, 1) }}
-                        </span>
+            <div class="bg-white rounded-[16px] overflow-hidden border-2 border-transparent hover:border-[#D3E9FF] transition-all">
+                <!-- Wrap the entire book card in a link to the book detail page -->
+                <a href="{{ route('user.buku.show', $book->id_buku) }}">
+                    @if($book->coverBuku && $book->coverBuku->first())
+                        <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Cover Buku" class="w-full h-128 object-cover rounded-[16px]">
+                    @else
+                        <img src="https://via.placeholder.com/150" alt="Cover Placeholder" class="w-full h-64 object-cover">
+                    @endif
+                </a>
+
+                <div class="p-4">
+                    <h3 class="text-[#052D6E] text-[14px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">{{ $book->judul_buku }}</h3>
+                    <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">{{ $book->penulis }}</p>
+
+                    <div class="flex justify-between items-center text-[#979797] text-sm mt-4">
+                        <div class="flex items-center">
+                            <i class="fa fa-clock mr-2 p-2 rounded-[8px] text-[12px]" style="background-color: #D3E9FF; color: #1E90FF;"></i>
+                            <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif;">{{ floor($book->totalWaktu / 60) }} Min</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-star mr-2 p-2 rounded-[8px] text-[12px]" style="background-color: #FAFAD8; color: #B79F54; "></i>
+                            <span class="font-inter font-medium text-[12px]" style="color: #979797;font-family: 'Inter', sans-serif;">{{ number_format($book->ratingRerata, 1) }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
-
             @endforeach
         </div>
     </div>

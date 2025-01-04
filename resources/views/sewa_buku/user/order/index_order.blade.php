@@ -32,7 +32,8 @@
 
     @if($order->isEmpty())
         <!-- Pesan jika tidak ada order -->
-        <p class="text-center text-gray-500 text-lg mt-6">Belum ada order yang dilakukan atau tidak ada hasil pencarian yang ditemukan.</p>
+        <p class="text-[#E46B61]">Belum ada order yang dilakukan atau tidak ada hasil pencarian yang ditemukan</p>
+
     @else
         <!-- Tabel Order -->
         <div id="order-table-container" class="overflow-x-auto rounded-[16px] mt-6 border border-[#1E90FF] border-2" style="font-family: 'Inter', sans-serif;">

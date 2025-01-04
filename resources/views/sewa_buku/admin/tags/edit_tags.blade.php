@@ -44,16 +44,45 @@
                             @method('PUT')
 
                             <!-- Nama Tags -->
-                            <div class="mb-3">
-                                <label for="nama_tags" class="form-label">Nama Tags</label>
-                                <input type="text" id="nama_tags" name="nama_tags" value="{{ old('nama_tags', $tags->nama_tags) }}"
-                                       class="form-control @error('nama_tags') is-invalid @enderror" required>
-                                @error('nama_tags')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                            @if ($tags->id_child != null)
+                                <div class="mb-3">
+                                    <label for="id_child" class="form-label">ID Parent (Optional)</label>
+                                    <select name="id_child" class="form-control">
+                                        <option value="">-- Pilih Parent Tag (Opsional) --</option>
+                                        @foreach ($parent as $tag)
+                                            <option value="{{ $tag->id_tags }}"
+                                                {{ old('id_child', $tags->id_child) == $tag->id_tags ? 'selected' : '' }}>
+                                                {{ $tag->nama_tags }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('id_child')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nama_tags" class="form-label">Nama Tags</label>
+                                    <input type="text" id="nama_tags" name="nama_tags" value="{{ old('nama_tags', $tags->nama_tags) }}"
+                                           class="form-control @error('nama_tags') is-invalid @enderror" required>
+                                    @error('nama_tags')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            @else
+                                <div class="mb-3">
+                                    <label for="nama_tags" class="form-label">Nama Tags</label>
+                                    <input type="text" id="nama_tags" name="nama_tags" value="{{ old('nama_tags', $tags->nama_tags) }}"
+                                           class="form-control @error('nama_tags') is-invalid @enderror" required>
+                                    @error('nama_tags')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            @endif
+                            
 
                             <!-- Tombol Simpan Perubahan -->
                             <div class="text-end mt-4">

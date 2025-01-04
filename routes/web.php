@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/store', [TagsController::class, 'storetags'])->name('admin.tags.store');
             Route::get('/edit/{id}', [TagsController::class, 'editTags'])->name('admin.tags.edit');
             Route::put('/update/{id}', [TagsController::class, 'updateTags'])->name('admin.tags.update');
+            Route::delete('/delete/{id}', [TagsController::class, 'deleteTags'])->name('admin.tags.delete');
         });
 
         Route::resource('/quiz', QuizController::class)->except('create');
@@ -93,7 +94,7 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('/baca/bab/{id}', [LanggananController::class, 'bacaBabBuku'])->name('user.buku.bacaBab');
         Route::get('/quiz/{id}', [QuizController::class, 'kerjakanQuiz'])->name('user.quiz.kerjakan');
         Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
-        Route::get('/search', [BukuController::class, 'searchBukuIndex'])->name('user.buku.search');
+
         Route::get('/search/buku', [BukuController::class, 'searchBuku'])->name('buku.search');
         Route::post('/markFinished/{id}', [LanggananController::class, 'tandaiBabDiselesaikan'])->name('user.mark.finished');
         Route::delete('/deleteMarkFinished/{id}', [LanggananController::class, 'hapusTandaBabDiselesaikan'])->name('user.delete.finished');
@@ -101,8 +102,14 @@ Route::group(['prefix' => 'user'], function () {
         Route::delete('/deleteMarkBookFinished/{id}', [LanggananController::class, 'hapusTandaBukuDiselesaikan'])->name('user.delete.bookFinished');
         Route::get('/collection', [BukuController::class, 'myCollection'])->name('user.myCollection');
         Route::post('/highlight-text', [LanggananController::class, 'highlightText'])->name('user.highlight.text');
-
+        Route::get('/highlight', [BukuController::class, 'highlightUser'])->name('user.highlight');
+        Route::get('/highlight/{id}', [BukuController::class, 'detailHighlight'])->name('user.highlight.detail');
+        Route::delete('/highlight/delete/{id}', [BukuController::class, 'hapusHighlight'])->name('user.highlight.delete');
+        Route::get('/search/highlight', [BukuController::class, 'searchBukuHighlight'])->name('highlight.search');
     });
+    Route::get('/user/buku/search', [BukuController::class, 'searchBukuIndex'])->name('search_buku');
+    // Route::get('user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');
+    // Route::get('/user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');
 
     Route::group(['prefix' => 'order'], function () {
         Route::get('/index', [OrderController::class, 'indexOrder'])->name('user.order.index');

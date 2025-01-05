@@ -12,7 +12,7 @@
     </div>
 
     <!-- Card Detail Order -->
-    <div class="bg-white shadow-lg rounded-3xl p-6 border-2 border-[#1E90FF] style="font-family: 'Libre Baskerville', serif;">
+    <div class="bg-white rounded-3xl p-6 border-2 border-[#1E90FF] style="font-family: 'Libre Baskerville', serif;">
         <!-- Tombol Kembali Icon -->
         <div class="flex items-center mb-5 mt-2">
             <!-- Tombol Kembali Icon -->
@@ -86,8 +86,8 @@
             </a> --}}
 
             <!-- Cetak Invoice -->
-            <a href="#" class="bg-[#1E90FF] text-white py-2 px-4 rounded-2xl shadow-md hover:bg-transparent hover:border-[#1E90FF] hover:text-[#1E90FF] border-2 transition-all duration-300">
-                Cetak Invoice
+            <a href="#" class="px-4 text-bold py-2 bg-[#FCEBCBFF] text-[#FDA403] rounded-[12px] hover:bg-[#FDA403] hover:text-white">
+                <strong>Cetak Invoice</strong>
             </a>
 
             <!-- Tombol Batalkan Order -->
@@ -95,8 +95,8 @@
             <form action="{{ route('user.order.batal', $order->id_order) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <button type="submit" class="bg-[#982B1C] text-white py-2 px-4 rounded-2xl shadow-md hover:bg-transparent hover:border-[#982B1C] hover:text-[#982B1C] border-2 transition-all duration-300">
-                    Batalkan Pesanan
+                <button type="submit" class="px-4 text-bold py-2 bg-[#FFCFC2] text-[#E46B61] rounded-[12px] hover:bg-[#E46B61] hover:text-white">
+                    <strong>Batalkan Pesanan</strong>
                 </button>
             </form>
             @endif
@@ -105,8 +105,8 @@
             @if ($order->status_order == 'Proses')
             <form action="{{ route('user.payment.store', $order->id_order) }}" method="POST" id="payment_form">
                 @csrf
-                <button type="submit" class="bg-[#FDA403] text-white py-2 px-4 rounded-2xl shadow-md hover:bg-transparent hover:border-[#FDA403] hover:text-[#FDA403] border-2 transition-all duration-300">
-                    Bayar Sekarang
+                <button type="submit" class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
+                  <strong>  Bayar Sekarang </strong>
                 </button>
             </form>
             @endif

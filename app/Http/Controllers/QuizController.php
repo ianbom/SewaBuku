@@ -79,7 +79,7 @@ class QuizController extends Controller
 
             $quiz = Quiz::create($data);
 
-            return redirect()->route('admin.detailBuku.edit', $quiz->detailBuku->id_buku)->with('success', 'Quiz created successfully');
+            return redirect()->route('soal.create', $quiz->id_quiz)->with('success', 'Quiz created successfully');
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);
         }

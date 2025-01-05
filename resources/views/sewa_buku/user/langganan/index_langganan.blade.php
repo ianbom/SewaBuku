@@ -61,7 +61,7 @@
                 <!-- Nama -->
                 <div class="mb-6">
                     <label for="nama" class="block text-sm font-semibold text-[#052D6E]">Nama</label>
-                    <input type="text" name="nama" id="nama" value="{{ Auth::user()->nama }}" class="mt-2 block w-full rounded-[8px] border-none shadow-sm focus:border-[#1E90FF] focus:ring-[#1E90FF]">
+                    <input type="text" name="nama" id="nama" value="{{ Auth::user()->name }}" class="mt-2 block w-full rounded-[8px] border-none shadow-sm focus:border-[#1E90FF] focus:ring-[#1E90FF]">
                 </div>
 
                 <!-- Email -->

@@ -9,4 +9,9 @@ window.Alpine = Alpine;
 window.$ = $; 
 window.Swal = Swal; 
 
+// Example: Test jQuery
+$(document).ready(function () {
+    console.log('jQuery is ready!');
+});
+
 Alpine.start();

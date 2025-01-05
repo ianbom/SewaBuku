@@ -5,7 +5,8 @@
     <aside class="w-64 bg-white  flex flex-col">
         <!-- Logo -->
         <div class="py-4">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-32 h-auto ml-2"> <!-- Logo aligned to the left -->
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-32 h-auto ml-2">
+            <!-- Logo aligned to the left -->
         </div>
 
 
@@ -16,7 +17,7 @@
                 <ul>
                     <li class="mb-2">
                         <a href="{{ route('user.buku.index') }}"
-                           class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                            {{ Route::currentRouteName() == 'user.buku.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
                             <i class="fas fa-home text-blue-500 mr-3"></i>
                             <span class="text-gray-700">Explore</span>
@@ -24,15 +25,14 @@
                     </li>
                     <li class="mb-2">
                         <a href="{{ route('user.buku.search') }}"
-                        class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                         {{ Route::currentRouteName() == 'user.buku.search' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
                             <i class="fas fa-search text-blue-500 mr-3"></i>
                             <span class="text-gray-700">Search</span>
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="#"
-                           class="flex items-center px-4 py-2 rounded hover:bg-gray-100">
+                        <a href="#" class="flex items-center px-4 py-2 rounded hover:bg-gray-100">
                             <i class="fas fa-highlighter text-blue-500 mr-3"></i>
                             <span class="text-gray-700">Highlight</span>
                         </a>
@@ -48,7 +48,7 @@
                 <ul>
                     <li class="mb-2">
                         <a href="{{ route('user.paketLangganan.index') }}"
-                           class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                            {{ Route::currentRouteName() == 'user.paketLangganan.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
                             <i class="fas fa-box text-blue-500 mr-3"></i>
                             <span class="text-gray-700">Subscription Package</span>
@@ -56,7 +56,7 @@
                     </li>
                     <li class="mb-2">
                         <a href="{{ route('user.order.index') }}"
-                           class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                            {{ Route::currentRouteName() == 'user.order.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
                             <i class="fas fa-shopping-cart text-blue-500 mr-3"></i>
                             <span class="text-gray-700">Orders</span>
@@ -67,24 +67,24 @@
             <hr class="my-8 border-t-1 border-[#1E90FF]">
 
             <div>
-            <ul>
-            <li class="mb-2">
-                <a href="{{ route('user.langganan.index') }}"
-                   class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                <ul>
+                    <li class="mb-2">
+                        <a href="{{ route('user.langganan.index') }}"
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                    {{ Route::currentRouteName() == 'user.langganan.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
-                    <i class="fas fa-users text-blue-500 mr-3"></i>
-                    <span class="text-gray-700">Profile Anda</span>
-                </a>
-            </li>
-            <li class="mb-2">
-                <a href="{{ route('user.langganan.index') }}"
-                   class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                            <i class="fas fa-users text-blue-500 mr-3"></i>
+                            <span class="text-gray-700">Profile Anda</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#logout" id="button-logout"
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                   'bg-[#D3E9FF] text-[#1E90FF] font-semibold' : '' }}">
-                  <i class="fas fa-sign-out-alt mr-2"></i>
-                  <span class="text-gray-700">Logout</span>
-                </a>
-            </li>
-            </ul>
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            <span class="text-gray-700">Logout</span>
+                        </a>
+                    </li>
+                </ul>
 
             </div>
             <hr class="my-8 border-t-1 border-[#1E90FF]">
@@ -96,7 +96,7 @@
 
 
                 <a href="{{ route('user.myCollection') }}"
-                   class="flex flex-col
+                    class="flex flex-col
                    {{ Route::currentRouteName() == 'user.myCollection' ? 'text-[#052D6E] font-semibold' : 'text-gray-700' }}">
                     <span class="text-sm">My Favorite</span>
                 </a>
@@ -106,9 +106,9 @@
     </aside>
 
     <!-- Main Content -->
-<div class="flex-1" style="background-image: url('{{ asset('images/bg.png') }}'); background-size: cover; background-position: center; background-color: white;">
+    <div class="flex-1"
+        style="background-image: url('{{ asset('images/bg.png') }}'); background-size: cover; background-position: center; background-color: white;">
 
-    @yield('content')
-</div>
-
+        @yield('content')
+    </div>
 </div>

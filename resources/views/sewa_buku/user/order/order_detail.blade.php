@@ -174,7 +174,6 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-
             // Function to handle payment
             function handlePayment(event, url) {
                 const grossAmount = "{{ $order->total_bayar }}"; // Get the total bill amount

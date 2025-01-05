@@ -56,8 +56,15 @@
                                             <td>{{ $tag->parent->nama_tags ?? '-' }}</td>
                                             <td>{{ $tag->nama_tags }}</td>
                                             <td>{{ $tag->created_at->format('d-m-Y') }}</td>
-                                            <td>
+                                            <td class="text-center justify-center items-center">
                                                 <a href="{{ route('admin.tags.edit', $tag->id_tags) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                <form action="{{ route('admin.tags.delete', $tag->id_tags) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus tags ini?')">
+                                                        Hapus
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty
@@ -76,10 +83,10 @@
                             <div class="row">
                                 <!-- ID Child -->
                                 <div class="col-md-6 mb-3">
-                                    <label for="id_child" class="form-label">ID Child (Optional)</label>
+                                    <label for="id_child" class="form-label">ID Parent (Optional)</label>
                                     <select name="id_child" class="form-control">
-                                        <option value="">-- Pilih Child Tag (Opsional) --</option>
-                                        @foreach ($tags as $tag)
+                                        <option value="">-- Pilih Parent Tag (Opsional) --</option>
+                                        @foreach ($parent as $tag)
                                             <option value="{{ $tag->id_tags }}" {{ old('id_child') == $tag->id_tags ? 'selected' : '' }}>
                                                 {{ $tag->nama_tags }}
                                             </option>

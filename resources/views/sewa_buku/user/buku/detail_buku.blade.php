@@ -136,11 +136,22 @@
                                 <strong>Baca Buku</strong>
                             </a>
                         </div>
+
+                        <div class="flex justify-end mt-6">
+                            <button
+                            type="button"
+                            onclick="toggleModal('ratingModal')"
+                            class="flex items-center gap-2 px-4 py-3 text-white bg-[#B79F54] rounded-[12px] hover:bg-[#FAFAD8] hover:text-[#B79F54]">
+                            <i class="fas fa-pen"></i>
+                            <strong>Beri Ulasan</strong>
+                           </button>
+                       </div>
+
                         @else
                         <div class="flex justify-end mt-6">
-                            <a href="{{ route('user.buku.bacaBab', $buku->detailBuku->first()->id_detail_buku) }}"
+                            <a href="#"
                                 type="submit"
-                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#052D6E]">
+                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] disabled">
                                 <strong>Langganan untuk membaca</strong>
                             </a>
                         </div>
@@ -192,15 +203,7 @@
                 @endif
             </form>
 
-            <div class="flex justify-end mt-6">
-                <button
-                type="button"
-                onclick="toggleModal('ratingModal')"
-                class="flex items-center gap-2 px-4 py-3 text-white bg-[#B79F54] rounded-[12px] hover:bg-[#FAFAD8] hover:text-[#B79F54]">
-                <i class="fas fa-pen"></i>
-                <strong>Beri Ulasan</strong>
-            </button>
-        </div>
+
 
 
     </div>
@@ -227,7 +230,7 @@
         @endif
 
         {{-- Highlight --}}
-        <div class="mt-10">
+        {{-- <div class="mt-10">
             <p class="text-[18px] text-[#052D6E] font-bold mb-4 ">Highlight</p>
             @forelse ($highlight as $index => $item)
             <div class="flex items-center justify-between p-4 rounded-[16px] mb-4 {{ $index % 2 === 0 ? 'bg-[#D3E9FF] text-[#1E90FF]' : 'bg-[#EBE4FF] text-[#8F7CC1]' }}">
@@ -240,7 +243,7 @@
             @empty
             <p class="text-[#E46B61]">Anda tidak memiliki highlight</p>
             @endforelse
-        </div>
+        </div> --}}
 
         <script>
             function copyToClipboard(text) {

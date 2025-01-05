@@ -52,6 +52,7 @@ class QuizController extends Controller
         } catch (\Throwable $th) {
             return back()->withErrors(['error' => $th->getMessage()]);
         }
+        
     }
 
     public function show($id){

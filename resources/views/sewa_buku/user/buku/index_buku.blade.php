@@ -15,12 +15,18 @@
                 /* Background panel transparan */
             }
 
-            .custom-audio::-webkit-media-controls-play-button {
-                background-color: white;
-                /* Transparansi tombol play */
-                color: #1E90FF !important;
-                /* Warna tombol play */
-            }
+        <!-- Last Pickup Section -->
+
+        <h2 class="text-[18px] font-semibold mb-4 text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Terakhir di baca</h2>
+        <div class="bg-[#D3E9FF] rounded-[16px] p-4 inline-block mb-10">
+            <div class="flex items-center space-x-4">
+                @if($terakhirDibaca && $terakhirDibaca->buku->coverBuku->first() )
+                    <img src="{{ asset('storage/' . $terakhirDibaca->buku->coverBuku->first()->file_image) }}"
+                        alt="Last Book"
+                        class="w-32 h-280 object-cover rounded-[16px] ">
+                @else
+                    <img src="https://via.placeholder.com/150" alt="Last Book" class="rounded-[16px]">
+                @endif
 
             .custom-audio::-webkit-media-controls-timeline {
                 color: #1E90FF !important;
@@ -31,17 +37,23 @@
                 color: #1E90FF !important;
             }
 
-            .custom-audio::-webkit-media-controls-play-button,
-            .custom-audio::-webkit-media-controls-pause-button,
-            .custom-audio::-webkit-media-controls-mute-button,
-            .custom-audio::-webkit-media-controls-timeline,
-            .custom-audio::-webkit-media-controls-volume-slider-container,
-            .custom-audio::-webkit-media-controls-current-time-display,
-            .custom-audio::-webkit-media-controls-time-remaining-display,
-            .custom-audio::-webkit-media-controls-button,
-            .custom-audio::-webkit-media-controls-panel {
-                color: #1E90FF !important;
-            }
+                    <div class="mt-4 bg-white rounded-[16px] h-16 flex items-center px-4 w-full">
+                        @if ($terakhirDibaca && $terakhirDibaca->buku->ringkasan_audio)
+                        <audio controls controlsList="nodownload" class="custom-audio">
+                            <source src="{{ asset('storage/' . $terakhirDibaca->buku->ringkasan_audio) }}" type="audio/mpeg">
+                            Browser Anda tidak mendukung pemutar audio.
+                        </audio>
+                        @else
+                        <p class="text-sm text-[#979797] font-bold">No audio available</p>
+                        @endif
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
 
             /* Tambahan untuk ikon titik tiga */
             .custom-audio::-webkit-media-controls {

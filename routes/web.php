@@ -121,6 +121,7 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['prefix' => 'langganan'], function () {
             Route::get('/index', [LanggananController::class, 'indexUser'])->name('user.langganan.index');
+            Route::put('/update', [LanggananController::class, 'updateProfile'])->name('user.langganan.update');
         });
 
         Route::group(['prefix' => 'rating'], function () {

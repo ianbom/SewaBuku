@@ -15,6 +15,8 @@
 </head>
 
 <div class="container mx-auto mt-10 p-10">
+
+
     <!-- Judul Halaman -->
     <div class="flex justify-between items-center mb-12">
         <h1 class="text-3xl font-bold text-left text-[052D6E]" style="font-family: 'Libre Baskerville', serif; color: #052D6E;">Profile Anda</h1>
@@ -24,8 +26,9 @@
         <!-- Informasi Profil (Card Kiri) -->
         <div class="col-span-2 bg-[#D3E9FF] rounded-[16px] p-8">
             <h2 class="text-[18px] font-bold text-[#052D6E] mb-6">Informasi Profil</h2>
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('user.langganan.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <!-- Foto Profil -->
                 <div class="flex items-center mb-6">
                     <div class="relative w-24 h-24 mr-4">
@@ -61,7 +64,7 @@
                 <!-- Nama -->
                 <div class="mb-6">
                     <label for="nama" class="block text-sm font-semibold text-[#052D6E]">Nama</label>
-                    <input type="text" name="nama" id="nama" value="{{ Auth::user()->nama }}" class="mt-2 block w-full rounded-[8px] border-none shadow-sm focus:border-[#1E90FF] focus:ring-[#1E90FF]">
+                    <input type="text" name="name" id="nama" value="{{ Auth::user()->name }}" class="mt-2 block w-full rounded-[8px] border-none shadow-sm focus:border-[#1E90FF] focus:ring-[#1E90FF]">
                 </div>
 
                 <!-- Email -->
@@ -81,6 +84,7 @@
                     <button type="submit" class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]"><strong> Simpan Perubahan </strong></button>
                 </div>
             </form>
+
         </div>
 
         <!-- Paket Langganan Terakhir (Card Kanan) -->

@@ -23,6 +23,7 @@ class RatingController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'komentar' => 'nullable|string',
         ]);
+        
 
         $user = Auth::user();
         $checkLanggananAktif = Langganan::where('id', $user->id)

@@ -65,4 +65,9 @@ class Buku extends Model
     {
         return $this->hasManyThrough(Quiz::class, DetailBuku::class, 'id_buku', 'id_detail_buku', 'id_buku', 'id_detail_buku');
     }
+
+    public function highlight()
+    {
+        return $this->hasMany(Highlight::class, 'id_buku', 'id_buku');
+    }
 }

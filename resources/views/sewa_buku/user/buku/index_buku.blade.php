@@ -46,10 +46,11 @@
         <h1 class="text-[40px] font-bold text-left text-[#052D6E] mb-10" style="font-family: 'Libre Baskerville', serif;">Eksplore</h1>
 
         <!-- Last Pickup Section -->
+
         <h2 class="text-[18px] font-semibold mb-4 text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Terakhir di baca</h2>
         <div class="bg-[#D3E9FF] rounded-[16px] p-4 inline-block mb-10">
             <div class="flex items-center space-x-4">
-                @if($terakhirDibaca && $terakhirDibaca->buku->coverBuku->first())
+                @if($terakhirDibaca && $terakhirDibaca->buku->coverBuku->first() )
                     <img src="{{ asset('storage/' . $terakhirDibaca->buku->coverBuku->first()->file_image) }}"
                         alt="Last Book"
                         class="w-32 h-280 object-cover rounded-[16px] ">
@@ -64,14 +65,21 @@
                     <!-- Audio Player -->
 
                     <div class="mt-4 bg-white rounded-[16px] h-16 flex items-center px-4 w-full">
+                        @if ($terakhirDibaca && $terakhirDibaca->buku->ringkasan_audio)
                         <audio controls controlsList="nodownload" class="custom-audio">
                             <source src="{{ asset('storage/' . $terakhirDibaca->buku->ringkasan_audio) }}" type="audio/mpeg">
                             Browser Anda tidak mendukung pemutar audio.
                         </audio>
+                        @else
+                        <p class="text-sm text-[#979797] font-bold">No audio available</p>
+                        @endif
+
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
 
     <div class="mb-6 mt-10">

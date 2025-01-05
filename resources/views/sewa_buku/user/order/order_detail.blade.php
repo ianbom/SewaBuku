@@ -103,7 +103,7 @@
 
             <!-- Tombol Bayar -->
             @if ($order->status_order == 'Proses')
-            <form action="{{ route('user.payment.store', $order->id_order) }}" method="POST">
+            <form action="{{ route('user.payment.store', $order->id_order) }}" method="POST" id="payment_form">
                 @csrf
                 <button type="submit" class="bg-[#FDA403] text-white py-2 px-4 rounded-2xl shadow-md hover:bg-transparent hover:border-[#FDA403] hover:text-[#FDA403] border-2 transition-all duration-300">
                     Bayar Sekarang
@@ -157,3 +157,94 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}">
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // Function to handle payment
+            function handlePayment(event, url) {
+                const grossAmount = "{{ $order->total_bayar}}"; // Get the total bill amount
+                const customerName = "{{ $order->nama_paket }}"; // Customer name
+                const customerEmail = "{{ auth()->user()->email }}"; // Customer email
+
+                // Call backend to get Snap token
+                fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            gross_amount: grossAmount,
+                            customer_name: customerName,
+                            customer_email: customerEmail
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.status) {
+                            snap.pay(data.data.snap_token, {
+                                onSuccess: function(result) {
+                                    Swal.fire({
+                                        title: 'Pembayaran Berhasil',
+                                        text: "Selamat Bergabung!",
+                                        icon: 'success',
+                                        confirmButtonColor: '#198754',
+                                        confirmButtonText: 'OK',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            handlePayment();
+                                        }
+                                    });
+                                    console.log(result);
+                                },
+                                onPending: function(result) {
+                                    Swal.fire({
+                                        title: 'Payment Pending',
+                                        text: "Your payment is pending confirmation.",
+                                        icon: 'warning',
+                                        confirmButtonText: 'OK',
+                                    });
+
+                                    console.log(result);
+                                },
+                                onError: function(result) {
+                                    Swal.fire({
+                                        title: 'Payment Failed',
+                                        text: "Something went wrong with your payment. Please try again.",
+                                        icon: 'error',
+                                        confirmButtonText: 'OK',
+                                    });
+                                    console.log(result);
+                                },
+                                onClose: function() {
+                                    Swal.fire({
+                                        title: 'Payment Canceled',
+                                        text: "You closed the payment window without completing the payment.",
+                                        icon: 'info',
+                                        confirmButtonText: 'OK',
+                                    });
+                                }
+                            });
+                        } else {
+                            alert('Failed to create transaction');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred');
+                    });
+            }
+
+            $('#payment_form').submit(function(e) {
+                e.preventDefault();
+                let url = $(this).attr('action');
+                console.log(url)
+                handlePayment(e, url)
+            })
+        });
+    </script>
+@endpush

@@ -99,6 +99,11 @@
                     </label>
                 </div> --}}
                 <button type="submit" class="btn btn-primary btn-block shadow-lg mt-4">Daftar Sekarang</button>
+                <div class="d-flex justify-content-center align-items-center mt-3">
+                    <a href="{{ route('auth.google') }}" class="shadow-lg">
+                        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" alt="Sign in with Google">
+                    </a>
+                </div>  
             </form>
             <div class="text-center mt-3">
                 <p>Sudah punya Akun? <a href="{{ route('login') }}" class="font-bold">Masuk</a>.</p>

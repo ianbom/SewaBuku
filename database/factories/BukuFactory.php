@@ -31,9 +31,9 @@ class BukuFactory extends Factory
             'tahun_terbit' => $this->faker->year(),
             'rating_amazon' => $this->faker->numberBetween(1,5),
             'link_pembelian' => $this->faker->sentence(),
-            'teaser_audio' => $randomAudio,
+            'teaser_audio' => $randomAudio ?? 'https://example.com/audio.mp3',
             'sinopsis' => $this->faker->paragraph(10),
-            'ringkasan_audio' => $randomAudio
+            'ringkasan_audio' => $randomAudio ?? 'https://example.com/audio.mp3',
         ];
     }
 }

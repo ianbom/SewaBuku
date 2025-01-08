@@ -150,7 +150,7 @@ class BukuController extends Controller
         $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
 
         $highlight = Highlight::where('id', $userId)->where('id_buku', $buku->id_buku)->get();
-
+        // dd($buku->detailBuku);
         return view('sewa_buku.user.buku.detail_buku', [
             'buku' => $buku,
             'favorites' => $favorites,

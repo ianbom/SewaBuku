@@ -13,6 +13,24 @@ class Buku extends Model
     protected $primaryKey = 'id_buku';
     protected $table = 'buku';
 
+    protected $fillable = [
+        'id_buku',
+        'judul_buku',
+        'penulis',
+        'tentang_penulis',
+        'penerbit',
+        'isbn',
+        'tahun_terbit',
+        'rating_amazon',
+        'link_pembelian',
+        'teaser_audio',
+        'sinopsis',
+        'ringkasan_audio',
+        'is_free',
+        'created_at',
+        'updated_at',
+    ];
+    
     public function detailBuku()
     {
         return $this->hasMany(DetailBuku::class, 'id_buku', 'id_buku');

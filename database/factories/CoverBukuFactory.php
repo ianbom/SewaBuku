@@ -22,7 +22,7 @@ class CoverBukuFactory extends Factory
 
         return [
             'id_buku' => $this->faker->numberBetween(1, 5),
-            'file_image' => $randomCover
+            'file_image' => $randomCover ?? $randomAudio ?? 'https://example.com/cover.jpg'
         ];
     }
 }

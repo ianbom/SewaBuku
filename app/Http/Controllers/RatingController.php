@@ -20,20 +20,24 @@ class RatingController extends Controller
     public function storeRating(Request $request, $id)
     {
         $request->validate([
+
             'rating' => 'required|integer|min:1|max:5',
             'komentar' => 'nullable|string',
         ]);
-        
+
 
         $user = Auth::user();
+        $buku = Buku::findOrFail($id);
         $checkLanggananAktif = Langganan::where('id', $user->id)
             ->where('status_langganan', true)
             ->exists();
+        $checkRating = Rating::where('id', $user->id)->where('id_buku', $buku->id_buku)->exists();
+
 
         try {
-            $buku = Buku::findOrFail($id);
 
-            if ($checkLanggananAktif) {
+
+            if ($checkLanggananAktif && !$checkRating) {
                 Rating::create([
                     'id_buku' => $buku->id_buku,
                     'id' => $user->id,
@@ -42,12 +46,11 @@ class RatingController extends Controller
                 ]);
 
                 return redirect()->back()->with('success', 'Rating berhasil disimpan.');
-
             } else {
-                return response()->json(['error', 'Anda perlu memiliki langganan aktif untuk memberikan rating.']);
+                return  redirect()->back();
             }
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()]);
+            return  redirect()->back();
         }
     }
 

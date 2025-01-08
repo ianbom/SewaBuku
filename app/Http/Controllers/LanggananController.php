@@ -14,20 +14,62 @@ use App\Models\Soal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class LanggananController extends Controller
 {
     public function indexUser(){
-        $userId = Auth::id();
-        $langganan = Langganan::where('id', $userId)->get();
+        $user = Auth::user();
+        $langganan = Langganan::where('id', $user->id)->get();
         foreach ($langganan as $lang) {
             if (Carbon::now()->greaterThan($lang->akhir_langganan)) {
                 $lang->status_langganan = false;
                 $lang->save();
             }
         }
-        return view('sewa_buku.user.langganan.index_langganan', ['langganan' => $langganan]);
+        return view('sewa_buku.user.langganan.index_langganan', ['langganan' => $langganan, 'user'=> $user]);
     }
+
+    public function updateProfile(Request $request)
+{
+    $user = Auth::user();
+
+    // Validasi input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        'password' => 'nullable|min:8',
+        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Update nama dan email
+    $user->name = $validated['name'];
+    $user->email = $validated['email'];
+
+    // Update password jika diisi
+    if (!empty($validated['password'])) {
+        $user->password = Hash::make($validated['password']);
+    }
+
+    // Update foto jika ada file baru
+    if ($request->hasFile('foto')) {
+        // Hapus foto lama jika ada
+        if ($user->foto) {
+            Storage::delete('public/' . $user->foto);
+        }
+
+        // Simpan foto baru
+        $path = $request->file('foto')->store('user_photos', 'public');
+        $user->foto = $path;
+    }
+
+    // Simpan perubahan pada user
+    $user->save();
+
+    return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
+}
+
 
     public function showUser($id){
         $userId = Auth::id();

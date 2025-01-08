@@ -20,6 +20,13 @@ class User extends Authenticatable
     protected $guarded = [
        'id'
     ];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',      // Optional, depending on your approach
+        'google_id',     // For storing the Google OAuth ID
+    ];
+
 
     /**
      * The attributes that should be hidden for serialization.

@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\PaketLangganan;
 use App\Models\Payment;
 use App\Models\Rating;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,16 @@ class OrderController extends Controller
 
         //return response()->json(['order' => $order]);
         return view('sewa_buku.user.order.order_detail', ['order' => $order]);
+    }
+
+    public function cetakInvoice($id){
+        $order = Order::with('user','payment')->findOrFail($id);
+
+        $pdf = Pdf::loadView('sewa_buku.user.order.invoice_template', ['order' => $order]);
+        $fileName = 'Invoice_'. $order->user->name. '.pdf';
+        return $pdf->download($fileName);
+
+        // return response()->json(['order' => $order]);
     }
 
     public function storeOrder($id)

@@ -110,6 +110,7 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['prefix' => 'order'], function () {
             Route::get('/index', [OrderController::class, 'indexOrder'])->name('user.order.index');
+            Route::get('/invoice/{id}', [OrderController::class, 'cetakInvoice'])->name('user.order.invoice');
             Route::get('/show/{id}', [OrderController::class, 'showOrder'])->name('user.order.show');
             Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
             Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');

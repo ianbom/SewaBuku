@@ -92,7 +92,7 @@
             </a> --}}
 
                 <!-- Cetak Invoice -->
-                <a href="#"
+                <a href="{{ route('user.order.invoice', $order->id_order) }}"
                     class="px-4 text-bold py-2 bg-[#FCEBCBFF] text-[#FDA403] rounded-[12px] hover:bg-[#FDA403] hover:text-white">
                     <strong>Cetak Invoice</strong>
                 </a>

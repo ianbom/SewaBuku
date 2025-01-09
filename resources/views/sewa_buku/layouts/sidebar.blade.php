@@ -16,28 +16,28 @@
                 <li class="sidebar-item {{ Route::is('dashboard') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
-                        <span>Beranda</span>
+                        <span>Dashboard</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item {{ Route::is('admin.buku.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.buku.index') }}" class='sidebar-link'>
                         <i class="bi bi-book"></i>
-                        <span>Buku</span>
+                        <span>Books</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item {{ Route::is('admin.order.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.order.index') }}" class='sidebar-link'>
                         <i class="bi bi-bag"></i>
-                        <span>Order</span>
+                        <span>Orders</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item {{ Route::is('admin.user.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.user.index') }}" class='sidebar-link'>
                         <i class="bi bi-people"></i>
-                        <span>User</span>
+                        <span>Users</span>
                     </a>
                 </li>
 
@@ -58,15 +58,15 @@
                 <li class="sidebar-item {{ Route::is('paket-langganan.index') ? 'active' : '' }}">
                     <a href="{{ route('paket-langganan.index') }}" class='sidebar-link'>
                         <i class="bi bi-box-seam"></i>
-                        <span>Paket Langganan</span>
+                        <span>Subscription Packages</span>
                     </a>
                 </li>
 
-                <li class="sidebar-title">Keluar</li>
+                <li class="sidebar-title">Logout</li>
                 <li class="sidebar-item">
                     <a type="button" class='sidebar-link' id="button-logout">
                         <i class="bi bi-box-arrow-left"></i>
-                        <span>Keluar</span>
+                        <span>Logout</span>
                     </a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

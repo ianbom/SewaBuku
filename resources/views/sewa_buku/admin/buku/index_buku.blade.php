@@ -46,12 +46,12 @@
                                             <th>Judul Buku</th>
                                             <th>Penulis</th>
                                             <th>Penerbit</th>
-                                            <th>Jumlah Halaman</th>
                                             <th>ISBN</th>
                                             <th>Tahun Terbit</th>
                                             <th>Teaser Audio</th>
                                             <th>Sinopsis</th>
                                             <th>Ringkasan Audio</th>
+                                            <th>Gratis</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -62,7 +62,6 @@
                                                 <td>{{ $item->judul_buku }}</td>
                                                 <td>{{ $item->penulis }}</td>
                                                 <td>{{ $item->penerbit }}</td>
-                                                <td>{{ $item->jumlah_halaman }}</td>
                                                 <td>{{ $item->isbn }}</td>
                                                 <td>{{ $item->tahun_terbit }}</td>
                                                 <td>
@@ -80,6 +79,7 @@
                                                         Browser Anda tidak mendukung pemutar audio.
                                                     </audio>
                                                 </td>
+                                                <td>{{ $item->is_free ? 'Gratis' : 'Berbayar' }}</td>
                                                 <td>
                                                     <a href="{{ route('admin.buku.edit', $item->id_buku) }}"
                                                         class="btn btn-warning btn-sm">

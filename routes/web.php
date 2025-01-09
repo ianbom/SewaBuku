@@ -13,6 +13,7 @@ use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
+use App\Models\Buku;
 use App\Models\Langganan;
 use App\Models\PaketLangganan;
 use Illuminate\Support\Facades\Auth;
@@ -25,11 +26,12 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         $user = Auth::user();
-        if ($user->is_admin === 1) {
+        if ($user->is_admin == 1) {
             return redirect()->route('admin.buku.index');
         } else {
             return redirect()->route('user.buku.index');
         }
+
     })->name('home');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -40,6 +42,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/index', [BukuController::class, 'index'])->name('admin.buku.index');
             Route::get('/create', [BukuController::class, 'create'])->name('admin.buku.create');
             Route::get('/show/{id}', [BukuController::class, 'show'])->name('admin.buku.show');
+            
+
             Route::post('/store', [BukuController::class, 'store2'])->name('admin.buku.store');
             Route::get('/edit/{id}', [BukuController::class, 'edit'])->name('admin.buku.edit');
             Route::put('/update/{id}', [BukuController::class, 'updateBuku'])->name('admin.buku.update');

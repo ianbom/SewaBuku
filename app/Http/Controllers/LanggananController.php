@@ -154,6 +154,8 @@ public function bacaBabBuku($id)
         $user = Auth::user();
         $detailBuku = DetailBuku::findOrFail($id);
 
+        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $user->id)->exists();
+
         Dibaca::where('id', $user->id)
             ->where('id_buku', $detailBuku->id_buku)
             ->update(['is_read' => false]);
@@ -209,6 +211,7 @@ public function bacaBabBuku($id)
             'quizStatus' => $quizStatus,
             'quizScore' => $quizScore,
             'idBuku' => $detailBuku->id_buku,
+            'checkLangganan' => $checkLangganan,
             'diselesaikanCheck' => $diselesaikanCheck,
         ]);
     } catch (\Throwable $th) {

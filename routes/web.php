@@ -18,9 +18,16 @@ use App\Models\PaketLangganan;
 use Illuminate\Support\Facades\Route;
 
 
+<<<<<<< HEAD
 Route::get('/', function () {
     return view('welcome');
 });
+=======
+Route::get('/landing', function () {
+    return view('sewa_buku.user.landing');
+})->name('sewa_buku.user.landing');
+
+>>>>>>> 87025d4... FE Login, Register, Landing Page
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -797,26 +797,61 @@ class BukuController extends Controller
         ]);
     }
 
-    public function highlightUser(){
+    public function highlightUser(Request $request)
+    {
         $userId = Auth::id();
+        $tagId = $request->input('tag_id');
 
         // Periksa status langganan
-        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+        $checkLangganan = Langganan::where('status_langganan', true)
+                                   ->where('id', $userId)
+                                   ->first();
 
         $highlight = Highlight::where('id', $userId)->pluck('id_buku');
 
-        $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
+        // Ambil semua tags
+        $tag = Tags::all();
+
+        // Query dasar untuk buku yang di-highlight
+        $query = Buku::with(['coverBuku', 'rating', 'detailBuku', 'tags'])
             ->whereIn('id_buku', $highlight)
             ->withCount(['rating as ratingRerata' => function ($query) {
                 $query->select(DB::raw('coalesce(avg(rating), 0)'));
             }])
             ->withCount(['highlight as total_highlight' => function ($query) use ($userId) {
                 $query->where('id', $userId);
-            }])
-            ->get();
+            }]);
 
+        // Filter berdasarkan tag jika ada
+        if ($tagId) {
+            $query->where(function($q) use ($tagId) {
+                // Cek apakah tag yang dipilih adalah child
+                $selectedTag = Tags::find($tagId);
+
+                if ($selectedTag->id_child) {
+                    // Jika child tag, ambil buku dengan tag tersebut dan parent tagnya
+                    $q->whereHas('tags', function($query) use ($tagId) {
+                        $query->where('tags.id_tags', $tagId);
+                    })->orWhereHas('tags', function($query) use ($selectedTag) {
+                        $query->where('tags.id_tags', $selectedTag->id_child);
+                    });
+                } else {
+                    // Jika parent tag, ambil buku dengan tag tersebut dan semua child tagnya
+                    $childTagIds = Tags::where('id_child', $tagId)->pluck('id_tags');
+                    $q->whereHas('tags', function($query) use ($tagId, $childTagIds) {
+                        $query->where('tags.id_tags', $tagId)
+                              ->orWhereIn('tags.id_tags', $childTagIds);
+                    });
+                }
+            });
+        }
+
+        $buku = $query->get();
+
+        // Ambil daftar favorit user
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
+        // Proses durasi audio
         $getID3 = new getID3();
 
         foreach ($buku as $b) {
@@ -834,7 +869,7 @@ class BukuController extends Controller
                 }
             }
 
-            // Simpan total waktu dalam format jam, menit, detik
+            // Format waktu
             $hours = floor($totalSeconds / 3600);
             $minutes = floor(($totalSeconds % 3600) / 60);
             $seconds = $totalSeconds % 60;
@@ -844,15 +879,17 @@ class BukuController extends Controller
 
             // Tentukan apakah buku dapat dibaca
             $b->can_read = $b->is_free || $checkLangganan ? true : false;
-
         }
 
         return view('sewa_buku.user.buku.highlight.index_highlight', [
             'buku' => $buku,
             'favorites' => $favorites,
             'checkLangganan' => $checkLangganan,
+            'tag' => $tag,
+            'tagId' => $tagId,
         ]);
     }
+
 
     public function detailHighlight($id) {
         $userId = Auth::id();

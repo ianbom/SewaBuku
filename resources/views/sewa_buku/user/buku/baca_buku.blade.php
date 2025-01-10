@@ -91,17 +91,17 @@
                                 @if(in_array($buku->id_buku, $diselesaikan))
                                     @method('DELETE')
                                     <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 w-full flex items-center justify-center gap-2">
-                                        <i class="fas fa-trash-alt"></i> Batalkan Tanda Selesai
+                                        <i class="fas fa-trash-alt"></i> Cancel Marked as Finished
                                     </button>
                                 @else
                                     <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-full flex items-center justify-center gap-2">
-                                        <i class="far fa-check-circle"></i> Tandai Selesai
+                                        <i class="far fa-check-circle"></i> Mark as Finished
                                     </button>
                                 @endif
                             </form>
 
                             <button class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                Lanjutkan Membaca
+                                Continue Reading
                             </button>
                         </div>
                     @endif

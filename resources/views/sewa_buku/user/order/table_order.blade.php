@@ -1,21 +1,31 @@
 <head>
     <style>
         .pagination-info {
-    display: none;
-}
+            display: none;
+        }
 
+        @media (max-width: 768px) {
+            .responsive-table th:nth-child(n+4),
+            .responsive-table td:nth-child(n+4) {
+                display: table-cell;
+            }
+            .responsive-table td {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
     </style>
 </head>
 
-<table class="table table-striped bg-white w-full">
+<table class="table table-striped bg-white w-full responsive-table">
     <thead>
         <tr class="bg-[#1E90FF] text-white uppercase text-sm font-semibold">
-            <th class="py-5 px-6 text-left">ID Order</th>
-            <th class="py-5 px-4 text-left">Nama Paket</th>
-            <th class="py-5 px-4 text-left">Total Bayar</th>
+            <th class="py-5 px-6 text-left">Order ID</th>
+            <th class="py-5 px-4 text-left">Package Name</th>
+            <th class="py-5 px-4 text-left">Total Payment</th>
             <th class="py-5 px-4 text-left">Status</th>
-            <th class="py-5 px-4 text-left">Tanggal Dibuat</th>
-            <th class="py-5 px-4 text-left">Aksi</th>
+            <th class="py-5 px-4 text-left">Created Date</th>
+            <th class="py-5 px-4 text-left">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -36,7 +46,7 @@
             <td class="py-6 px-4">
                 {{ \Carbon\Carbon::parse($o->created_at)->translatedFormat('d F Y') }}
             </td>
-            <!-- Aksi -->
+            <!-- Action -->
             <td class="py-3 px-4">
                 <a href="{{ route('user.order.show', $o->id_order) }}"
                    class="btn text-[#1E90FF] font-semibold bg-[#D3E9FF] py-2 px-4 rounded hover:bg-[#B1D4FF] hover:text-[#052D6E] transition">
@@ -46,7 +56,7 @@
         </tr>
         @empty
         <tr>
-            <td colspan="6" class="py-6 text-center text-gray-500">Data tidak ditemukan.</td>
+            <td colspan="6" class="py-6 text-center text-gray-500">No data found.</td>
         </tr>
         @endforelse
     </tbody>

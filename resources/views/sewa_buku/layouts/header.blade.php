@@ -26,7 +26,7 @@
     <!-- Sidebar -->
     <aside
         id="logo-sidebar"
-        class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0  bg-white"
+        class="fixed top-0 left-0 z-40 w-64 h-screen sm:min-h-[110vh] transition-transform -translate-x-full sm:translate-x-0  bg-white overflow-y-auto"
         aria-label="Sidebar"
     >
         <!-- Logo -->
@@ -101,7 +101,7 @@
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                    {{ Route::currentRouteName() == 'user.langganan.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
                             <i class="fas fa-users text-blue-500 mr-3"></i>
-                            <span class="text-gray-700">Profile</span>
+                            <span class="text-gray-700">Profile Anda</span>
                         </a>
                     </li>
                     <li class="mb-2">

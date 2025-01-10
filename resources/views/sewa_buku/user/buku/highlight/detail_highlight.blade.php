@@ -208,19 +208,19 @@
         <div class="flex items-center justify-between p-4 rounded-[16px] mb-4 {{ $index % 2 === 0 ? 'bg-[#D3E9FF] text-[#1E90FF]' : 'bg-[#EBE4FF] text-[#8F7CC1]' }}">
             <h3 class="flex-1 text-sm font-semibold text-inherit">{{ $item->highlight }}</h3>
             <!-- Div Ikon -->
-            <div onclick="copyToClipboard('{{ $item->highlight }}')"  class="text-center {{ $index % 2 === 0 ? 'bg-[#1E90FF]' : 'bg-[#8F7CC1]' }} p-2 rounded-[6px] flex items-center justify-center">
+            <div onclick="copyToClipboard('{{ $item->highlight }}')"  class="text-center {{ $index % 2 === 0 ? 'bg-[#1E90FF]' : 'bg-[#8F7CC1]' }} p-2 rounded-[6px] flex items-center justify-center mr-3">
                 <button><i class="fas fa-copy text-white text-[12px]"></i></button>
-
             </div>
-            <div class="text-center {{ $index % 2 === 0 ? 'bg-[#ff1e1e]' : 'bg-[#c1957c]' }} p-2 rounded-[6px] flex items-center justify-center">
+            <div class="text-center {{ $index % 2 === 0 ? 'border-2 border-[#1E90FF]' : 'border-2 border-[#8F7CC1]' }} p-2 rounded-[6px] flex items-center justify-center">
                 <form action="{{ route('user.highlight.delete', $item->id_highlight) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit">
-                        <i class="fas fa-trash text-white text-[12px]"></i>
+                        <i class="fas fa-trash {{ $index % 2 === 0 ? 'text-[#1E90FF]' : 'text-[#8F7CC1]' }} text-[12px]"></i>
                     </button>
                 </form>
             </div>
+
         </div>
         @empty
         <p class="text-[#E46B61]">Anda tidak memiliki highlight</p>

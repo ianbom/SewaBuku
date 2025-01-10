@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailBuku;
 use App\Models\Jawaban;
+use App\Models\Langganan;
 use App\Models\Opsi;
 use App\Models\Quiz;
 use App\Models\Soal;
@@ -52,7 +53,7 @@ class QuizController extends Controller
         } catch (\Throwable $th) {
             return back()->withErrors(['error' => $th->getMessage()]);
         }
-        
+
     }
 
     public function show($id){
@@ -96,9 +97,11 @@ class QuizController extends Controller
         $detailBuku = DetailBuku::findOrFail($id);
         $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
         $soal = Soal::where('id_quiz', $quiz->id_quiz)->get();
+        $user = Auth::user();
+        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $user->id)->exists();
         // return response()->json(['idBuku' => $detailBuku->id_buku]);
 
-        return view('sewa_buku.user.buku.quiz.kerjakan_quiz', ['quiz' => $quiz, 'soal' => $soal, 'idBuku' => $detailBuku->id_buku]);
+        return view('sewa_buku.user.buku.quiz.kerjakan_quiz', ['quiz' => $quiz, 'soal' => $soal, 'idBuku' => $detailBuku->id_buku, 'checkLangganan' => $checkLangganan]);
     }
 
     public function submitQuiz(Request $request, $id)
@@ -138,7 +141,7 @@ class QuizController extends Controller
                 }
             }
 
-            return response()->json(['status' => 'success', 'message' => 'Jawaban berhasil disimpan']);
+           return redirect()->route('user.buku.bacaBab', $quiz->id_detail_buku)->with('success', 'Jawaban kamu telah direkam');
         } catch (\Throwable $th) {
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
         }

@@ -327,6 +327,7 @@ class BukuController extends Controller
             'sinopsis' => 'nullable|string',
             'ringkasan_audio' => 'nullable|file|mimes:mp3', // Nullable for update
             'cover_buku.*' => 'nullable|file|mimes:jpeg,png,jpg', // Nullable for update
+            'is_free' => 'nullable'
         ]);
 
         // Temukan buku yang akan di-update
@@ -363,6 +364,7 @@ class BukuController extends Controller
             'isbn' => $request->isbn,
             'tahun_terbit' => $request->tahun_terbit,
             'sinopsis' => $request->sinopsis,
+            'is_free' => $request->is_free,
         ]);
 
         // Update cover buku jika ada file cover baru yang diupload
@@ -504,6 +506,7 @@ class BukuController extends Controller
     public function show($id){
         try {
             $buku = Buku::findOrFail($id);
+
         //return response()->json(['buku' => $buku]);
         return view('sewa_buku.admin.buku.show_buku', ['buku' => $buku]);
         } catch (\Throwable $th) {

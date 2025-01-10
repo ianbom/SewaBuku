@@ -35,15 +35,39 @@
                 <h3 class="text-gray-400 text-sm font-semibold uppercase mb-3 mt-14">Chapters </h3>
                 <ul>
                     @foreach ($buku->detailBuku as $detail)
-                    <li class="mb-2">
-                        <a href="{{ route('user.buku.bacaBab', $detail->id_detail_buku) }}"
-                           class="flex items-center justify-between px-4 py-2 hover:bg-[#F1F8FF]">
-                            <span class="{{ $detail->dibaca && $detail->dibaca->first() && $detail->dibaca->first()->is_read ? 'text-[#1E90FF]' : 'text-[#979797]' }}">
-                                {{ $detail->bab }}
-                            </span>
-                        </a>
-                        <hr class="border-t-1 border-[#1E90FF]">
-                    </li>
+                    @if ($detail->is_free_detail == true)
+                            <li class="mb-2">
+                                <a href="{{ route('user.buku.bacaBab', $detail->id_detail_buku) }}"
+                                   class="flex items-center justify-between px-4 py-2 hover:bg-[#F1F8FF]">
+                                    <span class="{{ $detail->dibaca && $detail->dibaca->first() && $detail->dibaca->first()->is_read ? 'text-[#1E90FF]' : 'text-[#979797]' }}">
+                                        {{ $detail->bab }}
+                                    </span>
+                                </a>
+                                <hr class="border-t-1 border-[#1E90FF]">
+                            </li>
+                        @else
+                            @if ($checkLangganan)
+                            <li class="mb-2">
+                                <a href="{{ route('user.buku.bacaBab', $detail->id_detail_buku) }}"
+                                   class="flex items-center justify-between px-4 py-2 hover:bg-[#F1F8FF]">
+                                    <span class="{{ $detail->dibaca && $detail->dibaca->first() && $detail->dibaca->first()->is_read ? 'text-[#1E90FF]' : 'text-[#979797]' }}">
+                                        {{ $detail->bab }}
+                                    </span>
+                                </a>
+                                <hr class="border-t-1 border-[#1E90FF]">
+                            </li>
+                            @else
+                            <li class="mb-2">
+                                <a href="#"
+                                   class="flex items-center justify-between px-4 py-2 hover:bg-[#F1F8FF]">
+                                    <span class=""> Berlangganan untuk membaca</span>
+
+                                </a>
+                                <hr class="border-t-1 border-[#1E90FF]">
+                            </li>
+                            @endif
+                    @endif
+
                 @endforeach
 
                 {{-- @foreach ($buku->detailBuku as $detail)

@@ -84,15 +84,8 @@
         <!-- Start content here -->
         <div class="row h-100">
             @yield('content')
-            <div class="footer px-5 mt-auto fixed-bottom">
-                @include('sewa_buku.layouts.footer')
-            </div>
             <!-- End content -->
         </div>
-        <!-- Floating WhatsApp Button -->
-        <a href="https://wa.me/6285817324271" target="_blank" class="whatsapp-float" title="Chat with CS on WhatsApp">
-            <i class="fab fa-whatsapp my-float"></i>
-        </a>
     </div>
 
     <script src="{{ asset('js/jquery.min.js') }}"></script>

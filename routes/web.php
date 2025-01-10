@@ -13,8 +13,10 @@ use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
+use App\Models\Buku;
 use App\Models\Langganan;
 use App\Models\PaketLangganan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -44,6 +46,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/index', [BukuController::class, 'index'])->name('admin.buku.index');
             Route::get('/create', [BukuController::class, 'create'])->name('admin.buku.create');
             Route::get('/show/{id}', [BukuController::class, 'show'])->name('admin.buku.show');
+            
+
             Route::post('/store', [BukuController::class, 'store2'])->name('admin.buku.store');
             Route::get('/edit/{id}', [BukuController::class, 'edit'])->name('admin.buku.edit');
             Route::put('/update/{id}', [BukuController::class, 'updateBuku'])->name('admin.buku.update');
@@ -118,6 +122,7 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['prefix' => 'order'], function () {
             Route::get('/index', [OrderController::class, 'indexOrder'])->name('user.order.index');
+            Route::get('/invoice/{id}', [OrderController::class, 'cetakInvoice'])->name('user.order.invoice');
             Route::get('/show/{id}', [OrderController::class, 'showOrder'])->name('user.order.show');
             Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
             Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');
@@ -127,6 +132,7 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['prefix' => 'langganan'], function () {
             Route::get('/index', [LanggananController::class, 'indexUser'])->name('user.langganan.index');
+            Route::put('/update', [LanggananController::class, 'updateProfile'])->name('user.langganan.update');
         });
 
         Route::group(['prefix' => 'rating'], function () {

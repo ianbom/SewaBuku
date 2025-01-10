@@ -25,8 +25,9 @@
         <div class="flex-1 md:flex-none mb-4 md:w-2/3">
             <div class="bg-[#D3E9FF] rounded-[16px] p-8">
                 <h2 class="text-[16px] sm:text-[18px] font-bold text-[#052D6E] mb-6">Profile Information</h2>
-                <form action="#" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('user.langganan.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <!-- Profile Picture -->
                     <div class="d-flex align-items-center mb-6">
                         <div class="relative w-24 h-24 mr-4">

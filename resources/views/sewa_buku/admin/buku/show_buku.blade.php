@@ -152,7 +152,7 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading{{ $index }}">
                                     <button class="accordion-button {{ $index != 0 ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="{{ $index == 0 ? 'true' : 'false' }}" aria-controls="collapse{{ $index }}">
-                                        Bab: {{ $detail->bab }}
+                                        Bab: {{ $detail->bab }} {{ $detail->is_free ? '(Gratis)' : '(Berbayar)' }}
                                     </button>
                                 </h2>
                                 <div id="collapse{{ $index }}" class="accordion-collapse collapse {{ $index == 0 ? 'show' : '' }}" aria-labelledby="heading{{ $index }}" data-bs-parent="#detailBukuAccordion">
@@ -178,31 +178,7 @@
         </div>
     </div>
 
-    <!-- Rating dan Komentar -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Rating dan Komentar</h5>
-                    @forelse($buku->rating as $rating)
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h6 class="card-subtitle text-muted">{{ $rating->user->name }}</h6>
-                                    <span class="badge bg-warning text-dark">
-                                        {{ $rating->rating }} / 5
-                                    </span>
-                                </div>
-                                <p class="card-text">{{ $rating->komentar }}</p>
-                            </div>
-                        </div>
-                    @empty
-                        <p class="text-muted">Belum ada rating atau komentar untuk buku ini.</p>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Quiz Buku -->
     <div class="row mb-4">
@@ -269,6 +245,32 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating dan Komentar -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Rating dan Komentar</h5>
+                    @forelse($buku->rating as $rating)
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="card-subtitle text-muted">{{ $rating->user->name }}</h6>
+                                    <span class="badge bg-warning text-dark">
+                                        {{ $rating->rating }} / 5
+                                    </span>
+                                </div>
+                                <p class="card-text">{{ $rating->komentar }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-muted">Belum ada rating atau komentar untuk buku ini.</p>
+                    @endforelse
+                </div>
             </div>
         </div>
     </div>

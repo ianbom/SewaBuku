@@ -185,176 +185,37 @@
         <!-- Cards Section Category -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 p-6 rounded-[16px] w-full max-w-6xl">
 
+            @foreach ($parentTags as $item)
+
             <!-- Category Card 1 -->
             <div class="p-6 rounded-[16px]" style="background-image: url('images/kategori.png'); background-size: cover; background-position: center;">
-                <h3 class="text-white font-semibold text-xl mb-2" style="font-family: 'Libre Baskerville', serif;">Personal Growth and Career Development</h3>
+                <h3 class="text-white font-semibold text-xl mb-2" style="font-family: 'Libre Baskerville', serif;">{{ $item->nama_tags }}</h3>
                 <div class="flex flex-col justify-center bg-white rounded-[16px] p-4">
                     <ul>
+                        @foreach ($item->child as $child)
+
+
                         <li class="flex items-start mb-4">
                             <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
                                 <i class="fas fa-folder text-sm"></i>
                             </div>
                             <div>
-                                <h3 class="text-[#052D6E] font-semibold">Self Improvement</h3>
+                                <h3 class="text-[#052D6E] font-semibold">{{ $child->nama_tags }}</h3>
                             </div>
                         </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Productivity and Efficiency</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Motivation and Improvement</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Career and Success Growth</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Communication Mastery</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Learning and Education</h3>
-                            </div>
-                        </li>
+
+                        @endforeach
                     </ul>
                 </div>
             </div>
+
+            @endforeach
 
             <!-- Category Card 2 -->
-            <div class="p-6 rounded-[16px]" style="background-image: url('images/kategori.png'); background-size: cover; background-position: center;">
-                <h3 class="text-white font-semibold text-xl mb-2" style="font-family: 'Libre Baskerville', serif;">Personal Growth and Career Development</h3>
-                <div class="flex flex-col justify-center bg-white rounded-[16px] p-4">
-                    <ul>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Self Improvement</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Productivity and Efficiency</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Motivation and Improvement</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Career and Success Growth</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Communication Mastery</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Learning and Education</h3>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+
 
             <!-- Category Card 3 -->
-            <div class="p-6 rounded-[16px]" style="background-image: url('images/kategori.png'); background-size: cover; background-position: center;">
-                <h3 class="text-white font-semibold text-xl mb-2" style="font-family: 'Libre Baskerville', serif;">Personal Growth and Career Development</h3>
-                <div class="flex flex-col justify-center bg-white rounded-[16px] p-4">
-                    <ul>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Self Improvement</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Productivity and Efficiency</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Motivation and Improvement</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Career and Success Growth</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Communication Mastery</h3>
-                            </div>
-                        </li>
-                        <li class="flex items-start mb-4">
-                            <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-[#052D6E] font-semibold">Learning and Education</h3>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+
 
         </div>
     </div>
@@ -522,7 +383,9 @@
         <div class="flex justify-center max-w-6xl mx-auto">
             <!-- Package Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {{-- @foreach($paketLangganan as $paket) --}}
+                @foreach ($paketLangganan as $paket)
+
+
                 @php
                     // Pilih gambar secara acak
                     $randomImage = $images[array_rand($images)];
@@ -533,16 +396,16 @@
                         <img src="{{ $randomImage }}" alt="Package Image" class="rounded-lg w-full h-50 object-cover">
                     </div>
 
-                    <h3 class="text-[16px] font-bold mb-2">NAMA PAKET</h3>
-                    <p class="mb-6 text-[14px] text-white">DESKRIPSI</p>
+                    <h3 class="text-[16px] font-bold mb-2">{{ $paket->nama_paket }}</h3>
+                    <p class="mb-6 text-[14px] text-white">{{ $paket->deskripsi }}</p>
 
                     <!-- Time and Price -->
                     <div class="flex justify-between items-center mb-6 p-3 border rounded-[8px]">
                         <div class="flex items-center space-x-2">
-                            <span class="text-[14px]">Waktu: 08.00 Hari</span>
+                            <span class="text-[14px]">{{ $paket->masa_waktu }} Hari</span>
                         </div>
                         <div class="text-[16px] font-bold">
-                            <strong>HARGA</strong>
+                            <span>{{ formatToIndonesianCurrency($paket->harga)  }}</span>
                         </div>
                     </div>
 
@@ -552,8 +415,9 @@
                         Subscribe Now
                     </button>
                 </div>
-                {{-- @endforeach --}}
+                @endforeach
             </div>
+
         </div>
     </section>
 </div>
@@ -570,33 +434,33 @@
 
         <!-- Book Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {{-- @foreach ($buku as $book) --}}
+            @foreach ($buku as $book)
                 <div class="bg-[#F1F8FF] rounded-[16px] overflow-hidden border-2 border-transparent hover:border-[#D3E9FF] transition-all">
                     <a href="{{ route('login') }}">
-                        {{-- @if ($book->coverBuku && $book->coverBuku->first()) --}}
-                            <img src="images/cover.png" alt="Cover Buku" class="w-full h-128 object-cover rounded-[16px]">
-                        {{-- @else --}}
-                            {{-- <img src="https://via.placeholder.com/150" alt="Cover Placeholder" class="w-full h-64 object-cover"> --}}
-                        {{-- @endif --}}
+                        @if ($book->coverBuku && $book->coverBuku->first())
+                            <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Cover Buku" class="w-full h-128 object-cover rounded-[16px]">
+                        @else
+                            <img src="https://via.placeholder.com/150" alt="Cover Placeholder" class="w-full h-64 object-cover">
+                     @endif
                     </a>
 
                     <div class="p-4">
-                        <h3 class="text-[#052D6E] text-[14px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">JUDUL BUKU</h3>
-                        <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">PENULIS</p>
+                        <h3 class="text-[#052D6E] text-[14px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">{{ $book->judul_buku }}</h3>
+                        <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">{{ $book->penulis }}</p>
 
                         <div class="flex justify-between items-center text-[#979797] text-sm mt-4">
                             <div class="flex items-center">
                                 <i class="fa fa-clock mr-2 p-2 rounded-[8px] text-[12px]" style="background-color: #D3E9FF; color: #1E90FF;"></i>
-                                <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif;">100 Min</span>
+                                <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif;">{{ floor($book->totalWaktu / 60) }}</span>
                             </div>
                             <div class="flex items-center">
                                 <i class="fas fa-star mr-2 p-2 rounded-[8px] text-[12px]" style="background-color: #FAFAD8; color: #B79F54;"></i>
-                                <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif;">RATING</span>
+                                <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif;">{{ number_format($book->ratingRerata, 1) }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            {{-- @endforeach --}}
+            @endforeach
         </div>
 
         <!-- Explore More Button -->

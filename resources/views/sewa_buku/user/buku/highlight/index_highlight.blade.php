@@ -55,15 +55,23 @@
             </div>
 
             <!-- Filter Dropdown -->
-            <div class="filter-dropdown relative w-1/5 ">
-                <select id="filter-select" class="form-control rounded-[12px] pl-4 pr-4 py-4 w-full border-2 border-transparent transition-all duration-300 focus:border-[#1E90FF]  text-[#1E90FF]">
-                    <option value="all">Semua Kategori</option>
-                    <option value="fiction">Fiksi</option>
-                    <option value="non-fiction">Non-Fiksi</option>
-                    <option value="science">Sains</option>
-                    <option value="history">Sejarah</option>
-                    <!-- GANTI INI -->
-                </select>
+            <div class="filter-dropdown relative w-1/5">
+                <!-- Form untuk Filter -->
+                <form action="{{ route('user.highlight') }}" method="GET">
+                    <select
+                        id="filter-select"
+                        name="tag_id"
+                        class="form-control rounded-[12px] pl-4 pr-4 py-4 w-full border-2 border-transparent transition-all duration-300 focus:border-[#1E90FF] text-[#1E90FF]"
+                        onchange="this.form.submit()"
+                    >
+                        <option value="">Semua Kategori</option>
+                        @foreach ($tag as $item)
+                            <option value="{{ $item->id_tags }}" {{ request('tag_id') == $item->id_tags ? 'selected' : '' }}>
+                                {{ $item->nama_tags }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
             </div>
         </div>
     </div>

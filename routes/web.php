@@ -19,6 +19,10 @@ use App\Models\PaketLangganan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/landing', function () {
+    return view('sewa_buku.user.landing');
+})->name('sewa_buku.user.landing');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

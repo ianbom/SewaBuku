@@ -20,10 +20,9 @@ use App\Models\PaketLangganan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/landing', function () {
-//     return view('sewa_buku.user.landing');
-// })->name('sewa_buku.user.landing');
-
+Route::get('/', function () {
+    return view('sewa_buku.user.landing');
+})->name('sewa_buku.user.landing');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -34,15 +33,15 @@ Route::get('/dashboard', function () {
 
 Route::get('/landingpage', [LandingPageController::class, 'landingPage'])->name('sewa_buku.user.landing');
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        $user = Auth::user();
-        if ($user->is_admin == 1) {
-            return redirect()->route('admin.buku.index');
-        } else {
-            return redirect()->route('user.buku.index');
-        }
+    // Route::get('/', function () {
+    //     $user = Auth::user();
+    //     if ($user->is_admin == 1) {
+    //         return redirect()->route('admin.buku.index');
+    //     } else {
+    //         return redirect()->route('user.buku.index');
+    //     }
 
-    })->name('home');
+    // })->name('home');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -1,7 +1,7 @@
 @extends('sewa_buku.layouts.userBacaBuku')
 
 @section('title')
-    'Kerjakan Quiz'
+    Kerjakan Quiz
 @endsection
 
 @section('content')
@@ -65,7 +65,26 @@
 <script>
     // JavaScript to handle form submission
     document.getElementById('submitQuizButton').addEventListener('click', function () {
-        document.getElementById('quizForm').submit();
+        // Validasi: Memastikan semua soal telah dijawab
+        let allAnswered = true;
+        const form = document.getElementById('quizForm');
+        const inputs = form.querySelectorAll('input[type="radio"]:checked');
+
+        @foreach ($soal as $key => $item)
+            if (!document.querySelector('input[name="jawaban[{{ $item->id_soal }}]"]:checked')) {
+                allAnswered = false;
+            }
+        @endforeach
+
+        if (!allAnswered) {
+            alert('Harap jawab semua pertanyaan sebelum mengirim.');
+            return;
+        }
+
+        // Menampilkan konfirmasi sebelum submit
+        if (confirm("Apakah Anda yakin ingin mengirim jawaban ini?")) {
+            form.submit();
+        }
     });
 </script>
 @endsection

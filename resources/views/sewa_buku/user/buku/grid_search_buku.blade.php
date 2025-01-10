@@ -3,7 +3,7 @@
        <!-- Wrap the entire book card in a link to the book detail page -->
     <a href="{{ route('user.buku.show', $book->id_buku) }}">
         @if($book->coverBuku && $book->coverBuku->first())
-            <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Cover Buku" class="w-full h-128 object-cover rounded-[16px]">
+            <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Book Cover" class="w-full h-128 object-cover rounded-[16px]">
         @else
             <img src="https://via.placeholder.com/150" alt="Cover Placeholder" class="w-full h-64 object-cover">
         @endif
@@ -26,7 +26,6 @@
     </div>
 </div>
     @empty
-    <p class="text-[#E46B61]">Buku tidak di temukan</p>
+    <p class="text-[#E46B61]">No books found</p>
 
 @endforelse
-

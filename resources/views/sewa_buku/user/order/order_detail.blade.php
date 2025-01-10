@@ -1,74 +1,73 @@
 @extends('sewa_buku.layouts.userApp')
 
 @section('title')
-    Detail Order
+    Order Details
 @endsection
 
 @section('content')
     <div class="container mx-auto mt-10 p-10">
-        <!-- Judul Halaman -->
+        <!-- Page Title -->
         <div class="flex justify-between items-center mb-12">
             <h1 class="text-3xl font-bold text-left text-[052D6E]"
-                style="font-family: 'Libre Baskerville', serif; color: #052D6E;">Detail Pesanan</h1>
+                style="font-family: 'Libre Baskerville', serif; color: #052D6E;">Order Details</h1>
         </div>
 
-        <!-- Card Detail Order -->
-        <div class="bg-white rounded-3xl p-6 border-2 border-[#1E90FF] style="font-family: 'Libre Baskerville' , serif;">
-            <!-- Tombol Kembali Icon -->
+        <!-- Order Detail Card -->
+        <div class="bg-white rounded-3xl p-6 border-2 border-[#1E90FF]" style="font-family: 'Libre Baskerville' , serif;">
+            <!-- Back Button Icon -->
             <div class="flex items-center mb-5 mt-2">
-                <!-- Tombol Kembali Icon -->
+                <!-- Back Button Icon -->
                 <a href="{{ url()->previous() }}" class="text-[#052D6E] hover:text-[#1E90FF] mr-4">
                     <i class="fa fa-angle-left text-xl"></i> <!-- Back Arrow Icon -->
                 </a>
 
-                <!-- Judul -->
-                <h1 class="text-xl font-bold text-left text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Detail
-                    Pesanan</h1>
+                <!-- Title -->
+                <h1 class="text-xl font-bold text-left text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Order Details</h1>
             </div>
 
-            <!-- Section Order Details -->
+            <!-- Order Details Section -->
             <div class="bg-[#D3E9FF] p-6 rounded-2xl mb-6" style="font-family: 'Inter', sans-serif;">
                 <div class="grid grid-cols-1 gap-3">
-                    <!-- Id order -->
+                    <!-- Order ID -->
                     <div class="flex justify-between items-start">
                         <h2 class="text-xl font-bold text-[#052D6E]">No. {{ $order->id_order }}</h2>
                     </div>
 
-                    <!-- Garis Pembatas -->
+                    <!-- Divider -->
                     <hr class="my-1 border-t-2 border-[#052D6E]">
 
-                    <!-- Nama Paket -->
-                    <div class="flex justify-between items-center">
-                        <p class="text-[#052D6E] font-bold">Nama Paket</p>
+                    <!-- Package Name -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                        <p class="text-[#052D6E] font-bold">Package Name</p>
                         <p class="text-[#979797] font-semibold">{{ $order->nama_paket }}</p>
                     </div>
 
-                    <!-- Pembeli -->
-                    <div class="flex justify-between items-center">
-                        <p class="text-[#052D6E] font-bold">Nama Pembeli</p>
+                    <!-- Buyer -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                        <p class="text-[#052D6E] font-bold">Buyer's Name</p>
                         <p class="text-[#979797] font-semibold">{{ $order->user->name }}</p>
                     </div>
 
-                    <!-- Tanggal Order -->
-                    <div class="flex justify-between items-center">
-                        <p class="text-[#052D6E] font-bold">Tanggal Order</p>
+                    <!-- Order Date -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                        <p class="text-[#052D6E] font-bold">Order Date</p>
                         <p class="text-[#979797] font-semibold">
                             {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</p>
                     </div>
 
-                    {{-- Total Bayar --}}
-                    <!-- Total Bayar -->
-                    <div class="flex justify-between items-center">
-                        <p class="text-[#052D6E] font-bold">Total Bayar</p>
+                    {{-- Total Amount --}}
+                    <!-- Total Amount -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                        <p class="text-[#052D6E] font-bold">Total Amount</p>
                         <p class="text-[#979797] font-semibold">Rp{{ number_format($order->total_bayar, 0, ',', '.') }}</p>
                     </div>
 
-                    <!-- Garis Pembatas -->
+                    <!-- Divider -->
                     <hr class="my-1 border-t-2 border-[#052D6E]">
 
-                    <!-- Status Order -->
-                    <div class="flex justify-between items-center">
-                        <p class="text-[#052D6E] font-bold mb-2">Status Pesanan</p>
+                    <!-- Order Status -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                        <p class="text-[#052D6E] font-bold mb-2">Order Status</p>
                         @if ($order->status_order === 'Proses')
                             <span class="py-1 px-2 rounded font-bold text-[#1E90FF]"
                                 style="text-transform: uppercase;">{{ $order->status_order }}</span>
@@ -83,63 +82,56 @@
                 </div>
             </div>
 
-
-            <!-- Aksi -->
-            <div class="flex flex-wrap gap-3 justify-end mt-6">
-                <!-- Tombol Kembali -->
-                {{-- <a href="{{ url()->previous() }}" class="bg-gray-500 text-white py-2 px-4 rounded-xl shadow-md hover:bg-transparent hover:border-gray-500 hover:text-gray-500 border-2 transition-all duration-300">
-                Kembali
-            </a> --}}
-
-                <!-- Cetak Invoice -->
-                <a href="{{ route('user.order.invoice', $order->id_order) }}"
+            <!-- Actions -->
+            <div class="flex flex-wrap lg:justify-end lg:gap-6 gap-3 justify-center mt-6" style="font-family: 'Inter', sans-serif;">
+                <!-- Print Invoice -->
+                <a href="#"
                     class="px-4 text-bold py-2 bg-[#FCEBCBFF] text-[#FDA403] rounded-[12px] hover:bg-[#FDA403] hover:text-white">
-                    <strong>Cetak Invoice</strong>
+                    <strong>Print Invoice</strong>
                 </a>
 
-                <!-- Tombol Batalkan Order -->
+                <!-- Cancel Order Button -->
                 @if ($order->status_order == 'Proses')
                     <form action="{{ route('user.order.batal', $order->id_order) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <button type="submit"
                             class="px-4 text-bold py-2 bg-[#FFCFC2] text-[#E46B61] rounded-[12px] hover:bg-[#E46B61] hover:text-white">
-                            <strong>Batalkan Pesanan</strong>
+                            <strong>Cancel Order</strong>
                         </button>
                     </form>
                 @endif
 
-                <!-- Tombol Bayar -->
+                <!-- Pay Now Button -->
                 @if ($order->status_order == 'Proses')
                     <form action="{{ route('user.payment.store', $order->id_order) }}" method="POST" id="payment_form">
                         @csrf
                         <button type="submit"
                             class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
-                            <strong> Bayar Sekarang </strong>
+                            <strong> Pay Now </strong>
                         </button>
                     </form>
                 @endif
             </div>
 
-
-            <!-- Section Rating -->
+            <!-- Rating Section -->
             @if ($order->status_order === 'Selesai')
                 <div class="mt-10 border-t pt-6">
-                    <h3 class="text-xl font-bold mb-4">Berikan Rating untuk Order Ini:</h3>
+                    <h3 class="text-xl font-bold mb-4">Give a Rating for This Order:</h3>
                     @if ($rating)
-                        <!-- Tampilkan Rating Jika Sudah Ada -->
+                        <!-- Display Rating If Available -->
                         <div class="mb-4">
                             <p class="text-gray-700 font-semibold">Rating:</p>
                             <p class="text-yellow-500">{{ $rating->rating }} / 5</p>
                         </div>
                         @if ($rating->komentar)
                             <div>
-                                <p class="text-gray-700 font-semibold">Komentar:</p>
+                                <p class="text-gray-700 font-semibold">Comment:</p>
                                 <p class="text-gray-900">{{ $rating->komentar }}</p>
                             </div>
                         @endif
                     @else
-                        <!-- Form untuk Memberikan Rating -->
+                        <!-- Form to Give Rating -->
                         <form action="{{ route('user.rating.store', $order->id_order) }}" method="POST">
                             @csrf
                             <div class="mb-4">
@@ -154,7 +146,7 @@
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label class="block text-gray-700 font-semibold mb-2">Komentar:</label>
+                                <label class="block text-gray-700 font-semibold mb-2">Comment:</label>
                                 <textarea name="komentar" rows="3"
                                     class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200"></textarea>
                             </div>
@@ -199,33 +191,30 @@
                         if (data.status) {
                             if (data.data.status == 'settlement') {
                                 Swal.fire({
-                                    title: 'Pembayaran Berhasil',
-                                    text: "Selamat Bergabung!",
+                                    title: 'Payment Successful',
+                                    text: "Welcome aboard!",
                                     icon: 'success',
                                     confirmButtonColor: '#198754',
                                     confirmButtonText: 'OK',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         window.location.reload()
-                                        // $('#payment_form').submit();
                                     }
                                 });
                             } else {
                                 snap.pay(data.data.snap_token, {
                                     onSuccess: function(result) {
                                         Swal.fire({
-                                            title: 'Pembayaran Berhasil',
-                                            text: "Selamat Bergabung!",
+                                            title: 'Payment Successful',
+                                            text: "Welcome aboard!",
                                             icon: 'success',
                                             confirmButtonColor: '#198754',
                                             confirmButtonText: 'OK',
                                         }).then((result) => {
                                             if (result.isConfirmed) {
                                                 window.location.reload()
-                                                // $('#payment_form').submit();
                                             }
                                         });
-                                        console.log(result);
                                     },
                                     onPending: function(result) {
                                         Swal.fire({
@@ -234,8 +223,6 @@
                                             icon: 'warning',
                                             confirmButtonText: 'OK',
                                         });
-
-                                        console.log(result);
                                     },
                                     onError: function(result) {
                                         Swal.fire({
@@ -244,7 +231,6 @@
                                             icon: 'error',
                                             confirmButtonText: 'OK',
                                         });
-                                        console.log(result);
                                     },
                                     onClose: function() {
                                         Swal.fire({
@@ -266,12 +252,9 @@
                     });
             }
 
-            $('#payment_form').submit(function(e) {
-                e.preventDefault();
-                let url = $(this).attr('action');
-                console.log(url)
-                handlePayment(e, url)
-            })
+            $('#pay-button').click(function() {
+                handlePayment(event, '/pay');
+            });
         });
     </script>
 @endpush

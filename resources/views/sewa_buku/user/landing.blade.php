@@ -465,7 +465,7 @@
 
         <!-- Explore More Button -->
         <div class="text-center mt-16">
-            <a href="{{ route('login') }}" class="bg-[#F1F8FF] text-[#1E90FF] py-2 px-6 rounded-full border-2 border-[#1E90FF] hover:bg-[#1E90FF] hover:text-white transition duration-300">
+            <a href="{{ route('user.buku.index') }}" class="bg-[#F1F8FF] text-[#1E90FF] py-2 px-6 rounded-full border-2 border-[#1E90FF] hover:bg-[#1E90FF] hover:text-white transition duration-300">
                 Explore More
             </a>
         </div>

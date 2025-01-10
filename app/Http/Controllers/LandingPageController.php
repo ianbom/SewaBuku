@@ -47,8 +47,7 @@ class LandingPageController extends Controller
             $b->totalWaktu = $totalSeconds;
 
         }
-
-        // return response()->json(['tags' => $parentTags]);
+        
         return view('sewa_buku.user.landing', ['parentTags' => $parentTags, 'paketLangganan' => $paketLangganan, 'buku' => $buku]);
     }
 }

@@ -20,18 +20,13 @@ use App\Models\PaketLangganan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('sewa_buku.user.landing');
-})->name('sewa_buku.user.landing');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
-
-
-Route::get('/landingpage', [LandingPageController::class, 'landingPage'])->name('sewa_buku.user.landing');
+Route::get('/', [LandingPageController::class, 'landingPage'])->name('sewa_buku.user.landing');
 Route::middleware('auth')->group(function () {
     // Route::get('/', function () {
     //     $user = Auth::user();

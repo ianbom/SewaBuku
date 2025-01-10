@@ -5,8 +5,9 @@
 @endsection
 
 @section('content')
-<div class="d-flex align-items-center justify-content-center" style="height: 100vh; background-image: url('{{ asset('/images/bglogin.png') }}'); background-size: cover; background-position: center;">
-    <div class="card p-4" style="width: 500px; background-color: transparent;">
+<div class="d-flex align-items-center justify-content-center" style="height: 100vh; position: relative; background-image: url('{{ asset('/images/bglogin.png') }}'); background-size: cover; background-position: center;">
+    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #052D6E; z-index: -1;"></div>
+      <div class="card p-4" style="width: 500px; background-color: transparent;">
         <h1 class="text-center text-white" style="font-size: 28px; margin-bottom:20px; font-weight: bold; font-family: 'Libre Baskerville', serif;">Login</h1>
         <p class="text-center text-white" style="font-size: 16px; margin-bottom:40px;  font-family: 'Libre Baskerville', serif;">LoginPlease enter your Login and your Password</p>
 
@@ -61,6 +62,7 @@
             <p style="font-size: 12px; color: white;"><strong> Masih belum punya akun?</strong> <a href="{{ route('register') }}"  style="color: white;">Register!</a></p>
         </div>
     </div>
+</div>
 </div>
 @endsection
 

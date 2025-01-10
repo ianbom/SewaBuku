@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 @php
     // Array gambar yang tersedia
@@ -22,8 +28,11 @@
             <!-- Left section (Text and buttons) -->
             <div class="flex-1 pr-0 md:pr-4">
                 <h1 class="text-4xl sm:text-5xl md:text-6xl font-semibold text-[#052D6E] mb-6" style="font-family: 'Libre Baskerville', serif; line-height: 1.2;">
-                    The more that you <span class="text-[#1E90FF]">read</span>, the more <span class="text-[#1E90FF]">things</span> that you will know.
+                    The more that you
+                    <span class="text-[#1E90FF] font-light italic">read</span>, the more
+                    <span class="text-[#1E90FF] font-light italic">things</span> that you will know.
                 </h1>
+
 
                 <div class="flex space-x-4 mt-12">
                     <a href="#subscription"
@@ -50,9 +59,11 @@
         <!-- Title -->
         <h2 class="text-[#052D6E] text-center font-semibold text-2xl mb-4" style="font-family: 'Libre Baskerville', serif;">Features</h2>
         <!-- Description -->
-        <p class="text-center text-[#052D6E] text-4xl font-semibold  mb-12" style="font-family: 'Libre Baskerville', serif;">
-            <span class="text-[#1E90FF]">Bacaan</span> Insightful, <span class="text-[#1E90FF]">Hidup</span> Meaningful
+        <p class="text-center text-[#052D6E] text-4xl font-light italic mb-12" style="font-family: 'Libre Baskerville', serif;">
+            <span class="text-[#1E90FF] font-semibold not-italic">Bacaan</span> Insightful,
+            <span class="text-[#1E90FF] font-semibold not-italic">Hidup</span> Meaningful
         </p>
+
         <div class="flex justify-center">
         <!-- Cards Section -->
         <div class="flex justify-center">
@@ -65,7 +76,10 @@
                         <!-- Right Column - Text and Button -->
                         <div class="flex flex-col justify-center">
                             <h3 class="text-[#1E90FF] font-semibold text-xl mb-2" style="font-family: 'Libre Baskerville', serif;">Audio Book</h3>
-                            <p class="text-[#484848] mb-2">Enjoy Your Favorite Books Anytime, Anywhere</p>
+                            <p class="text-[#484848] mb-2" style="font-family: 'Inter', sans-serif;">Enjoy Your Favorite Books Anytime, Anywhere</p>
+                            <a style="font-family: 'Inter', sans-serif;" href="{{ route('user.buku.index') }}" class="bg-[#1E90FF] text-white py-1 px-6 rounded-[16px] text-center  w-[60%] self-start hover:bg-[#052D6E]">
+                                TRY NOW
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -77,9 +91,9 @@
                         <!-- Right Column - Text and Button -->
                         <div class="flex flex-col justify-center">
                             <h3 class="text-[#1E90FF] font-semibold text-xl mb-2" style="font-family: 'Libre Baskerville', serif;">Highlight</h3>
-                            <p class="text-[#484848] mb-2">Save Your Favorite Texts with Ease</p>
-                            <a href="#" class="bg-[#1E90FF] text-white py-1 px-6 rounded-[16px] text-center  w-[60%] self-start cursor-not-allowed pointer-events-none">
-                                PREMIUM
+                            <p class="text-[#484848] mb-2" style="font-family: 'Inter', sans-serif;">Save Your Favorite Texts with Ease</p>
+                            <a style="font-family: 'Inter', sans-serif;" href="{{ route('user.buku.index') }}" class="bg-[#1E90FF] text-white py-1 px-6 rounded-[16px] text-center  w-[60%] self-start hover:bg-[#052D6E]">
+                                TRY NOW
                             </a>
                         </div>
                     </div>
@@ -92,7 +106,10 @@
                         <!-- Right Column - Text and Button -->
                         <div class="flex flex-col justify-center">
                             <h3 class="text-[#1E90FF] font-semibold text-xl mb-2" style="font-family: 'Libre Baskerville', serif;">Quiz</h3>
-                            <p class="text-[#484848] mb-2">est Your Knowledge with Interactive Quizzes</p>
+                            <p class="text-[#484848] mb-2" style="font-family: 'Inter', sans-serif;">est Your Knowledge with Interactive Quizzes</p>
+                            <a  style="font-family: 'Inter', sans-serif;" href="{{ route('user.buku.index') }}" class="bg-[#1E90FF] text-white py-1 px-6 rounded-[16px] text-center  w-[60%] self-start hover:bg-[#052D6E]">
+                                TRY NOW
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -104,7 +121,10 @@
                         <!-- Right Column - Text and Button -->
                         <div class="flex flex-col justify-center">
                             <h3 class="text-[#1E90FF] font-semibold text-xl mb-2" style="font-family: 'Libre Baskerville', serif;">Library collection</h3>
-                            <p class="text-[#484848] mb-2">Your Personal Library, Always Within Reach</p>
+                            <p class="text-[#484848] mb-2" style="font-family: 'Inter', sans-serif;">Your Personal Library, Always Within Reach</p>
+                            <a style="font-family: 'Inter', sans-serif;" href="{{ route('user.buku.index') }}" class="bg-[#1E90FF] text-white py-1 px-6 rounded-[16px] text-center  w-[60%] self-start hover:bg-[#052D6E]">
+                                TRY NOW
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -121,46 +141,46 @@
 
         <!-- Right Column - Text and Icon List -->
         <div class="flex flex-col justify-center">
-            <h2 class="text-[#1E90FF]  font-semibold text-2xl mb-3" style="font-family: 'Libre Baskerville', serif;">Why Choose Us</h2>
+            <h2 class="text-[#1E90FF]  font-semibold text-2xl mb-3" style="font-family: 'Libre Baskerville', serif;">Why Choose Shae Insight?</h2>
             <p class="text-[#052D6E] mb-2 font-semibold text-3xl mb-8" style="font-family: 'Libre Baskerville', serif;">Your Ultimate Companion for Learning, Growth, and Enjoyment</p>
 
             <ul>
                 <li class="flex items-start mb-4">
-                    <div class="bg-[#1E90FF] text-white rounded-[8px] pl-4 pr-4 pt-2 pb-2 mr-4">
+                    <div class="bg-[#052D6E] text-white rounded-[8px] pl-4 pr-4 pt-3 pb-3 mr-4">
                         <i class="fas fa-star"></i>
                     </div>
                     <div>
-                        <h3 class="text-[#052D6E] font-semibold" style="font-family: 'Libre Baskerville', serif;">Personalisasi Terbaik</h3>
-                        <p class="text-[#979797]">Shae Life menyesuaikan diri dengan kebiasaan membaca Anda, memberikan rekomendasi yang sesuai dengan minat dan tujuan Anda.</p>
+                        <h3 class="  text-2xl text-[#052D6E] font-semibold" style="font-family: 'Libre Baskerville', serif;">Personalisasi Terbaik</h3>
+                        <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Shae Life menyesuaikan diri dengan kebiasaan membaca Anda, memberikan rekomendasi yang sesuai dengan minat dan tujuan Anda.</p>
                     </div>
                 </li>
                 <li class="flex items-start mb-4">
-                    <div class="bg-[#1E90FF] text-white rounded-[8px] pl-4 pr-4 pt-2 pb-2 mr-4">
+                    <div class="bg-[#1E90FF] text-white rounded-[8px] pl-4 pr-4 pt-3 pb-3 mr-4">
                         <i class="fas fa-star"></i>
                     </div>
                     <div>
-                        <h3 class="text-[#052D6E]  font-semibold" style="font-family: 'Libre Baskerville', serif;">Features Multifungsi</h3>
-                        <p class="text-[#979797]">Shae Life menggabungkan berbagai alat bantu belajar dan konten interaktif dalam satu platform yang mudah diakses.
+                        <h3 class=" text-2xl text-[#052D6E]  font-semibold" style="font-family: 'Libre Baskerville', serif;">Features Multifungsi</h3>
+                        <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Shae Life menggabungkan berbagai alat bantu belajar dan konten interaktif dalam satu platform yang mudah diakses.
 
                         </p>
                     </div>
                 </li>
                 <li class="flex items-start mb-4">
-                    <div class="bg-[#1E90FF] text-white rounded-[8px] pl-4 pr-4 pt-2 pb-2 mr-4">
+                    <div class="bg-[#052D6E] text-white rounded-[8px] pl-4 pr-4 pt-3 pb-3 mr-4">
                         <i class="fas fa-star"></i>
                     </div>
                     <div>
-                        <h3 class="text-[#052D6E] font-semibold" style="font-family: 'Libre Baskerville', serif;">Belajar Kapan Saja, di Mana Saja</h3>
-                        <p class="text-[#979797]">Shae Life menyesuaikan diri dengan kebiasaan membaca Anda, memberikan rekomendasi yang sesuai dengan minat dan tujuan Anda.</p>
+                        <h3 class=" text-2xl text-[#052D6E] font-semibold" style="font-family: 'Libre Baskerville', serif;">Belajar Kapan Saja, di Mana Saja</h3>
+                        <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Shae Life menyesuaikan diri dengan kebiasaan membaca Anda, memberikan rekomendasi yang sesuai dengan minat dan tujuan Anda.</p>
                     </div>
                 </li>
                 <li class="flex items-start mb-4">
-                    <div class="bg-[#1E90FF] text-white rounded-[8px] pl-4 pr-4 pt-2 pb-2 mr-4">
+                    <div class="bg-[#1E90FF] text-white rounded-[8px] pl-4 pr-4 pt-3 pb-3 mr-4">
                         <i class="fas fa-star"></i>
                     </div>
                     <div>
-                        <h3 class="text-[#052D6E] font-semibold" style="font-family: 'Libre Baskerville', serif;">Tetap Termotivasi dan Terlibat</h3>
-                        <p class="text-[#979797]">Shae Life menyesuaikan diri dengan kebiasaan membaca Anda, memberikan rekomendasi yang sesuai dengan minat dan tujuan Anda.</p>
+                        <h3 class=" text-2xl text-[#052D6E] font-semibold" style="font-family: 'Libre Baskerville', serif;">Tetap Termotivasi dan Terlibat</h3>
+                        <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Shae Life menyesuaikan diri dengan kebiasaan membaca Anda, memberikan rekomendasi yang sesuai dengan minat dan tujuan Anda.</p>
                     </div>
                 </li>
 
@@ -178,7 +198,7 @@
 
     <!-- Description -->
     <p class="text-center text-[#052D6E] text-4xl font-semibold mb-12" style="font-family: 'Libre Baskerville', serif;">
-        Explore <span class="text-[#1E90FF]">Categories</span> and <span class="text-[#1E90FF]">Topics</span> That Match Your Interests
+        Explore Categories and Topics That Match Your Interests
     </p>
 
     <div class="flex justify-center">
@@ -197,10 +217,10 @@
 
                         <li class="flex items-start mb-4">
                             <div class="bg-[#1E90FF] text-white rounded-[8px] p-2 mr-2 flex items-center justify-center w-6 h-6">
-                                <i class="fas fa-folder text-sm"></i>
+                                <i class="far fa-folder text-sm"></i>
                             </div>
                             <div>
-                                <h3 class="text-[#052D6E] font-semibold">{{ $child->nama_tags }}</h3>
+                                <h3 class="text-[#052D6E] font-semibold" style="font-family: 'Inter', sans-serif;">{{ $child->nama_tags }}</h3>
                             </div>
                         </li>
 
@@ -228,9 +248,9 @@
     <section class="flex flex-col md:flex-row items-start md:items-center bg-white w-full rounded-lg py-24 max-w-6xl mx-auto">
         <!-- Bagian Kiri -->
         <div class="md:w-1/2 mb-6 md:mb-0">
-            <p class="text-[#052D6E] text-4xl font-semibold mb-6" style="font-family: 'Libre Baskerville', serif;"> Find Your
+            <p class="text-[#052D6E] text-4xl font-semibold mb-4" style="font-family: 'Libre Baskerville', serif;">Step by Step
             </p>
-            <p class="text-[#1E90FF] text-4xl font-semibold" style="font-family: 'Libre Baskerville', serif;"> Favorite Book
+            <p class="text-[#1E90FF] text-4xl font-semibold" style="font-family: 'Libre Baskerville', serif;"> to Learn
             </p>
         </div>
 
@@ -238,34 +258,34 @@
         <div class="md:w-1/2">
             <ul class="space-y-4">
                 <li class="flex items-center bg-[#052D6E] text-white rounded-[16px] p-4">
-                    <div class="w-8 h-8 flex items-center justify-center bg-white text-[#052D6E] font-semibold rounded-full mr-4">
+                    <div class="w-8 h-8 flex items-center justify-center bg-[#D9D9D9] text-[#052D6E] font-semibold rounded-full mr-4">
                         1
                     </div>
-                    <span>Read or Listen with Ease</span>
+                    <span class="font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Read or Listen with Ease</span>
                 </li>
                 <li class="flex items-center bg-[#385688] text-white rounded-[16px] p-4">
-                    <div class="w-8 h-8 flex items-center justify-center bg-white text-[#385688] font-semibold rounded-full mr-4">
+                    <div class="w-8 h-8 flex items-center justify-center bg-[#D9D9D9]  text-[#385688] font-semibold rounded-full mr-4">
                         2
                     </div>
-                    <span>Learning Methods</span>
+                    <span class="font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Learning Methods</span>
                 </li>
                 <li class="flex items-center bg-[#526E9C] text-white rounded-[16px] p-4">
-                    <div class="w-8 h-8 flex items-center justify-center bg-white text-[#526E9C] font-semibold rounded-full mr-4">
+                    <div class="w-8 h-8 flex items-center justify-center bg-[#D9D9D9]  text-[#526E9C] font-semibold rounded-full mr-4">
                         3
                     </div>
-                    <span>Take Notes and Highlight Key Points</span>
+                    <span class="font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Take Notes and Highlight Key Points</span>
                 </li>
                 <li class="flex items-center bg-[#8DA0BF] text-white rounded-[16px] p-4">
-                    <div class="w-8 h-8 flex items-center justify-center bg-white text-[#8DA0BF] font-semibold rounded-full mr-4">
+                    <div class="w-8 h-8 flex items-center justify-center bg-[#D9D9D9]  text-[#8DA0BF] font-semibold rounded-full mr-4">
                         4
                     </div>
-                    <span>Test Your Understanding</span>
+                    <span class="font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Test Your Understanding</span>
                 </li>
                 <li class="flex items-center bg-[#A8B6CD] text-white rounded-[16px] p-4">
-                    <div class="w-8 h-8 flex items-center justify-center bg-white text-[#A8B6CD] font-semibold rounded-full mr-4">
+                    <div class="w-8 h-8 flex items-center justify-center bg-[#D9D9D9]  text-[#8DA0BF] font-semibold rounded-full mr-4">
                         5
                     </div>
-                    <span>Save to Your Personal Library</span>
+                    <span class="font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Save to Your Personal Library</span>
                 </li>
             </ul>
         </div>
@@ -281,7 +301,7 @@
 
     <!-- Description -->
     <p class="text-center text-[#052D6E] text-4xl font-semibold  mb-12" style="font-family: 'Libre Baskerville', serif;"> What do
-        <span class="text-[#1E90FF]">They Say </span> about <span class="text-[#1E90FF]">Shae Insight?</span>
+        They Say about Shae Insight?
     </p>
   <div class="flex justify-center">
     <!-- Cards Section Category-->
@@ -308,7 +328,7 @@
                     <i class="fas fa-star text-[#74A9DD]"></i>
                     </div>
                     <!-- Testimoni -->
-                    <p class="text-[#052D6E] text-sm text-center">
+                    <p class="text-[#052D6E] text-sm text-center" style="font-family: 'Inter', sans-serif;">
                        "The experience with Shae Insight has been amazing. The insights have boosted my confidence and effectiveness."
                     </p>
               </div>
@@ -332,7 +352,7 @@
                 <i class="fas fa-star text-[#74A9DD]"></i>
                 </div>
                 <!-- Testimoni -->
-                <p class="text-[#052D6E] text-sm text-center">
+                <p class="text-[#052D6E] text-sm text-center" style="font-family: 'Inter', sans-serif;">
                 "Shae Insight has greatly helped me grow both personally and professionally. Highly recommend it!"
                 </p>
           </div>
@@ -346,7 +366,7 @@
             <!-- Nama -->
             <h3 class="text-[#052D6E] font-semibold text-lg text-center">Emily Johnson</h3>
             <!-- Pekerjaan -->
-            <p class="text-[#979797] text-sm text-center">Content Strategist</p>
+            <p class="text-[#979797] text-sm text-center" >Content Strategist</p>
             <!-- Bintang -->
             <div class="flex justify-center items-center my-4">
             <i class="fas fa-star text-[#052D6E]"></i>
@@ -356,7 +376,7 @@
             <i class="fas fa-star text-[#74A9DD]"></i>
             </div>
             <!-- Testimoni -->
-            <p class="text-[#052D6E] text-sm text-center">
+            <p class="text-[#052D6E] text-sm text-center" style="font-family: 'Inter', sans-serif;">
                 "I love how Shae Insight provides clear guidance on personal and career development. It has been a game changer for me!"
             </p>
       </div>
@@ -377,7 +397,7 @@
 
         <!-- Description -->
         <p class="text-center text-[#052D6E] text-4xl font-semibold mb-12" style="font-family: 'Libre Baskerville', serif;">
-            Discover the <span class="text-[#1E90FF]">Subscription Plan</span> that Best Fits Your <span class="text-[#1E90FF]">Needs</span> and Goals
+            Discover the Subscription Plan that Best Fits Your Needs and Goals
         </p>
 
         <div class="flex justify-center max-w-6xl mx-auto">
@@ -396,22 +416,22 @@
                         <img src="{{ $randomImage }}" alt="Package Image" class="rounded-lg w-full h-50 object-cover">
                     </div>
 
-                    <h3 class="text-[16px] font-bold mb-2">{{ $paket->nama_paket }}</h3>
-                    <p class="mb-6 text-[14px] text-white">{{ $paket->deskripsi }}</p>
+                    <h3 class="text-[16px] font-bold mb-2" style="font-family: 'Inter', sans-serif;">{{ $paket->nama_paket }}</h3>
+                    <p class="mb-6 text-[14px] text-white" style="font-family: 'Inter', sans-serif;">{{ $paket->deskripsi }}</p>
 
                     <!-- Time and Price -->
                     <div class="flex justify-between items-center mb-6 p-3 border rounded-[8px]">
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center space-x-2" style="font-family: 'Inter', sans-serif;">
                             <span class="text-[14px]">{{ $paket->masa_waktu }} Hari</span>
                         </div>
-                        <div class="text-[16px] font-bold">
+                        <div class="text-[16px] font-bold" style="font-family: 'Inter', sans-serif;">
                             <span>{{ formatToIndonesianCurrency($paket->harga)  }}</span>
                         </div>
                     </div>
 
                     <button type="button"
                             class="w-full bg-[#D3E9FF] text-[#1E90FF] py-4 rounded-[12px] font-bold hover:bg-white transition"
-                            onclick="window.location.href='{{ route('login') }}'">
+                            onclick="window.location.href='{{ route('login') }}'" style="font-family: 'Inter', sans-serif;">
                         Subscribe Now
                     </button>
                 </div>
@@ -429,7 +449,7 @@
     <section class="features py-24 max-w-6xl mx-auto">
         <!-- Title -->
         <h2 class="text-[#052D6E] text-center font-semibold text-4xl mb-12" style="font-family: 'Libre Baskerville', serif;">
-            Explore Available Books
+            Start Discovering Your Favorite Books
         </h2>
 
         <!-- Book Grid -->
@@ -465,8 +485,8 @@
 
         <!-- Explore More Button -->
         <div class="text-center mt-16">
-            <a href="{{ route('user.buku.index') }}" class="bg-[#F1F8FF] text-[#1E90FF] py-2 px-6 rounded-full border-2 border-[#1E90FF] hover:bg-[#1E90FF] hover:text-white transition duration-300">
-                Explore More
+            <a href="{{ route('user.buku.index') }}" class="bg-[#F1F8FF] text-[#1E90FF] py-2 px-6 rounded-full border-2 border-[#1E90FF] hover:bg-[#1E90FF] hover:text-white transition duration-300" style="font-family: 'Inter', sans-serif;">
+                Start Reading Now
             </a>
         </div>
     </section>
@@ -481,42 +501,42 @@
         <!-- FAQ 1 -->
         <div class="bg-[#D3E9FF] p-6 rounded-lg" id="faq-1">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold text-[#1E90FF]">What is a subscription package?</h3>
+                <h3 class="text-xl font-semibold text-[#1E90FF]" style="font-family: 'Inter', sans-serif;">What is a subscription package?</h3>
                 <button class="text-[#1E90FF]" onclick="toggleAnswer(1)">
                     <span id="toggle-icon-1">+</span>
                 </button>
             </div>
-            <p id="answer-1" class="text-[#979797] hidden mt-4">A subscription package is a paid service that gives access to exclusive content for a certain period of time.</p>
+            <p id="answer-1" class="text-[#979797] hidden mt-4" style="font-family: 'Inter', sans-serif;">A subscription package is a paid service that gives access to exclusive content for a certain period of time.</p>
         </div>
         <!-- FAQ 2 -->
         <div class="bg-[#D3E9FF] p-6 rounded-lg" id="faq-2">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold text-[#1E90FF]">How do I subscribe?</h3>
+                <h3 class="text-xl font-semibold text-[#1E90FF]" style="font-family: 'Inter', sans-serif;">How do I subscribe?</h3>
                 <button class="text-[#1E90FF]" onclick="toggleAnswer(2)">
                     <span id="toggle-icon-2">+</span>
                 </button>
             </div>
-            <p id="answer-2" class="text-[#979797] hidden mt-4">You can subscribe by selecting the desired package and following the provided payment procedure.</p>
+            <p id="answer-2" class="text-[#979797] hidden mt-4" style="font-family: 'Inter', sans-serif;">You can subscribe by selecting the desired package and following the provided payment procedure.</p>
         </div>
         <!-- FAQ 3 -->
         <div class="bg-[#D3E9FF] p-6 rounded-lg" id="faq-3">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold text-[#1E90FF]">Can I cancel my subscription?</h3>
+                <h3 class="text-xl font-semibold text-[#1E90FF]" style="font-family: 'Inter', sans-serif;">Can I cancel my subscription?</h3>
                 <button class="text-[#1E90FF]" onclick="toggleAnswer(3)">
                     <span id="toggle-icon-3">+</span>
                 </button>
             </div>
-            <p id="answer-3" class="text-[#979797] hidden mt-4">Yes, you can cancel your subscription at any time according to the applicable policy.</p>
+            <p id="answer-3" class="text-[#979797] hidden mt-4" style="font-family: 'Inter', sans-serif;">Yes, you can cancel your subscription at any time according to the applicable policy.</p>
         </div>
         <!-- FAQ 4 -->
         <div class="bg-[#D3E9FF] p-6 rounded-lg" id="faq-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold text-[#1E90FF]">Are there any discounts for new customers?</h3>
+                <h3 class="text-xl font-semibold text-[#1E90FF]" style="font-family: 'Inter', sans-serif;">Are there any discounts for new customers?</h3>
                 <button class="text-[#1E90FF]" onclick="toggleAnswer(4)">
                     <span id="toggle-icon-4">+</span>
                 </button>
             </div>
-            <p id="answer-4" class="text-[#979797] hidden mt-4">We offer special discounts for new customers. Check out our promotions page for more details.</p>
+            <p id="answer-4" class="text-[#979797] hidden mt-4" style="font-family: 'Inter', sans-serif;">We offer special discounts for new customers. Check out our promotions page for more details.</p>
         </div>
     </div>
 </section>
@@ -547,37 +567,37 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <!-- Deskripsi Website -->
             <div class=" sm:text-left mb-6 sm:mb-0 max-w-xs sm:max-w-sm">
-                <p class="font-semibold text-lg">Shae Insight</p>
-                <p class="text-sm mt-2">Empowering your personal growth with insights that drive lasting change and deepen understanding in just 1 minute.</p>
+                <p class="font-semibold text-lg" style="font-family: 'Inter', sans-serif;">Shae Insight</p>
+                <p class="text-sm mt-2" style="font-family: 'Inter', sans-serif;">Empowering your personal growth with insights that drive lasting change and deepen understanding in just 1 minute.</p>
             </div>
 
             <!-- Quick Links -->
             <div class="flex flex-col sm:flex-row justify-between gap-8 w-full sm:w-auto">
                 <!-- Company Section -->
                 <div class="sm:w-1/2">
-                    <h4 class="font-semibold text-white mb-3">Company</h4>
+                    <h4 class="font-semibold text-white mb-3" style="font-family: 'Inter', sans-serif;">Company</h4>
                     <ul class="space-y-4 text-sm">
-                        <li><a href="#about" class="hover:text-[#052D6E]">About Us</a></li>
-                        <li><a href="#features" class="hover:text-[#052D6E]">Features</a></li>
-                        <li><a href="#testimonial" class="hover:text-[#052D6E]">Testimonial</a></li>
-                        <li><a href="#faq" class="hover:text-[#052D6E]">FAQ</a></li>
+                        <li><a href="#about" class="hover:text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Introduction</a></li>
+                        <li><a href="#features" class="hover:text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Features</a></li>
+                        <li><a href="#testimonial" class="hover:text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Testimonial</a></li>
+                        <li><a href="#faq" class="hover:text-[#052D6E]" style="font-family: 'Inter', sans-serif;">FAQ</a></li>
                     </ul>
                 </div>
 
                 <!-- Explore Section -->
                 <div class="sm:w-1/2">
-                    <h4 class="font-semibold text-white mb-3">Explore</h4>
+                    <h4 class="font-semibold text-white mb-3" style="font-family: 'Inter', sans-serif;">Explore</h4>
                     <ul class="space-y-4 text-sm">
-                        <li><a href="#categories" class="hover:text-[#052D6E]">Categories & Topics List</a></li>
-                        <li><a href="#subscription" class="hover:text-[#052D6E]">Subscription</a></li>
-                        <li><a href="#books" class="hover:text-[#052D6E]">Books</a></li>
+                        <li><a href="#categories" class="hover:text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Categories & Topics List</a></li>
+                        <li><a href="#subscription" class="hover:text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Subscription</a></li>
+                        <li><a href="#books" class="hover:text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Books</a></li>
                     </ul>
                 </div>
             </div>
 
             <!-- Social Media Links -->
             <div class="mt-6 sm:mt-0">
-                <h4 class="font-semibold text-white mb-3">Follow Us</h4>
+                <h4 class="font-semibold text-white mb-3" style="font-family: 'Inter', sans-serif;">Follow Us</h4>
                 <ul class="flex space-x-6 justify-center sm:justify-start">
                     <li>
                         <a href="https://facebook.com" target="_blank" class="hover:text-[#052D6E]">

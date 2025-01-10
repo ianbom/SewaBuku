@@ -5,6 +5,34 @@
 @endsection
 
 @section('content')
+<head>
+    <style>
+        .custom-audio {
+            background-color: #D3E9FF;
+            border-radius: 16px;
+            color: #1E90FF !important;
+        }
+
+        .custom-audio::-webkit-media-controls-panel {
+            background-color: #D3E9FF;
+        }
+
+        .custom-audio::-webkit-media-controls-play-button {
+            background-color: white;
+            border-radius: 50px;
+            color: #1E90FF !important;
+        }
+
+        .custom-audio::-webkit-media-controls-timeline {
+            color: #1E90FF !important;
+        }
+
+        .custom-audio::-webkit-media-controls-current-time-display,
+        .custom-audio::-webkit-media-controls-time-remaining-display {
+            color: #1E90FF !important;
+        }
+    </style>
+</head>
 <div class="container mx-auto p-4 sm:p-8 lg:p-10 bg-white max-w-full">
     <!-- Page Title -->
     <div class="flex flex-col sm:flex-row justify-between items-center mb-4 mt-10">
@@ -50,7 +78,7 @@
     <!-- Chapter Audio -->
     <div class="mb-8">
         @if (!empty($detailBuku->audio))
-            <audio controls controlsList="nodownload" class="w-full bg-[#D3E9FF] rounded-[16px] px-4 py-2">
+            <audio controls controlsList="nodownload" class="custom-audio w-full bg-[#D3E9FF] rounded-[16px] px-4 py-2">
                 <source src="{{ asset('storage/' . $detailBuku->audio) }}" type="audio/mpeg">
                 Your browser does not support the audio player.
             </audio>

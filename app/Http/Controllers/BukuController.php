@@ -85,7 +85,7 @@ class BukuController extends Controller
             'checkLangganan' => $checkLangganan,
             'parentTags' => $parentTags,
             'childTags' => $childTags,
-            'terakhirDibaca' => $terakhirDibaca
+            'terakhirDibaca' => $terakhirDibaca ?? null
         ]);
     }
 
@@ -150,7 +150,7 @@ class BukuController extends Controller
         $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
 
         $highlight = Highlight::where('id', $userId)->where('id_buku', $buku->id_buku)->get();
-
+        // dd($buku->detailBuku);
         return view('sewa_buku.user.buku.detail_buku', [
             'buku' => $buku,
             'favorites' => $favorites,
@@ -327,6 +327,7 @@ class BukuController extends Controller
             'sinopsis' => 'nullable|string',
             'ringkasan_audio' => 'nullable|file|mimes:mp3', // Nullable for update
             'cover_buku.*' => 'nullable|file|mimes:jpeg,png,jpg', // Nullable for update
+            'is_free' => 'nullable'
         ]);
 
         // Temukan buku yang akan di-update
@@ -363,6 +364,7 @@ class BukuController extends Controller
             'isbn' => $request->isbn,
             'tahun_terbit' => $request->tahun_terbit,
             'sinopsis' => $request->sinopsis,
+            'is_free' => $request->is_free,
         ]);
 
         // Update cover buku jika ada file cover baru yang diupload
@@ -504,6 +506,7 @@ class BukuController extends Controller
     public function show($id){
         try {
             $buku = Buku::findOrFail($id);
+
         //return response()->json(['buku' => $buku]);
         return view('sewa_buku.admin.buku.show_buku', ['buku' => $buku]);
         } catch (\Throwable $th) {
@@ -523,6 +526,7 @@ class BukuController extends Controller
     }
 
 
+    //Search ini ga kepake kayae
     public function searchJudulBuku(Request $request)
     {
         $query = $request->input('query');
@@ -553,61 +557,92 @@ class BukuController extends Controller
         return view('sewa_buku.user.buku.index_buku', ['buku' => $buku, 'favorites' => $favorites]);
     }
 
-    public function searchBukuIndex(){
-        $userId = Auth::id();
+    public function searchBukuIndex(Request $request)
+{
+    $userId = Auth::id();
+    $tagId = $request->input('tag_id');
 
-        // Periksa status langganan
-        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+    $checkLangganan = Langganan::where('status_langganan', true)
+                               ->where('id', $userId)
+                               ->first();
 
-        $parentTags = Tags::where('id_child', null)->get();
-        $childTags = Tags::whereNotNull('id_child')->get();
+    // Ambil semua tags
+    $tag = Tags::all();
 
-        $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
-            ->withCount(['rating as ratingRerata' => function ($query) {
-                $query->select(DB::raw('coalesce(avg(rating), 0)'));
-            }])
-            ->get();
+    // Query dasar untuk buku
+    $query = Buku::with(['coverBuku', 'rating', 'detailBuku', 'tags'])
+        ->withCount(['rating as ratingRerata' => function ($query) {
+            $query->select(DB::raw('coalesce(avg(rating), 0)'));
+        }]);
 
-        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+    // Filter berdasarkan tag jika ada
+    if ($tagId) {
+        $query->where(function($q) use ($tagId) {
+            // Cek apakah tag yang dipilih adalah child
+            $selectedTag = Tags::find($tagId);
 
-        $getID3 = new getID3(); // Inisialisasi library getID3
+            if ($selectedTag->id_child) {
+                // Jika child tag, ambil buku dengan tag tersebut dan parent tagnya
+                $q->whereHas('tags', function($query) use ($tagId) {
+                    $query->where('tags.id_tags', $tagId);
+                })->orWhereHas('tags', function($query) use ($selectedTag) {
+                    $query->where('tags.id_tags', $selectedTag->id_child);
+                });
+            } else {
+                // Jika parent tag, ambil buku dengan tag tersebut dan semua child tagnya
+                $childTagIds = Tags::where('id_child', $tagId)->pluck('id_tags');
+                $q->whereHas('tags', function($query) use ($tagId, $childTagIds) {
+                    $query->where('tags.id_tags', $tagId)
+                          ->orWhereIn('tags.id_tags', $childTagIds);
+                });
+            }
+        });
+    }
 
-        foreach ($buku as $b) {
-            $totalSeconds = 0;
+    $buku = $query->get();
 
-            // Hitung total durasi audio dari detailBuku
-            foreach ($b->detailBuku as $detail) {
-                if ($detail->audio) {
-                    $filePath = storage_path('app/public/' . $detail->audio);
-                    if (file_exists($filePath)) {
-                        $audioInfo = $getID3->analyze($filePath);
-                        if (isset($audioInfo['playtime_seconds'])) {
-                            $totalSeconds += $audioInfo['playtime_seconds'];
-                        }
+    // Ambil daftar favorit user
+    $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+
+    // Proses durasi audio
+    $getID3 = new getID3();
+
+    foreach ($buku as $b) {
+        $totalSeconds = 0;
+
+        foreach ($b->detailBuku as $detail) {
+            if ($detail->audio) {
+                $filePath = storage_path('app/public/' . $detail->audio);
+                if (file_exists($filePath)) {
+                    $audioInfo = $getID3->analyze($filePath);
+                    if (isset($audioInfo['playtime_seconds'])) {
+                        $totalSeconds += $audioInfo['playtime_seconds'];
                     }
                 }
             }
-
-            // Simpan total waktu dalam format jam, menit, detik
-            $hours = floor($totalSeconds / 3600);
-            $minutes = floor(($totalSeconds % 3600) / 60);
-            $seconds = $totalSeconds % 60;
-
-            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-            $b->totalWaktu = $totalSeconds;
-
-            // Tentukan apakah buku dapat dibaca
-            $b->can_read = $b->is_free || $checkLangganan ? true : false;
         }
 
-        return view('sewa_buku.user.buku.search_buku', [
-            'buku' => $buku,
-            'favorites' => $favorites,
-            'checkLangganan' => $checkLangganan,
-            'parentTags' => $parentTags,
-            'childTags' => $childTags
-        ]);
+        // Format waktu
+        $hours = floor($totalSeconds / 3600);
+        $minutes = floor(($totalSeconds % 3600) / 60);
+        $seconds = $totalSeconds % 60;
+
+        $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        $b->totalWaktu = $totalSeconds;
+
+        // Set flag can_read
+        $b->can_read = $b->is_free || $checkLangganan ? true : false;
     }
+
+    return view('sewa_buku.user.buku.search_buku', [
+        'buku' => $buku,
+        'favorites' => $favorites,
+        'checkLangganan' => $checkLangganan,
+        'tag' => $tag,
+        'tagId' => $tagId
+    ]);
+}
+
 
     public function searchBuku(Request $request)
     {
@@ -615,7 +650,38 @@ class BukuController extends Controller
 
         $buku = Buku::where('judul_buku', 'like', "%$search%")
                     ->orWhere('penulis', 'like', "%$search%")
+                    ->withCount(['rating as ratingRerata' => function ($query)
+                     {$query->select(DB::raw('coalesce(avg(rating), 0)'));
+                    }])
                     ->get();
+
+                    $getID3 = new getID3();
+
+                    foreach ($buku as $b) {
+                        $totalSeconds = 0;
+
+                        foreach ($b->detailBuku as $detail) {
+                            if ($detail->audio) {
+                                $filePath = storage_path('app/public/' . $detail->audio);
+                                if (file_exists($filePath)) {
+                                    $audioInfo = $getID3->analyze($filePath);
+                                    if (isset($audioInfo['playtime_seconds'])) {
+                                        $totalSeconds += $audioInfo['playtime_seconds'];
+                                    }
+                                }
+                            }
+                        }
+
+                        // Simpan total waktu dalam format jam, menit, detik
+                        $hours = floor($totalSeconds / 3600);
+                        $minutes = floor(($totalSeconds % 3600) / 60);
+                        $seconds = $totalSeconds % 60;
+
+                        $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+                        $b->totalWaktu = $totalSeconds;
+
+
+                    }
 
         $html = view('sewa_buku.user.buku.grid_search_buku', compact('buku'))->render();
 
@@ -730,5 +796,243 @@ class BukuController extends Controller
 
         ]);
     }
+
+    public function highlightUser(){
+        $userId = Auth::id();
+
+        // Periksa status langganan
+        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+
+        $highlight = Highlight::where('id', $userId)->pluck('id_buku');
+
+        $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
+            ->whereIn('id_buku', $highlight)
+            ->withCount(['rating as ratingRerata' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->withCount(['highlight as total_highlight' => function ($query) use ($userId) {
+                $query->where('id', $userId);
+            }])
+            ->get();
+
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+
+        $getID3 = new getID3();
+
+        foreach ($buku as $b) {
+            $totalSeconds = 0;
+
+            foreach ($b->detailBuku as $detail) {
+                if ($detail->audio) {
+                    $filePath = storage_path('app/public/' . $detail->audio);
+                    if (file_exists($filePath)) {
+                        $audioInfo = $getID3->analyze($filePath);
+                        if (isset($audioInfo['playtime_seconds'])) {
+                            $totalSeconds += $audioInfo['playtime_seconds'];
+                        }
+                    }
+                }
+            }
+
+            // Simpan total waktu dalam format jam, menit, detik
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            $seconds = $totalSeconds % 60;
+
+            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+            $b->totalWaktu = $totalSeconds;
+
+            // Tentukan apakah buku dapat dibaca
+            $b->can_read = $b->is_free || $checkLangganan ? true : false;
+
+        }
+
+        return view('sewa_buku.user.buku.highlight.index_highlight', [
+            'buku' => $buku,
+            'favorites' => $favorites,
+            'checkLangganan' => $checkLangganan,
+        ]);
+    }
+
+    public function detailHighlight($id) {
+        $userId = Auth::id();
+
+        $buku = Buku::with('detailBuku', 'detailBuku.quiz')
+        ->withCount(['detailBuku as jumlahChapter' => function ($query) {
+            $query->select(DB::raw('coalesce(count(id_detail_buku))'));
+        }])
+        ->findOrFail($id);
+
+        $jumlahQuiz = Quiz::whereIn('id_detail_buku', function ($query) use ($buku) {
+            $query->select('id_detail_buku')
+                ->from('detail_buku')
+                ->where('id_buku', $buku->id_buku);
+        })
+        ->count();
+
+
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+
+        $rating = Rating::where('id_buku', $buku->id_buku)->get();
+
+        $ratingCheck = Rating::where('id', $userId)
+        ->where('id_buku', $buku->id_buku)
+        ->first();
+
+        $checkLanggananAktif = Langganan::where('id', $userId)
+            ->where('status_langganan', true)
+            ->exists();
+
+        $averageRating = $rating->isNotEmpty() ? $rating->avg('rating') : null;
+
+        $getID3 = new getID3();
+
+        $totalSeconds = 0;
+
+
+        foreach ($buku->detailBuku as $detail) {
+            if ($detail->audio) {
+                $filePath = storage_path('app/public/' . $detail->audio);
+                if (file_exists($filePath)) {
+                    $audioInfo = $getID3->analyze($filePath);
+                    if (isset($audioInfo['playtime_seconds'])) {
+                        $totalSeconds += $audioInfo['playtime_seconds'];
+                    }
+                }
+            }
+        }
+
+        // Simpan total waktu dalam format jam, menit, detik
+        $hours = floor($totalSeconds / 3600);
+        $minutes = floor(($totalSeconds % 3600) / 60);
+        $seconds = $totalSeconds % 60;
+
+        $buku->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        $buku->totalWaktu = $totalSeconds;
+
+        $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
+
+        $highlight = Highlight::where('id', $userId)->where('id_buku', $buku->id_buku)->get();
+
+        return view('sewa_buku.user.buku.highlight.detail_highlight', [
+            'buku' => $buku,
+            'favorites' => $favorites,
+            'averageRating' => $averageRating,
+            'ratingCheck' => $ratingCheck,
+            'rating' => $rating,
+            'checkLanggananAktif' => $checkLanggananAktif,
+            'jumlahQuiz' => $jumlahQuiz,
+            'diselesaikanCheck' => $diselesaikanCheck,
+            'highlight' => $highlight
+        ]);
+    }
+
+    public function hapusHighlight($id){
+        $highlight = Highlight::findOrFail($id);
+        $highlight->delete();
+        return redirect()->back()->with('success', 'highlight berhasil dihapus');
+    }
+
+public function searchBukuHighlight(Request $request)
+{
+    $userId = Auth::id();
+
+    // Ambil daftar id_buku dari tabel Highlight untuk user tertentu
+    $highlight = Highlight::where('id', $userId)->pluck('id_buku');
+
+    $search = $request->input('search');
+
+    // Query buku hanya jika id_buku terdapat pada $highlight
+    $buku = Buku::whereIn('id_buku', $highlight) // Filter buku berdasarkan highlight
+                ->when($search, function ($query) use ($search) {
+                    $query->where(function ($subQuery) use ($search) {
+                        $subQuery->where('judul_buku', 'like', "%$search%")
+                                 ->orWhere('penulis', 'like', "%$search%");
+                    });
+                })->withCount(['highlight as total_highlight' => function ($query) use ($userId) {
+                    $query->where('id', $userId);
+                }])
+                ->get();
+
+    // Render view dengan data buku yang difilter
+    $html = view('sewa_buku.user.buku.highlight.list_highlight', compact('buku'))->render();
+
+    return response()->json(['html' => $html]);
+}
+
+
+public function filterTagsBuku(Request $request)
+{
+    try {
+        $tags = $request->input('tags');
+        $search = $request->input('search', '');
+
+        $query = Buku::with(['tags', 'detailBuku'])->withCount([
+            'rating as ratingRerata' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }
+        ]);
+
+        // Filter berdasarkan tags jika dipilih
+        if ($tags && $tags !== 'all') {
+            $query->whereHas('tags', function ($tagQuery) use ($tags) {
+                $tagQuery->where('id_tags', $tags);
+            });
+        }
+
+        // Filter berdasarkan pencarian jika ada
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('judul_buku', 'like', "%{$search}%")
+                    ->orWhere('penulis', 'like', "%{$search}%")
+                    ->orWhere('penerbit', 'like', "%{$search}%");
+            });
+        }
+
+        $buku = $query->get();
+
+        // Proses durasi audio
+        $getID3 = new getID3();
+        foreach ($buku as $b) {
+            $totalSeconds = 0;
+
+            if ($b->detailBuku) {
+                foreach ($b->detailBuku as $detail) {
+                    if ($detail->audio) {
+                        $filePath = storage_path('app/public/' . $detail->audio);
+                        if (file_exists($filePath)) {
+                            $audioInfo = $getID3->analyze($filePath);
+                            if (isset($audioInfo['playtime_seconds'])) {
+                                $totalSeconds += $audioInfo['playtime_seconds'];
+                            }
+                        }
+                    }
+                }
+            }
+
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            $seconds = $totalSeconds % 60;
+
+            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+            $b->totalWaktu = $totalSeconds;
+        }
+
+        $html = view('sewa_buku.user.buku.grid_search_buku', compact('buku'))->render();
+
+        return response()->json([
+            'html' => $html,
+            'count' => $buku->count()
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => true,
+            'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+
 
 }

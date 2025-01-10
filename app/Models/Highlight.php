@@ -12,4 +12,9 @@ class Highlight extends Model
     protected $guarded = ['id_highlight'];
     protected $primaryKey = 'id_highlight';
     protected $table = 'highlight';
+
+    public function buku()
+    {
+        return $this->belongsTo(Buku::class, 'id_buku', 'id_buku');
+    }
 }

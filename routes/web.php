@@ -13,29 +13,30 @@ use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
+use App\Models\Buku;
 use App\Models\Langganan;
 use App\Models\PaketLangganan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-
-<<<<<<< HEAD
-Route::get('/', function () {
-    return view('welcome');
-});
-=======
 Route::get('/landing', function () {
     return view('sewa_buku.user.landing');
 })->name('sewa_buku.user.landing');
-
->>>>>>> 87025d4... FE Login, Register, Landing Page
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
-
 Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        $user = Auth::user();
+        if ($user->is_admin == 1) {
+            return redirect()->route('admin.buku.index');
+        } else {
+            return redirect()->route('user.buku.index');
+        }
+
+    })->name('home');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/index', [BukuController::class, 'index'])->name('admin.buku.index');
             Route::get('/create', [BukuController::class, 'create'])->name('admin.buku.create');
             Route::get('/show/{id}', [BukuController::class, 'show'])->name('admin.buku.show');
+            
+
             Route::post('/store', [BukuController::class, 'store2'])->name('admin.buku.store');
             Route::get('/edit/{id}', [BukuController::class, 'edit'])->name('admin.buku.edit');
             Route::put('/update/{id}', [BukuController::class, 'updateBuku'])->name('admin.buku.update');
@@ -75,6 +78,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/store', [TagsController::class, 'storetags'])->name('admin.tags.store');
             Route::get('/edit/{id}', [TagsController::class, 'editTags'])->name('admin.tags.edit');
             Route::put('/update/{id}', [TagsController::class, 'updateTags'])->name('admin.tags.update');
+            Route::delete('/delete/{id}', [TagsController::class, 'deleteTags'])->name('admin.tags.delete');
         });
 
         Route::resource('/quiz', QuizController::class)->except('create');
@@ -88,56 +92,66 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('/paket-langganan', PaketLanggananController::class);
     });
+
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::group(['prefix' => 'buku'], function () {
+            Route::get('/index', [BukuController::class, 'indexBukuUser'])->name('user.buku.index');
+            Route::get('/search/judulBuku', [BukuController::class, 'searchJudulBuku'])->name('judulBuku.search');
+            Route::get('/show/{id}', [BukuController::class, 'detailBukuUser'])->name('user.buku.show');
+            Route::get('/baca/{id}', [LanggananController::class, 'bacaBuku'])->name('user.buku.baca'); // kayae wes ga kepake
+            Route::get('/baca/bab/{id}', [LanggananController::class, 'bacaBabBuku'])->name('user.buku.bacaBab');
+            Route::get('/quiz/{id}', [QuizController::class, 'kerjakanQuiz'])->name('user.quiz.kerjakan');
+            Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
+
+            Route::get('/search/buku', [BukuController::class, 'searchBuku'])->name('buku.search');
+            Route::post('/markFinished/{id}', [LanggananController::class, 'tandaiBabDiselesaikan'])->name('user.mark.finished');
+            Route::delete('/deleteMarkFinished/{id}', [LanggananController::class, 'hapusTandaBabDiselesaikan'])->name('user.delete.finished');
+            Route::post('/markBookFinished/{id}', [LanggananController::class, 'tandaiBukuDiselesaikan'])->name('user.mark.bookFinished');
+            Route::delete('/deleteMarkBookFinished/{id}', [LanggananController::class, 'hapusTandaBukuDiselesaikan'])->name('user.delete.bookFinished');
+            Route::get('/collection', [BukuController::class, 'myCollection'])->name('user.myCollection');
+            Route::post('/highlight-text', [LanggananController::class, 'highlightText'])->name('user.highlight.text');
+            Route::get('/highlight', [BukuController::class, 'highlightUser'])->name('user.highlight');
+            Route::get('/highlight/{id}', [BukuController::class, 'detailHighlight'])->name('user.highlight.detail');
+            Route::delete('/highlight/delete/{id}', [BukuController::class, 'hapusHighlight'])->name('user.highlight.delete');
+            Route::get('/search/highlight', [BukuController::class, 'searchBukuHighlight'])->name('highlight.search');
+        });
+        Route::get('/user/buku/search', [BukuController::class, 'searchBukuIndex'])->name('search_buku');
+        // Route::get('user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');
+        // Route::get('/user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');
+
+        Route::group(['prefix' => 'order'], function () {
+            Route::get('/index', [OrderController::class, 'indexOrder'])->name('user.order.index');
+            Route::get('/invoice/{id}', [OrderController::class, 'cetakInvoice'])->name('user.order.invoice');
+            Route::get('/show/{id}', [OrderController::class, 'showOrder'])->name('user.order.show');
+            Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
+            Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');
+            Route::put('/batal/{id}', [OrderController::class, 'batalkanOrder'])->name('user.order.batal');
+            Route::get('/search', [OrderController::class, 'searchOrder'])->name('user.order.search');
+        });
+
+        Route::group(['prefix' => 'langganan'], function () {
+            Route::get('/index', [LanggananController::class, 'indexUser'])->name('user.langganan.index');
+            Route::put('/update', [LanggananController::class, 'updateProfile'])->name('user.langganan.update');
+        });
+
+        Route::group(['prefix' => 'rating'], function () {
+            Route::post('/store/{id}', [RatingController::class, 'storeRating'])->name('user.rating.store');
+        });
+
+        Route::group(['prefix' => 'favorite'], function () {
+            Route::get('/index', [FavoriteController::class, 'indexFavorite'])->name('user.favorite.index');
+            Route::post('/store/{id}', [FavoriteController::class, 'storeFavorite'])->name('user.favorite.store');
+            Route::delete('/delete/{id}', [FavoriteController::class, 'deleteFavorite'])->name('user.favorite.delete');
+        });
+
+        Route::group(['prefix' => 'paket-langganan'], function () {
+            Route::get('/index', [PaketLanggananController::class, 'indexUser'])->name('user.paketLangganan.index');
+        });
+    });
 });
 
 
-Route::group(['prefix' => 'user'], function () {
-    Route::group(['prefix' => 'buku'], function () {
-        Route::get('/index', [BukuController::class, 'indexBukuUser'])->name('user.buku.index');
-        Route::get('/search/judulBuku', [BukuController::class, 'searchJudulBuku'])->name('judulBuku.search');
-        Route::get('/show/{id}', [BukuController::class, 'detailBukuUser'])->name('user.buku.show');
-        Route::get('/baca/{id}', [LanggananController::class, 'bacaBuku'])->name('user.buku.baca'); // kayae wes ga kepake
-        Route::get('/baca/bab/{id}', [LanggananController::class, 'bacaBabBuku'])->name('user.buku.bacaBab');
-        Route::get('/quiz/{id}', [QuizController::class, 'kerjakanQuiz'])->name('user.quiz.kerjakan');
-        Route::post('/quiz/{id}/submit', [QuizController::class, 'submitQuiz'])->name('user.quiz.submit');
-        Route::get('/search', [BukuController::class, 'searchBukuIndex'])->name('user.buku.search');
-        Route::get('/search/buku', [BukuController::class, 'searchBuku'])->name('buku.search');
-        Route::post('/markFinished/{id}', [LanggananController::class, 'tandaiBabDiselesaikan'])->name('user.mark.finished');
-        Route::delete('/deleteMarkFinished/{id}', [LanggananController::class, 'hapusTandaBabDiselesaikan'])->name('user.delete.finished');
-        Route::post('/markBookFinished/{id}', [LanggananController::class, 'tandaiBukuDiselesaikan'])->name('user.mark.bookFinished');
-        Route::delete('/deleteMarkBookFinished/{id}', [LanggananController::class, 'hapusTandaBukuDiselesaikan'])->name('user.delete.bookFinished');
-        Route::get('/collection', [BukuController::class, 'myCollection'])->name('user.myCollection');
-        Route::post('/highlight-text', [LanggananController::class, 'highlightText'])->name('user.highlight.text');
-
-    });
-
-    Route::group(['prefix' => 'order'], function () {
-        Route::get('/index', [OrderController::class, 'indexOrder'])->name('user.order.index');
-        Route::get('/show/{id}', [OrderController::class, 'showOrder'])->name('user.order.show');
-        Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
-        Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');
-        Route::put('/batal/{id}', [OrderController::class, 'batalkanOrder'])->name('user.order.batal');
-        Route::get('/search', [OrderController::class, 'searchOrder'])->name('user.order.search');
-    });
-
-    Route::group(['prefix' => 'langganan'], function () {
-        Route::get('/index', [LanggananController::class, 'indexUser'])->name('user.langganan.index');
-    });
-
-    Route::group(['prefix' => 'rating'], function () {
-        Route::post('/store/{id}', [RatingController::class, 'storeRating'])->name('user.rating.store');
-    });
-
-    Route::group(['prefix' => 'favorite'], function () {
-        Route::get('/index', [FavoriteController::class, 'indexFavorite'])->name('user.favorite.index');
-        Route::post('/store/{id}', [FavoriteController::class, 'storeFavorite'])->name('user.favorite.store');
-        Route::delete('/delete/{id}', [FavoriteController::class, 'deleteFavorite'])->name('user.favorite.delete');
-    });
-
-    Route::group(['prefix' => 'paket-langganan'], function () {
-        Route::get('/index', [PaketLanggananController::class, 'indexUser'])->name('user.paketLangganan.index');
-    });
-});
 
 
 require __DIR__ . '/auth.php';

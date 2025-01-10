@@ -56,8 +56,22 @@
                                 @enderror
                             </div>
 
+                            <!-- Opsi Jawaban -->
+                            <div id="opsi-container" class="mb-3">
+                                <label class="form-label">Opsi Jawaban</label>
+                                <div class="input-group mb-2">
+                                    <input type="text" name="opsi[]" class="form-control" placeholder="Masukkan opsi jawaban" required>
+                                    <div class="input-group-text">
+                                        <input type="radio" name="is_correct" value="0" required>
+                                        <label class="ms-2">Benar</label>
+                                    </div>
+                                    <button type="button" class="btn btn-danger remove-opsi">Hapus</button>
+                                </div>
+                            </div>
+                            <button type="button" id="add-opsi" class="btn btn-secondary">Tambah Opsi</button>
+
                             <!-- Tombol Submit -->
-                            <div class="text-end">
+                            <div class="text-end mt-4">
                                 <a href="{{ route('quiz.show', $quiz->id_quiz) }}" class="btn btn-secondary">
                                     Batal
                                 </a>
@@ -66,10 +80,40 @@
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const opsiContainer = document.getElementById('opsi-container');
+        const addOpsiButton = document.getElementById('add-opsi');
+
+        addOpsiButton.addEventListener('click', () => {
+            const opsiCount = opsiContainer.querySelectorAll('.input-group').length;
+            const opsiHtml = `
+                <div class="input-group mb-2">
+                    <input type="text" name="opsi[]" class="form-control" placeholder="Masukkan opsi jawaban" required>
+                    <div class="input-group-text">
+                        <input type="radio" name="is_correct" value="${opsiCount}" required>
+                        <label class="ms-2">Benar</label>
+                    </div>
+                    <button type="button" class="btn btn-danger remove-opsi">Hapus</button>
+                </div>`;
+            opsiContainer.insertAdjacentHTML('beforeend', opsiHtml);
+        });
+
+        opsiContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('remove-opsi')) {
+                event.target.closest('.input-group').remove();
+            }
+        });
+    });
+</script>
+
+
 @endsection

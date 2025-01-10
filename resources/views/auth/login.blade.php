@@ -44,7 +44,7 @@
     <div class="col-lg-5 col-12 d-flex flex-column">
         <div id="auth-left">
             <div class="auth-logo">
-                <a href="/"><img src="{{ asset('images/logo-kpspam.png') }}" alt="Logo"></a>
+                <a href="/"><img src="{{ asset('images/logo.png') }}" alt="Logo"></a>
             </div>
             <h1 class="auth-title mb-0">Masuk.</h1>
             <p class="auth-subtitle mb-4 mt-0">Masuk menggunakan akun yang telah terdaftar</p>
@@ -78,6 +78,11 @@
                 </div>
 <<<<<<< HEAD
                 <button class="btn btn-primary btn-block shadow-lg mt-4">Masuk</button>
+                <div class="d-flex justify-content-center align-items-center mt-3">
+                    <a href="{{ route('auth.google') }}" class="shadow-lg">
+                        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" alt="Sign in with Google">
+                    </a>
+                </div>                
             </form>
             <div class="text-center mt-3 text-lg">
                 <p>Belum punya akun? <a href="{{ route('register') }}" class="fw-bold">Daftar</a>.</p>

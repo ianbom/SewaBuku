@@ -7,8 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ env('APP_NAME') }} - @yield('title') </title>
 
-    <link rel="shortcut icon" href="{{ asset('images/logo-kpspam.png') }}" type="image/x-icon">
-    <link rel="icon" href="{{ asset('images/logo-kpspam.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('images/logo.png') }}" />
 
     <link rel="stylesheet" href="{{ asset('css/custom.css?v=' . bin2hex(random_bytes(20))) }}">
     <link rel="stylesheet" href="{{ asset('css/app.css?v=' . bin2hex(random_bytes(20))) }}">
@@ -158,40 +158,6 @@
 
     <script>
         $(document).ready(function() {
-            // $('#form_set_fee_register').submit(function(e) {
-            //     e.preventDefault();
-
-            //     let form = $(this);
-
-            //     var arr_params = {
-            //         url: form.attr('action'), // The route for the backend
-            //         method: 'POST', // HTTP method
-            //         input: form.serialize(), // Serialize form inputs
-            //         forms: form[0],
-            //         modal: $('#feeRegisterModal').modal('hide'), // Hide the modal after saving
-            //         reload: false, // Reload the page to reflect changes
-            //     };
-
-            //     ajaxSaveDatas(arr_params);
-            // });
-
-            $("#button-back-admin").click(function() {
-                Swal.fire({
-                    title: 'Kembali ke Admin?',
-                    text: "Apakah anda yakin ingin kembali ke admin?",
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya',
-                    cancelButtonText: 'Tidak'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $("#logout-form-admin").submit();
-                    }
-                });
-            });
-
             $("#button-logout").click(function() {
                 Swal.fire({
                     title: 'Keluar?',

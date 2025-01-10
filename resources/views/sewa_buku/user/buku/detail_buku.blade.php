@@ -238,8 +238,8 @@
                                     </button>
                                 </div>
                             @else
-                                <h3 class="text-[16px] font-bold text-[#052D6E] mb-4">Berikan Rating untuk Buku Ini</h3>
-                                <form action="{{ route('user.rating.store') }}" method="POST">
+                                <h3 class="text-[16px] font-bold text-[#052D6E] mb-4">Give a Rating for This Book</h3>
+                                <form action="{{ route('user.rating.store', ['id' => $buku->id_buku]) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="buku_id" value="{{ $buku->id_buku }}">
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LanggananController;
 use App\Http\Controllers\OpsiController;
 use App\Http\Controllers\OrderController;
@@ -19,14 +20,13 @@ use App\Models\PaketLangganan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('sewa_buku.user.landing');
-})->name('sewa_buku.user.landing');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/', [LandingPageController::class, 'landingPage'])->name('sewa_buku.user.landing');
 Route::middleware('auth')->group(function () {
     // Route::get('/', function () {
     //     $user = Auth::user();
@@ -41,12 +41,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
     Route::middleware(['is_admin'])->prefix('admin')->group(function () {
         Route::group(['prefix' => 'buku'], function () {
             Route::get('/index', [BukuController::class, 'index'])->name('admin.buku.index');
             Route::get('/create', [BukuController::class, 'create'])->name('admin.buku.create');
             Route::get('/show/{id}', [BukuController::class, 'show'])->name('admin.buku.show');
-            
+
 
             Route::post('/store', [BukuController::class, 'store2'])->name('admin.buku.store');
             Route::get('/edit/{id}', [BukuController::class, 'edit'])->name('admin.buku.edit');

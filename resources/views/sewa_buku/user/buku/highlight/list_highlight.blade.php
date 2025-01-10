@@ -1,4 +1,4 @@
-@foreach($buku as $book)
+@forelse($buku as $book)
 <div class="bg-white rounded-[16px] overflow-hidden border-2 border-transparent hover:border-[#D3E9FF] transition-all">
     <a href="{{ route('user.highlight.detail', $book->id_buku) }}">
         @if($book->coverBuku && $book->coverBuku->first())
@@ -21,4 +21,6 @@
         </div>
     </div>
 </div>
-@endforeach
+@empty
+Kosong
+@endforelse

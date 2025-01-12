@@ -21,11 +21,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::get('/', [LandingPageController::class, 'landingPage'])->name('sewa_buku.user.landing');
 Route::middleware('auth')->group(function () {
     // Route::get('/', function () {
@@ -125,7 +120,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/index', [OrderController::class, 'indexOrder'])->name('user.order.index');
             Route::get('/invoice/{id}', [OrderController::class, 'cetakInvoice'])->name('user.order.invoice');
             Route::get('/show/{id}', [OrderController::class, 'showOrder'])->name('user.order.show');
-            Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
+            Route::get('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
             Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');
             Route::put('/batal/{id}', [OrderController::class, 'batalkanOrder'])->name('user.order.batal');
             Route::get('/search', [OrderController::class, 'searchOrder'])->name('user.order.search');

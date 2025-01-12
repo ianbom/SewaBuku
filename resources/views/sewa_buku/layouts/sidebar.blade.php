@@ -3,7 +3,7 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('sewa_buku.user.landing') }}">
                         <img src="{{ asset('images/logo.png') }}" alt="Logo" srcset="">
                     </a>
                 </div>
@@ -12,13 +12,6 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
-
-                {{-- <li class="sidebar-item {{ Route::is('dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('dashboard') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li> --}}
 
                 <li class="sidebar-item {{ Route::is('admin.buku.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.buku.index') }}" class='sidebar-link'>

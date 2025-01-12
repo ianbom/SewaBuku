@@ -23,15 +23,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'landingPage'])->name('sewa_buku.user.landing');
 Route::middleware('auth')->group(function () {
-    // Route::get('/', function () {
-    //     $user = Auth::user();
-    //     if ($user->is_admin == 1) {
-    //         return redirect()->route('admin.buku.index');
-    //     } else {
-    //         return redirect()->route('user.buku.index');
-    //     }
-
-    // })->name('home');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

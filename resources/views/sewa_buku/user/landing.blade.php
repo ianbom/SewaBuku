@@ -36,10 +36,17 @@
                             class="bg-gradient-to-r from-[#1E90FF] to-[#052D6E] text-white px-6 py-2 rounded-[16px] hover:bg-[#1E90FF] font-semibold flex items-center space-x-2">
                             Subscribe
                         </a>
-                        <a href="{{ route('login') }}"
-                            class="bg-transparent border-2 border-[#1E90FF] text-[#1E90FF] py-2 px-6 rounded-[16px] hover:bg-[#D3E9FF] transition duration-300">
-                            Login
-                        </a>
+                        @auth
+                            <a href="{{ route('user.buku.index') }}"
+                                class="bg-transparent border-2 border-[#1E90FF] text-[#1E90FF] py-2 px-6 rounded-[16px] hover:bg-[#D3E9FF] transition duration-300">
+                                Read Now
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}"
+                                class="bg-transparent border-2 border-[#1E90FF] text-[#1E90FF] py-2 px-6 rounded-[16px] hover:bg-[#D3E9FF] transition duration-300">
+                                Login
+                            </a>
+                        @endauth
                     </div>
                 </div>
 
@@ -166,7 +173,8 @@
                         <div>
                             <h3 class="  text-2xl text-[#052D6E] font-semibold"
                                 style="font-family: 'Libre Baskerville', serif;">Personalisasi Terbaik</h3>
-                            <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">Shae
+                            <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">
+                                Shae
                                 Life menyesuaikan diri dengan kebiasaan membaca Anda, memberikan rekomendasi yang sesuai
                                 dengan minat dan tujuan Anda.</p>
                         </div>

@@ -13,12 +13,12 @@
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
 
-                <li class="sidebar-item {{ Route::is('dashboard') ? 'active' : '' }}">
+                {{-- <li class="sidebar-item {{ Route::is('dashboard') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="sidebar-item {{ Route::is('admin.buku.index') ? 'active' : '' }}">
                     <a href="{{ route('admin.buku.index') }}" class='sidebar-link'>

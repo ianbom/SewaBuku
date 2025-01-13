@@ -158,7 +158,7 @@
                     @endphp
                     <a href="#" class="px-8 py-3 rounded-[16px]"
                         style="background-color: {{ $color['bg'] }}; color: {{ $color['text'] }};">
-                        <strong> {{ $item->nama_tags }} hahaha </strong>
+                        <strong> {{ $item->nama_tags }} </strong>
                     </a>
                 @endforeach
             </div>

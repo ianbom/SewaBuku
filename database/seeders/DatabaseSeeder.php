@@ -17,16 +17,16 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            // UserSeeder::class,
-            // BukuSeeder::class,
-            // DetailBukuSeeder::class,
-            // CoverBukuSeeder::class,
-            // RatingSeeder::class,
+            UserSeeder::class,
+            BukuSeeder::class,
+            DetailBukuSeeder::class,
+            CoverBukuSeeder::class,
+            RatingSeeder::class,
             TagsSeeder::class,
-            // PaketSeeder::class,
-            // QuizSeeder::class,
-            // SoalSeeder::class,
-            // OpsiSeeder::class,
+            PaketSeeder::class,
+            QuizSeeder::class,
+            SoalSeeder::class,
+            OpsiSeeder::class,
             TagsChildSeeder::class,
 
         ]);

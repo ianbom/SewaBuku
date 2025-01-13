@@ -149,14 +149,13 @@
 
         @endphp
         @foreach ($parentTags as $parentTags)
-            @php
-                $color = $colorPairs[$parentTags->id % count($colorPairs)];
-            @endphp
-            <h2 class="text-[18px] font-semibold mb-4 mt-6 text-[#052D6E]"
-                style="font-family: 'Inter', sans-serif; background-color: {{ $color['bg'] }}; color: {{ $color['text'] }};">
+            <h2 class="text-[18px] font-semibold mb-4 mt-6 text-[#052D6E]" style="font-family: 'Inter', sans-serif;">
                 {{ $parentTags->nama_tags }}</h2>
             <div class="flex flex-wrap gap-4">
                 @foreach ($parentTags->child as $index => $item)
+                    @php
+                        $color = $colorPairs[$parentTags->id % count($colorPairs)];
+                    @endphp
                     <a href="#" class="px-8 py-3 rounded-[16px]"
                         style="background-color: {{ $color['bg'] }}; color: {{ $color['text'] }};">
                         <strong> {{ $item->nama_tags }} hahaha </strong>

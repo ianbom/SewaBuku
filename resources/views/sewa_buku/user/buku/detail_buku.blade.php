@@ -72,38 +72,47 @@
                 <div class="col-span-12 sm:col-span-9">
                     <div class="flex flex-col">
                         <div class="mb-6">
-                            <h2 class="text-[28px] font-bold text-[#052D6E] mb-3" style="font-family: 'Libre Baskerville', serif;">
+                            <h2 class="text-[28px] font-bold text-[#052D6E] mb-3"
+                                style="font-family: 'Libre Baskerville', serif;">
                                 {{ $buku->judul_buku }}
                             </h2>
-                            <p class="text-[#052D6E] font-bold mb-2">AUTHOR - {{ $buku->penulis }} / PUBLISHER - {{ $buku->penerbit }}</p>
+                            <p class="text-[#052D6E] font-bold mb-2">AUTHOR - {{ $buku->penulis }} / PUBLISHER -
+                                {{ $buku->penerbit }}</p>
                             <p class="text-sm text-[#979797] font-bold">{{ $buku->tentang_penulis }}</p>
                         </div>
                         <hr class="w-full border-t border-[#052D6E]">
 
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
                             <div class="flex mt-6 items-center">
-                                <div class="text-center bg-[#D3E9FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                <div
+                                    class="text-center bg-[#D3E9FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
                                     <i class="fas fa-clock text-[#1E90FF] text-[12px]"></i>
                                 </div>
-                                <span class="text-[12px] text-[#979797] font-bold">{{ floor($buku->totalWaktu / 60) }} Menit</span>
+                                <span class="text-[12px] text-[#979797] font-bold">{{ floor($buku->totalWaktu / 60) }}
+                                    Menit</span>
                             </div>
 
                             <div class="flex mt-6 items-center">
-                                <div class="text-center bg-[#FAFAD8] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                <div
+                                    class="text-center bg-[#FAFAD8] p-2 rounded-[6px] mr-2 flex items-center justify-center">
                                     <i class="fas fa-star text-[#B79F54] text-[12px]"></i>
                                 </div>
-                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ number_format($averageRating, 1) }}</span>
+                                <span
+                                    class="text-[12px] text-sm text-[#979797] font-bold">{{ number_format($averageRating, 1) }}</span>
                             </div>
 
                             <div class="flex mt-6 items-center">
-                                <div class="text-center bg-[#FFE8E2] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                <div
+                                    class="text-center bg-[#FFE8E2] p-2 rounded-[6px] mr-2 flex items-center justify-center">
                                     <i class="fas fa-book text-[#DD7971] text-[12px]"></i>
                                 </div>
-                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ $buku->jumlahChapter }} Tipe</span>
+                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ $buku->jumlahChapter }}
+                                    Tipe</span>
                             </div>
 
                             <div class="flex mt-6 items-center">
-                                <div class="text-center bg-[#EBE4FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                <div
+                                    class="text-center bg-[#EBE4FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
                                     <i class="fas fa-question-circle text-[#8F7CC1] text-[12px]"></i>
                                 </div>
                                 <span class="text-[12px] text-[#979797] font-bold">{{ $jumlahQuiz }} Bab</span>
@@ -133,7 +142,7 @@
                             </div>
                         @else
                             <div class="flex justify-end mt-6">
-                                <a href="#" type="submit"
+                                <a href="{{ route('user.paketLangganan.index') }}" type="submit"
                                     class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] disabled">
                                     <strong>Langganan untuk membaca</strong>
                                 </a>
@@ -152,7 +161,7 @@
                                     </button>
                                 </div>
                             </form>
-                        @else
+                        @elseif($buku->is_free || $checkLanggananAktif)
                             <form action="{{ route('user.mark.bookFinished', $buku->id_buku) }}" method="POST">
                                 @csrf
                                 <button type="submit"
@@ -167,7 +176,9 @@
                             </form>
                         @endif
 
-                        <form action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}" method="POST" class="mt-2">
+                        <form
+                            action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}"
+                            method="POST" class="mt-2">
                             @csrf
 
                             @if (in_array($buku->id_buku, $favorites))
@@ -208,10 +219,12 @@
                     <p class="text-[18px] text-[#052D6E] font-bold mb-4">Ulasan</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach ($rating as $review)
-                            <div class="border p-4 rounded-lg
+                            <div
+                                class="border p-4 rounded-lg
                                 @if (auth()->check() && $review->id == auth()->id()) bg-[#F1F8FF] border-[#A3D8FF] @else bg-white border-[#D3E9FF] @endif">
                                 <div class="flex items-center mb-2">
-                                    <span class="font-semibold text-[#1E90FF] text-sm mr-2">{{ $review->user->name }}</span>
+                                    <span
+                                        class="font-semibold text-[#1E90FF] text-sm mr-2">{{ $review->user->name }}</span>
                                     <span class="text-[#B79F54] ml-2">★</span>
                                     <span class="text-sm text-[#979797] ml-1">{{ $review->rating }}/5</span>
                                 </div>
@@ -230,7 +243,8 @@
                         <div class="bg-white p-8 rounded-lg w-full max-w-md">
                             @if ($ratingCheck)
                                 <h3 class="text-[16px] font-bold text-[#052D6E] mb-4">Peringatan</h3>
-                                <p class="text-[#979797] mb-6 text-[14px]">Anda sudah memberikan rating untuk buku ini. Terima kasih atas partisipasi Anda!</p>
+                                <p class="text-[#979797] mb-6 text-[14px]">Anda sudah memberikan rating untuk buku ini.
+                                    Terima kasih atas partisipasi Anda!</p>
                                 <div class="flex justify-end">
                                     <button onclick="toggleModal('ratingModal')"
                                         class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
@@ -246,7 +260,8 @@
                                     <div class="flex gap-3 mb-6">
                                         @for ($i = 1; $i <= 5; $i++)
                                             <label for="star{{ $i }}">
-                                                <i class="star fa fa-star text-[#B79F54]" data-value="{{ $i }}"></i>
+                                                <i class="star fa fa-star text-[#B79F54]"
+                                                    data-value="{{ $i }}"></i>
                                             </label>
                                         @endfor
                                     </div>

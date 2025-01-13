@@ -154,7 +154,7 @@
             <div class="flex flex-wrap gap-4">
                 @foreach ($parentTags->child as $index => $item)
                     @php
-                        $color = $colorPairs[$parentTags->id % count($colorPairs)];
+                        $color = $colorPairs[$index % count($colorPairs)];
                     @endphp
                     <a href="#" class="px-8 py-3 rounded-[16px]"
                         style="background-color: {{ $color['bg'] }}; color: {{ $color['text'] }};">

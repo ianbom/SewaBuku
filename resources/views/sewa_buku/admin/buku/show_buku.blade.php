@@ -10,7 +10,7 @@
         <div class="col-12">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Beranda</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.buku.index') }}">Beranda</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('admin.buku.index') }}">Daftar Buku</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $buku->judul_buku }}</li>
                 </ol>

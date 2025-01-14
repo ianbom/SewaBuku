@@ -5,6 +5,34 @@
 @endsection
 
 @section('content')
+<head>
+    <style>
+        .custom-audio {
+            background-color: #D3E9FF;
+            border-radius: 16px;
+            color: #1E90FF !important;
+        }
+
+        .custom-audio::-webkit-media-controls-panel {
+            background-color: #D3E9FF;
+        }
+
+        .custom-audio::-webkit-media-controls-play-button {
+            background-color: white;
+            border-radius: 50px;
+            color: #1E90FF !important;
+        }
+
+        .custom-audio::-webkit-media-controls-timeline {
+            color: #1E90FF !important;
+        }
+
+        .custom-audio::-webkit-media-controls-current-time-display,
+        .custom-audio::-webkit-media-controls-time-remaining-display {
+            color: #1E90FF !important;
+        }
+    </style>
+</head>
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-6xl mx-auto">
         <div class="flex flex-col md:flex-row gap-8">
@@ -29,7 +57,7 @@
                                 @if($detail->audio)
                                     <div class="mb-8 bg-gray-50 p-4 rounded-xl">
                                         <div class="w-full bg-white rounded-lg p-4 shadow-sm">
-                                            <audio controls class="w-full">
+                                            <audio controls class="w-full custom-audio">
                                                 <source src="{{ Storage::url($detail->audio) }}" type="audio/mpeg">
                                             </audio>
                                         </div>

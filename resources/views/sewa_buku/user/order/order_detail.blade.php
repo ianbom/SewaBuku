@@ -17,12 +17,13 @@
             <!-- Back Button Icon -->
             <div class="flex items-center mb-5 mt-2">
                 <!-- Back Button Icon -->
-                <a href="{{ url()->previous() }}" class="text-[#052D6E] hover:text-[#1E90FF] mr-4">
+                <a href="{{ route('user.paketLangganan.index') }}" class="text-[#052D6E] hover:text-[#1E90FF] mr-4">
                     <i class="fa fa-angle-left text-xl"></i> <!-- Back Arrow Icon -->
                 </a>
 
                 <!-- Title -->
-                <h1 class="text-xl font-bold text-left text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Order Details</h1>
+                <h1 class="text-xl font-bold text-left text-[#052D6E]" style="font-family: 'Inter', sans-serif;">Order
+                    Details</h1>
             </div>
 
             <!-- Order Details Section -->
@@ -83,12 +84,13 @@
             </div>
 
             <!-- Actions -->
-            <div class="flex flex-wrap lg:justify-end lg:gap-6 gap-3 justify-center mt-6" style="font-family: 'Inter', sans-serif;">
+            <div class="flex flex-wrap lg:justify-end lg:gap-6 gap-3 justify-center mt-6"
+                style="font-family: 'Inter', sans-serif;">
                 <!-- Print Invoice -->
-                <a href="#"
+                {{-- <a href="#"
                     class="px-4 text-bold py-2 bg-[#FCEBCBFF] text-[#FDA403] rounded-[12px] hover:bg-[#FDA403] hover:text-white">
                     <strong>Print Invoice</strong>
-                </a>
+                </a> --}}
 
                 <!-- Cancel Order Button -->
                 @if ($order->status_order == 'Proses')
@@ -252,9 +254,12 @@
                     });
             }
 
-            $('#pay-button').click(function() {
-                handlePayment(event, '/pay');
-            });
+            $('#payment_form').submit(function(e) {
+                e.preventDefault();
+                let url = $(this).attr('action');
+                console.log(url)
+                handlePayment(e, url)
+            })
         });
     </script>
 @endpush

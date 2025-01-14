@@ -42,7 +42,7 @@
     @else
         <!-- Orders Table -->
         <div id="order-table-container"
-            class="overflow-x-auto rounded-[16px] mt-6 border border-[#1E90FF] border-2"
+            class="overflow-x-auto rounded-[16px] mt-12"
             style="font-family: 'Inter', sans-serif;">
             @include('sewa_buku.user.order.table_order', ['order' => $order])
         </div>

@@ -119,7 +119,7 @@
             // Append search term to pagination URLs if exists
             if (currentSearchTerm && !url.includes('search=')) {
                 const separator = url.includes('?') ? '&' : '?';
-                url = `${url}${separator}search=${encodeURIComponent(currentSearchTerm)}`;
+                url = ${url}${separator}search=${encodeURIComponent(currentSearchTerm)};
             }
 
             fetch(url, {
@@ -143,7 +143,7 @@
             clearTimeout(searchTimer);
             searchTimer = setTimeout(() => {
                 currentSearchTerm = searchInput.value;
-                fetchOrders(`{{ route('user.order.search') }}?search=${encodeURIComponent(currentSearchTerm)}`);
+                fetchOrders({{ route('user.order.search') }}?search=${encodeURIComponent(currentSearchTerm)});
             }, 300);
         });
 

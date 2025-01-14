@@ -34,6 +34,6 @@ class Langganan extends Model
     }
 
     public function paketLangganan(){
-        return $this->belongsTo(paketLangganan::class, 'id_paket_langganan', 'id_paket_langganan');
+        return $this->belongsTo(PaketLangganan::class, 'id_paket_langganan', 'id_paket_langganan');
     }
 }

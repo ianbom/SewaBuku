@@ -573,7 +573,7 @@ class BukuController extends Controller
             ->first();
 
         // Ambil semua tags
-        $tag = Tags::all();
+        $tag = Tags::whereNull('id_child')->get();
 
         // Query dasar untuk buku
         $query = Buku::with(['coverBuku', 'rating', 'detailBuku', 'tags'])
@@ -813,7 +813,7 @@ class BukuController extends Controller
         $highlight = Highlight::where('id', $userId)->pluck('id_buku');
 
         // Ambil semua tags
-        $tag = Tags::all();
+        $tag = Tags::whereNull('id_child')->get();
 
         // Query dasar untuk buku yang di-highlight
         $query = Buku::with(['coverBuku', 'rating', 'detailBuku', 'tags'])

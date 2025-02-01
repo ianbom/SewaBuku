@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
             PaketSeeder::class,
             QuizSeeder::class,
             SoalSeeder::class,
-            OpsiSeeder::class
+            OpsiSeeder::class,
+            TagsChildSeeder::class,
 
         ]);
     }

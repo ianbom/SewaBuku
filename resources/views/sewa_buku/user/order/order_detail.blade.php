@@ -37,19 +37,19 @@
                     <hr class="my-1 border-t-2 border-[#052D6E]">
 
                     <!-- Package Name -->
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <div class="flex flex-col sm:flex-row justify-start sm:justify-between items-start sm:items-center">
                         <p class="text-[#052D6E] font-bold">Package Name</p>
                         <p class="text-[#979797] font-semibold">{{ $order->nama_paket }}</p>
                     </div>
 
                     <!-- Buyer -->
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <div class="flex flex-col sm:flex-row justify-start sm:justify-between items-start sm:items-center">
                         <p class="text-[#052D6E] font-bold">Buyer's Name</p>
                         <p class="text-[#979797] font-semibold">{{ $order->user->name }}</p>
                     </div>
 
                     <!-- Order Date -->
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <div class="flex flex-col sm:flex-row justify-start sm:justify-between items-start sm:items-center">
                         <p class="text-[#052D6E] font-bold">Order Date</p>
                         <p class="text-[#979797] font-semibold">
                             {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</p>
@@ -57,7 +57,7 @@
 
                     {{-- Total Amount --}}
                     <!-- Total Amount -->
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <div class="flex flex-col sm:flex-row justify-start sm:justify-between items-start sm:items-center">
                         <p class="text-[#052D6E] font-bold">Total Amount</p>
                         <p class="text-[#979797] font-semibold">Rp{{ number_format($order->total_bayar, 0, ',', '.') }}</p>
                     </div>
@@ -66,17 +66,20 @@
                     <hr class="my-1 border-t-2 border-[#052D6E]">
 
                     <!-- Order Status -->
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <div class="flex flex-col sm:flex-row justify-start sm:justify-between items-start sm:items-center">
                         <p class="text-[#052D6E] font-bold mb-2">Order Status</p>
                         @if ($order->status_order === 'Proses')
-                            <span class="py-1 px-2 rounded font-bold text-[#1E90FF]"
-                                style="text-transform: uppercase;">{{ $order->status_order }}</span>
+                            <span class="py-1 px-2 rounded font-bold text-[#1E90FF] bg-[#98b8d4]" style="text-transform: uppercase;">
+                                {{ $order->status_order }}
+                            </span>
                         @elseif($order->status_order === 'Selesai')
-                            <span class="py-1 px-2 rounded font-bold text-[#DC3545]"
-                                style="text-transform: uppercase;">{{ $order->status_order }}</span>
+                            <span class="py-1 px-2 rounded font-bold text-[#DC3545] bg-[#98b8d4]" style="text-transform: uppercase;">
+                                {{ $order->status_order }}
+                            </span>
                         @else
-                            <span class="py-1 px-2 rounded font-bold text-[#4DAF84]"
-                                style="text-transform: uppercase;">{{ $order->status_order }}</span>
+                            <span class="py-1 px-2 rounded font-bold text-[#4DAF84] bg-[#98b8d4]" style="text-transform: uppercase;">
+                                {{ $order->status_order }}
+                            </span>
                         @endif
                     </div>
                 </div>
@@ -161,6 +164,7 @@
         </div>
     </div>
 @endsection
+
 @push('scripts')
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}">
     </script>

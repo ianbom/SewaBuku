@@ -14,9 +14,10 @@
 
         <div class="flex justify-between items-center text-[#979797] text-sm mt-4">
             <div class="flex items-center">
-                <i class="fa fa-clock mr-2 p-2 rounded-[8px] text-[12px]" style="background-color: #D3E9FF; color: #1E90FF;"></i>
-                <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif;">{{ $book->total_highlight }}</span>
-            </div>
+                   <span class="material-icons mr-2 p-2 rounded-[8px] text-[12px]" style="font-size: 16px; font-weight:700; background-color: #D3E9FF; color: #1E90FF;">highlight</span>
+                   <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif;">{{ $book->total_highlight }}</span>
+                   <span class="font-inter font-medium text-[12px]" style="color: #979797; font-family: 'Inter', sans-serif; margin-left: 4px;">Hightlight</span>
+                                                  </div>
 
         </div>
     </div>
@@ -24,3 +25,4 @@
 @empty
 Kosong
 @endforelse
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

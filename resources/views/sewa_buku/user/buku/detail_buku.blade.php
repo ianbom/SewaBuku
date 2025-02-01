@@ -63,7 +63,7 @@
                 <!-- Left Column - Image -->
                 <div class="col-span-12 sm:col-span-3">
                     @if ($buku->coverBuku && $buku->coverBuku->count() > 0)
-                        <img src="{{ asset('storage/' . $buku->coverBuku->first()->file_image) }}" alt="Book Cover"
+                        <img src="{{ asset('storage/' . $buku->coverBuku->first()->file_image) }}" alt="Cover Buku"
                             class="w-full h-[300px] object-cover rounded-[16px]">
                     @endif
                 </div>
@@ -72,41 +72,50 @@
                 <div class="col-span-12 sm:col-span-9">
                     <div class="flex flex-col">
                         <div class="mb-6">
-                            <h2 class="text-[28px] font-bold text-[#052D6E] mb-3" style="font-family: 'Libre Baskerville', serif;">
+                            <h2 class="text-[28px] font-bold text-[#052D6E] mb-3"
+                                style="font-family: 'Libre Baskerville', serif;">
                                 {{ $buku->judul_buku }}
                             </h2>
-                            <p class="text-[#052D6E] font-bold mb-2">AUTHOR - {{ $buku->penulis }} / PUBLISHER - {{ $buku->penerbit }}</p>
+                            <p class="text-[#052D6E] font-bold mb-2">AUTHOR - {{ $buku->penulis }} / PUBLISHER -
+                                {{ $buku->penerbit }}</p>
                             <p class="text-sm text-[#979797] font-bold">{{ $buku->tentang_penulis }}</p>
                         </div>
                         <hr class="w-full border-t border-[#052D6E]">
 
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
                             <div class="flex mt-6 items-center">
-                                <div class="text-center bg-[#D3E9FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                <div
+                                    class="text-center bg-[#D3E9FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
                                     <i class="fas fa-clock text-[#1E90FF] text-[12px]"></i>
                                 </div>
-                                <span class="text-[12px] text-[#979797] font-bold">{{ floor($buku->totalWaktu / 60) }} Minutes</span>
+                                <span class="text-[12px] text-[#979797] font-bold">{{ floor($buku->totalWaktu / 60) }}
+                                    Menit</span>
                             </div>
 
                             <div class="flex mt-6 items-center">
-                                <div class="text-center bg-[#FAFAD8] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                <div
+                                    class="text-center bg-[#FAFAD8] p-2 rounded-[6px] mr-2 flex items-center justify-center">
                                     <i class="fas fa-star text-[#B79F54] text-[12px]"></i>
                                 </div>
-                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ number_format($averageRating, 1) }}</span>
+                                <span
+                                    class="text-[12px] text-sm text-[#979797] font-bold">{{ number_format($averageRating, 1) }}</span>
                             </div>
 
                             <div class="flex mt-6 items-center">
-                                <div class="text-center bg-[#FFE8E2] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                <div
+                                    class="text-center bg-[#FFE8E2] p-2 rounded-[6px] mr-2 flex items-center justify-center">
                                     <i class="fas fa-book text-[#DD7971] text-[12px]"></i>
                                 </div>
-                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ $buku->jumlahChapter }} Types</span>
+                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ $buku->jumlahChapter }}
+                                    Tipe</span>
                             </div>
 
                             <div class="flex mt-6 items-center">
-                                <div class="text-center bg-[#EBE4FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                <div
+                                    class="text-center bg-[#EBE4FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
                                     <i class="fas fa-question-circle text-[#8F7CC1] text-[12px]"></i>
                                 </div>
-                                <span class="text-[12px] text-[#979797] font-bold">{{ $jumlahQuiz }} Chapters</span>
+                                <span class="text-[12px] text-[#979797] font-bold">{{ $jumlahQuiz }} Bab</span>
                             </div>
                         </div>
 
@@ -120,7 +129,7 @@
                                 <a href="{{ $buku->detailBuku?->first() ? route('user.buku.bacaBab', $buku->detailBuku?->first()?->id_detail_buku) : '#empty-bab' }}"
                                     type="submit"
                                     class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#052D6E]">
-                                    <strong>Read Book</strong>
+                                    <strong>Baca Buku</strong>
                                 </a>
                             </div>
 
@@ -128,14 +137,14 @@
                                 <button type="button" onclick="toggleModal('ratingModal')"
                                     class="flex items-center gap-2 px-4 py-3 text-white bg-[#B79F54] rounded-[12px] hover:bg-[#FAFAD8] hover:text-[#B79F54]">
                                     <i class="fas fa-pen"></i>
-                                    <strong>Give Review</strong>
+                                    <strong>Beri Ulasan</strong>
                                 </button>
                             </div>
                         @else
                             <div class="flex justify-end mt-6">
-                                <a href="#" type="submit"
+                                <a href="{{ route('user.paketLangganan.index') }}" type="submit"
                                     class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] disabled">
-                                    <strong>Subscribe to Read</strong>
+                                    <strong>Langganan untuk membaca</strong>
                                 </a>
                             </div>
                         @endif
@@ -148,11 +157,11 @@
                                     <button type="submit"
                                         class="flex items-center gap-2 px-4 py-3 text-white bg-[#1E90FF] rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
                                         <i class="fas fa-trash-alt"></i>
-                                        <strong>Remove Finished Mark</strong>
+                                        <strong>Hapus Tanda Selesai</strong>
                                     </button>
                                 </div>
                             </form>
-                        @else
+                        @elseif($buku->is_free || $checkLanggananAktif)
                             <form action="{{ route('user.mark.bookFinished', $buku->id_buku) }}" method="POST">
                                 @csrf
                                 <button type="submit"
@@ -162,24 +171,26 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5 13l4 4L19 7" />
                                     </svg>
-                                    <strong>Mark as Finished</strong>
+                                    <strong>Tandai Selesai</strong>
                                 </button>
                             </form>
                         @endif
 
-                        <form action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}" method="POST" class="mt-2">
+                        <form
+                            action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}"
+                            method="POST" class="mt-2">
                             @csrf
 
                             @if (in_array($buku->id_buku, $favorites))
                                 @method('DELETE')
                                 <button type="submit"
                                     class="flex mt-4 items-center gap-2 px-4 py-3 text-white bg-[#DD7971] rounded-[12px] hover:bg-[#FFE8E2] hover:text-[#DD7971]">
-                                    <i class="fas fa-trash-alt"></i> <strong> Remove from Favorites </strong>
+                                    <i class="fas fa-trash-alt"></i> <strong> Hapus Favorite </strong>
                                 </button>
                             @else
                                 <button type="submit"
                                     class="flex mt-4 items-center gap-2 px-4 py-3 text-white bg-[#DD7971] rounded-[12px] hover:bg-[#FFE8E2] hover:text-[#DD7971]">
-                                    <i class="far fa-heart"></i> <strong> Add to Favorites </strong>
+                                    <i class="far fa-heart"></i> <strong> Tambah ke Favorite </strong>
                                 </button>
                             @endif
                         </form>
@@ -190,7 +201,7 @@
 
         <div class="mt-12">
             <div class="mb-10">
-                <p class="text-[18px] text-[#052D6E] font-bold mb-2">Book Synopsis</p>
+                <p class="text-[18px] text-[#052D6E] font-bold mb-2">Sinopsis Buku</p>
                 <p class="text-[#979797] leading-relaxed">{{ $buku->sinopsis }}</p>
             </div>
 
@@ -205,13 +216,15 @@
             <!-- Reviews Section -->
             @if ($rating)
                 <div class="mt-8 rounded-xl">
-                    <p class="text-[18px] text-[#052D6E] font-bold mb-4">Reviews</p>
+                    <p class="text-[18px] text-[#052D6E] font-bold mb-4">Ulasan</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach ($rating as $review)
-                            <div class="border p-4 rounded-lg
+                            <div
+                                class="border p-4 rounded-lg
                                 @if (auth()->check() && $review->id == auth()->id()) bg-[#F1F8FF] border-[#A3D8FF] @else bg-white border-[#D3E9FF] @endif">
                                 <div class="flex items-center mb-2">
-                                    <span class="font-semibold text-[#1E90FF] text-sm mr-2">{{ $review->user->name }}</span>
+                                    <span
+                                        class="font-semibold text-[#1E90FF] text-sm mr-2">{{ $review->user->name }}</span>
                                     <span class="text-[#B79F54] ml-2">★</span>
                                     <span class="text-sm text-[#979797] ml-1">{{ $review->rating }}/5</span>
                                 </div>
@@ -229,8 +242,9 @@
                         class="hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                         <div class="bg-white p-8 rounded-lg w-full max-w-md">
                             @if ($ratingCheck)
-                                <h3 class="text-[16px] font-bold text-[#052D6E] mb-4">Warning</h3>
-                                <p class="text-[#979797] mb-6 text-[14px]">You have already rated this book. Thank you for your participation!</p>
+                                <h3 class="text-[16px] font-bold text-[#052D6E] mb-4">Peringatan</h3>
+                                <p class="text-[#979797] mb-6 text-[14px]">Anda sudah memberikan rating untuk buku ini.
+                                    Terima kasih atas partisipasi Anda!</p>
                                 <div class="flex justify-end">
                                     <button onclick="toggleModal('ratingModal')"
                                         class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
@@ -239,14 +253,15 @@
                                 </div>
                             @else
                                 <h3 class="text-[16px] font-bold text-[#052D6E] mb-4">Give a Rating for This Book</h3>
-                                <form action="{{ route('user.rating.store') }}" method="POST">
+                                <form action="{{ route('user.rating.store', ['id' => $buku->id_buku]) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="buku_id" value="{{ $buku->id_buku }}">
 
                                     <div class="flex gap-3 mb-6">
                                         @for ($i = 1; $i <= 5; $i++)
                                             <label for="star{{ $i }}">
-                                                <i class="star fa fa-star text-[#B79F54]" data-value="{{ $i }}"></i>
+                                                <i class="star fa fa-star text-[#B79F54]"
+                                                    data-value="{{ $i }}"></i>
                                             </label>
                                         @endfor
                                     </div>
@@ -254,11 +269,11 @@
                                     <div class="flex justify-between">
                                         <button type="button" onclick="toggleModal('ratingModal')"
                                             class="px-4 py-2 bg-[#D3E9FF] text-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#1E90FF]">
-                                            Cancel
+                                            Batal
                                         </button>
                                         <button type="submit"
                                             class="px-4 py-2 bg-[#1E90FF] text-bold text-white rounded-[12px] hover:bg-[#D3E9FF] hover:text-[#1E90FF]">
-                                            Submit Rating
+                                            Beri Rating
                                         </button>
                                     </div>
                                 </form>

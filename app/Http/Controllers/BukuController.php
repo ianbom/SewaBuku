@@ -22,13 +22,15 @@ use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $buku = Buku::all();
 
-        return view('sewa_buku.admin.buku.index_buku', ['buku'=> $buku]);
+        return view('sewa_buku.admin.buku.index_buku', ['buku' => $buku]);
     }
 
-    public function indexBukuUser() {
+    public function indexBukuUser()
+    {
         $userId = Auth::id();
 
         // Periksa status langganan
@@ -74,9 +76,8 @@ class BukuController extends Controller
             $b->can_read = $b->is_free || $checkLangganan ? true : false;
 
             $terakhirDibaca = Dibaca::where('id', $userId)
-                                        ->orderBy('updated_at', 'desc')
-                                        ->first();
-
+                ->orderBy('updated_at', 'desc')
+                ->first();
         }
 
         return view('sewa_buku.user.buku.index_buku', [
@@ -91,21 +92,22 @@ class BukuController extends Controller
 
 
 
-    public function detailBukuUser($id) {
+    public function detailBukuUser($id)
+    {
         $userId = Auth::id();
 
         $buku = Buku::with('detailBuku', 'detailBuku.quiz')
-        ->withCount(['detailBuku as jumlahChapter' => function ($query) {
-            $query->select(DB::raw('coalesce(count(id_detail_buku))'));
-        }])
-        ->findOrFail($id);
+            ->withCount(['detailBuku as jumlahChapter' => function ($query) {
+                $query->select(DB::raw('coalesce(count(id_detail_buku))'));
+            }])
+            ->findOrFail($id);
 
         $jumlahQuiz = Quiz::whereIn('id_detail_buku', function ($query) use ($buku) {
             $query->select('id_detail_buku')
                 ->from('detail_buku')
                 ->where('id_buku', $buku->id_buku);
         })
-        ->count();
+            ->count();
 
 
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
@@ -113,8 +115,8 @@ class BukuController extends Controller
         $rating = Rating::where('id_buku', $buku->id_buku)->get();
 
         $ratingCheck = Rating::where('id', $userId)
-        ->where('id_buku', $buku->id_buku)
-        ->first();
+            ->where('id_buku', $buku->id_buku)
+            ->first();
 
         $checkLanggananAktif = Langganan::where('id', $userId)
             ->where('status_langganan', true)
@@ -166,11 +168,13 @@ class BukuController extends Controller
 
 
 
-    public function create(){
+    public function create()
+    {
         return view('sewa_buku.admin.buku.create_buku');
     }
 
-    public function store2(Request $request){
+    public function store2(Request $request)
+    {
         $request->validate([
             'judul_buku' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
@@ -223,166 +227,167 @@ class BukuController extends Controller
     }
 
     public function store(Request $request)
-{
-    try {
-        $request->validate([
-            'judul_buku' => 'required|string|max:255',
-            'penulis' => 'required|string|max:255',
-            'penerbit' => 'required|string|max:255',
-            'tentang_penulis' => 'required|string',
-            'rating_amazon' => 'required|numeric',
-            'link_pembelian' => 'required|string',
-            'isbn' => 'required|string|max:255',
-            'tahun_terbit' => 'required|string|max:255',
-            'teaser_audio' => 'required|file|mimes:mp3',
-            'sinopsis' => 'required|string',
-            'ringkasan_audio' => 'required|file|mimes:mp3',
-            'detail_buku' => 'nullable|array',
-            'detail_buku.*.bab' => 'nullable|string|max:255',
-            'detail_buku.*.isi' => 'nullable|string',
-            'detail_buku.*.audio' => 'nullable|file|mimes:mp3',
-            'cover_buku.*' => 'required|file|mimes:jpeg,png,jpg',
-            'is_free' => 'nullable|boolean',
-        ]);
+    {
+        try {
+            $request->validate([
+                'judul_buku' => 'required|string|max:255',
+                'penulis' => 'required|string|max:255',
+                'penerbit' => 'required|string|max:255',
+                'tentang_penulis' => 'required|string',
+                'rating_amazon' => 'required|numeric',
+                'link_pembelian' => 'required|string',
+                'isbn' => 'required|string|max:255',
+                'tahun_terbit' => 'required|string|max:255',
+                'teaser_audio' => 'required|file|mimes:mp3',
+                'sinopsis' => 'required|string',
+                'ringkasan_audio' => 'required|file|mimes:mp3',
+                'detail_buku' => 'nullable|array',
+                'detail_buku.*.bab' => 'nullable|string|max:255',
+                'detail_buku.*.isi' => 'nullable|string',
+                'detail_buku.*.audio' => 'nullable|file|mimes:mp3',
+                'cover_buku.*' => 'required|file|mimes:jpeg,png,jpg',
+                'is_free' => 'nullable|boolean',
+            ]);
 
-        // Handle teaser audio upload
-        $teaserAudioPath = $request->file('teaser_audio')->store('voice/teaser', 'public');
+            // Handle teaser audio upload
+            $teaserAudioPath = $request->file('teaser_audio')->store('voice/teaser', 'public');
 
-        // Handle ringkasan audio upload
-        $ringkasanAudioPath = $request->file('ringkasan_audio')->store('voice/ringkasan', 'public');
+            // Handle ringkasan audio upload
+            $ringkasanAudioPath = $request->file('ringkasan_audio')->store('voice/ringkasan', 'public');
 
-        // Create a new book
-        $buku = Buku::create([
-            'judul_buku' => $request->judul_buku,
-            'penulis' => $request->penulis,
-            'penerbit' => $request->penerbit,
-            'tentang_penulis' => $request->tentang_penulis,
-            'rating_amazon' => $request->rating_amazon,
-            'link_pembelian' => $request->link_pembelian,
-            'isbn' => $request->isbn,
-            'tahun_terbit' => $request->tahun_terbit,
-            'teaser_audio' => $teaserAudioPath,
-            'sinopsis' => $request->sinopsis,
-            'ringkasan_audio' => $ringkasanAudioPath,
-            'is_free' => $request->has('is_free'),
-        ]);
+            // Create a new book
+            $buku = Buku::create([
+                'judul_buku' => $request->judul_buku,
+                'penulis' => $request->penulis,
+                'penerbit' => $request->penerbit,
+                'tentang_penulis' => $request->tentang_penulis,
+                'rating_amazon' => $request->rating_amazon,
+                'link_pembelian' => $request->link_pembelian,
+                'isbn' => $request->isbn,
+                'tahun_terbit' => $request->tahun_terbit,
+                'teaser_audio' => $teaserAudioPath,
+                'sinopsis' => $request->sinopsis,
+                'ringkasan_audio' => $ringkasanAudioPath,
+                'is_free' => $request->has('is_free'),
+            ]);
 
-        // Handle book details (optional)
-        if ($request->has('detail_buku')) {
-            foreach ($request->input('detail_buku') as $key => $detail) {
-                // Only create detail if bab and isi are provided
-                if (!empty($detail['bab']) && !empty($detail['isi'])) {
-                    $detailAudioPath = null;
-                    if ($request->hasFile("detail_buku.$key.audio")) {
-                        $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
+            // Handle book details (optional)
+            if ($request->has('detail_buku')) {
+                foreach ($request->input('detail_buku') as $key => $detail) {
+                    // Only create detail if bab and isi are provided
+                    if (!empty($detail['bab']) && !empty($detail['isi'])) {
+                        $detailAudioPath = null;
+                        if ($request->hasFile("detail_buku.$key.audio")) {
+                            $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
+                        }
+
+                        DetailBuku::create([
+                            'id_buku' => $buku->id_buku,
+                            'bab' => $detail['bab'],
+                            'isi' => $detail['isi'],
+                            'audio' => $detailAudioPath,
+                            'is_free_detail' => isset($detail['is_free_detail']) ? true : false,
+                        ]);
                     }
+                }
+            }
 
-                    DetailBuku::create([
+            // Handle cover uploads
+            if ($request->hasFile('cover_buku')) {
+                foreach ($request->file('cover_buku') as $cover) {
+                    $coverPath = $cover->store('cover_buku', 'public');
+                    CoverBuku::create([
                         'id_buku' => $buku->id_buku,
-                        'bab' => $detail['bab'],
-                        'isi' => $detail['isi'],
-                        'audio' => $detailAudioPath,
-                        'is_free_detail' => isset($detail['is_free_detail']) ? true : false,
+                        'file_image' => $coverPath,
                     ]);
                 }
             }
-        }
 
-        // Handle cover uploads
-        if ($request->hasFile('cover_buku')) {
-            foreach ($request->file('cover_buku') as $cover) {
-                $coverPath = $cover->store('cover_buku', 'public');
-                CoverBuku::create([
-                    'id_buku' => $buku->id_buku,
-                    'file_image' => $coverPath,
-                ]);
-            }
+            return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diupload');
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors($th->getMessage());
         }
-
-        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diupload');
-    } catch (\Throwable $th) {
-        return redirect()->back()->withErrors($th->getMessage());
     }
-}
 
-    public function edit($id){
+    public function edit($id)
+    {
         $buku = Buku::findOrFail($id);
-        return view('sewa_buku.admin.buku.edit_buku', ['buku'=> $buku]);
+        return view('sewa_buku.admin.buku.edit_buku', ['buku' => $buku]);
     }
 
     public function updateBuku(Request $request, $id)
-{
-    try {
-        // Validasi data dari request
-        $request->validate([
-            'nama_buku' => 'nullable|string|max:255',
-            'penulis' => 'nullable|string|max:255',
-            'penerbit' => 'nullable|string|max:255',
-            'tentang_penulis' => 'nullable|string',
-            'rating_amazon' => 'nullable|numeric',
-            'link_pembelian' => 'nullable|string',
-            'isbn' => 'nullable|string|max:255',
-            'tahun_terbit' => 'nullable|string|max:255',
-            'teaser_audio' => 'nullable|file|mimes:mp3', // Nullable for update
-            'sinopsis' => 'nullable|string',
-            'ringkasan_audio' => 'nullable|file|mimes:mp3', // Nullable for update
-            'cover_buku.*' => 'nullable|file|mimes:jpeg,png,jpg', // Nullable for update
-            'is_free' => 'nullable'
-        ]);
+    {
+        try {
+            // Validasi data dari request
+            $request->validate([
+                'nama_buku' => 'nullable|string|max:255',
+                'penulis' => 'nullable|string|max:255',
+                'penerbit' => 'nullable|string|max:255',
+                'tentang_penulis' => 'nullable|string',
+                'rating_amazon' => 'nullable|numeric',
+                'link_pembelian' => 'nullable|string',
+                'isbn' => 'nullable|string|max:255',
+                'tahun_terbit' => 'nullable|string|max:255',
+                'teaser_audio' => 'nullable|file|mimes:mp3', // Nullable for update
+                'sinopsis' => 'nullable|string',
+                'ringkasan_audio' => 'nullable|file|mimes:mp3', // Nullable for update
+                'cover_buku.*' => 'nullable|file|mimes:jpeg,png,jpg', // Nullable for update
+                'is_free' => 'nullable'
+            ]);
 
-        // Temukan buku yang akan di-update
-        $buku = Buku::findOrFail($id);
+            // Temukan buku yang akan di-update
+            $buku = Buku::findOrFail($id);
 
-        // Update teaser audio jika ada file baru yang diupload
-        if ($request->hasFile('teaser_audio')) {
-            // Hapus teaser audio lama jika ada
-            if ($buku->teaser_audio) {
-                Storage::disk('public')->delete($buku->teaser_audio);
+            // Update teaser audio jika ada file baru yang diupload
+            if ($request->hasFile('teaser_audio')) {
+                // Hapus teaser audio lama jika ada
+                if ($buku->teaser_audio) {
+                    Storage::disk('public')->delete($buku->teaser_audio);
+                }
+                $teaserAudioPath = $request->file('teaser_audio')->store('voice/teaser', 'public');
+                $buku->teaser_audio = $teaserAudioPath;
             }
-            $teaserAudioPath = $request->file('teaser_audio')->store('voice/teaser', 'public');
-            $buku->teaser_audio = $teaserAudioPath;
-        }
 
 
-        if ($request->hasFile('ringkasan_audio')) {
+            if ($request->hasFile('ringkasan_audio')) {
 
-            if ($buku->ringkasan_audio) {
-                Storage::disk('public')->delete($buku->ringkasan_audio);
+                if ($buku->ringkasan_audio) {
+                    Storage::disk('public')->delete($buku->ringkasan_audio);
+                }
+                $ringkasanAudioPath = $request->file('ringkasan_audio')->store('voice/ringkasan', 'public');
+                $buku->ringkasan_audio = $ringkasanAudioPath;
             }
-            $ringkasanAudioPath = $request->file('ringkasan_audio')->store('voice/ringkasan', 'public');
-            $buku->ringkasan_audio = $ringkasanAudioPath;
-        }
 
-        // Update data buku
-        $buku->update([
-            'judul_buku' => $request->nama_buku,
-            'penulis' => $request->penulis,
-            'penerbit' => $request->penerbit,
-            'tentang_penulis' => $request->tentang_penulis,
-            'rating_amazon' => $request->rating_amazon,
-            'link_pembelian' => $request->link_pembelian,
-            'isbn' => $request->isbn,
-            'tahun_terbit' => $request->tahun_terbit,
-            'sinopsis' => $request->sinopsis,
-            'is_free' => $request->is_free,
-        ]);
+            // Update data buku
+            $buku->update([
+                'judul_buku' => $request->nama_buku,
+                'penulis' => $request->penulis,
+                'penerbit' => $request->penerbit,
+                'tentang_penulis' => $request->tentang_penulis,
+                'rating_amazon' => $request->rating_amazon,
+                'link_pembelian' => $request->link_pembelian,
+                'isbn' => $request->isbn,
+                'tahun_terbit' => $request->tahun_terbit,
+                'sinopsis' => $request->sinopsis,
+                'is_free' => $request->is_free,
+            ]);
 
-        // Update cover buku jika ada file cover baru yang diupload
-        if ($request->hasFile('cover_buku')) {
+            // Update cover buku jika ada file cover baru yang diupload
+            if ($request->hasFile('cover_buku')) {
 
-            foreach ($request->file('cover_buku') as $cover) {
-                $coverPath = $cover->store('cover_buku', 'public');
-                CoverBuku::create([
-                    'id_buku' => $buku->id_buku,
-                    'file_image' => $coverPath,
-                ]);
+                foreach ($request->file('cover_buku') as $cover) {
+                    $coverPath = $cover->store('cover_buku', 'public');
+                    CoverBuku::create([
+                        'id_buku' => $buku->id_buku,
+                        'file_image' => $coverPath,
+                    ]);
+                }
             }
+            return redirect()->back()->with('success', 'Buku berhasil diperbarui');
+        } catch (\Throwable $th) {
+            return redirect()->back()->withErrors($th->getMessage());
         }
-        return redirect()->back()->with('success', 'Buku berhasil diperbarui');
-    } catch (\Throwable $th) {
-        return redirect()->back()->withErrors($th->getMessage());
     }
-}
 
     public function editDetailBuku($id)
     {
@@ -436,8 +441,8 @@ class BukuController extends Controller
 
                 // Cek apakah ini adalah update untuk detail yang sudah ada
                 $existingDetail = DetailBuku::where('id_buku', $buku->id_buku)
-                                          ->where('bab', $detail['bab'])
-                                          ->first();
+                    ->where('bab', $detail['bab'])
+                    ->first();
 
                 // Jika ada file audio baru
                 if ($request->hasFile("detail_buku.$key.audio")) {
@@ -474,17 +479,17 @@ class BukuController extends Controller
 
 
     public function editTagsBuku($id)
-{
-    $buku = Buku::findOrFail($id);
-    $tags = Tags::all();
-    $selectedTags = $buku->tags->pluck('id_tags')->toArray();
+    {
+        $buku = Buku::findOrFail($id);
+        $tags = Tags::all();
+        $selectedTags = $buku->tags->pluck('id_tags')->toArray();
 
-    return view('sewa_buku.admin.buku.create_tags_buku', [
-        'buku' => $buku,
-        'tags' => $tags,
-        'selectedTags' => $selectedTags
-    ]);
-}
+        return view('sewa_buku.admin.buku.create_tags_buku', [
+            'buku' => $buku,
+            'tags' => $tags,
+            'selectedTags' => $selectedTags
+        ]);
+    }
 
 
     public function updateTagsBuku(Request $request, $id)
@@ -503,23 +508,24 @@ class BukuController extends Controller
     }
 
 
-    public function show($id){
+    public function show($id)
+    {
         try {
             $buku = Buku::findOrFail($id);
 
-        //return response()->json(['buku' => $buku]);
-        return view('sewa_buku.admin.buku.show_buku', ['buku' => $buku]);
+            //return response()->json(['buku' => $buku]);
+            return view('sewa_buku.admin.buku.show_buku', ['buku' => $buku]);
         } catch (\Throwable $th) {
             return response()->json(['err' => $th]);
         }
-
     }
 
-    public function deleteCover($id){
+    public function deleteCover($id)
+    {
         try {
-           $cover = CoverBuku::findOrFail($id);
-           $cover->delete();
-           return redirect()->back()->with('success', 'cover Buku berhasil hapus.');
+            $cover = CoverBuku::findOrFail($id);
+            $cover->delete();
+            return redirect()->back()->with('success', 'cover Buku berhasil hapus.');
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -532,11 +538,11 @@ class BukuController extends Controller
         $query = $request->input('query');
         $userId = Auth::id();
         $buku = Buku::with('coverBuku')
-                    ->where('judul_buku', 'like', "%{$query}%")
-                    ->with(['order.rating' => function($query) {
-                        $query->select('id_order', 'rating');
-                    }])
-                    ->get();
+            ->where('judul_buku', 'like', "%{$query}%")
+            ->with(['order.rating' => function ($query) {
+                $query->select('id_order', 'rating');
+            }])
+            ->get();
 
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
@@ -558,90 +564,90 @@ class BukuController extends Controller
     }
 
     public function searchBukuIndex(Request $request)
-{
-    $userId = Auth::id();
-    $tagId = $request->input('tag_id');
+    {
+        $userId = Auth::id();
+        $tagId = $request->input('tag_id');
 
-    $checkLangganan = Langganan::where('status_langganan', true)
-                               ->where('id', $userId)
-                               ->first();
+        $checkLangganan = Langganan::where('status_langganan', true)
+            ->where('id', $userId)
+            ->first();
 
-    // Ambil semua tags
-    $tag = Tags::all();
+        // Ambil semua tags
+        $tag = Tags::whereNull('id_child')->get();
 
-    // Query dasar untuk buku
-    $query = Buku::with(['coverBuku', 'rating', 'detailBuku', 'tags'])
-        ->withCount(['rating as ratingRerata' => function ($query) {
-            $query->select(DB::raw('coalesce(avg(rating), 0)'));
-        }]);
+        // Query dasar untuk buku
+        $query = Buku::with(['coverBuku', 'rating', 'detailBuku', 'tags'])
+            ->withCount(['rating as ratingRerata' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }]);
 
-    // Filter berdasarkan tag jika ada
-    if ($tagId) {
-        $query->where(function($q) use ($tagId) {
-            // Cek apakah tag yang dipilih adalah child
-            $selectedTag = Tags::find($tagId);
+        // Filter berdasarkan tag jika ada
+        if ($tagId) {
+            $query->where(function ($q) use ($tagId) {
+                // Cek apakah tag yang dipilih adalah child
+                $selectedTag = Tags::find($tagId);
 
-            if ($selectedTag->id_child) {
-                // Jika child tag, ambil buku dengan tag tersebut dan parent tagnya
-                $q->whereHas('tags', function($query) use ($tagId) {
-                    $query->where('tags.id_tags', $tagId);
-                })->orWhereHas('tags', function($query) use ($selectedTag) {
-                    $query->where('tags.id_tags', $selectedTag->id_child);
-                });
-            } else {
-                // Jika parent tag, ambil buku dengan tag tersebut dan semua child tagnya
-                $childTagIds = Tags::where('id_child', $tagId)->pluck('id_tags');
-                $q->whereHas('tags', function($query) use ($tagId, $childTagIds) {
-                    $query->where('tags.id_tags', $tagId)
-                          ->orWhereIn('tags.id_tags', $childTagIds);
-                });
-            }
-        });
-    }
+                if ($selectedTag->id_child) {
+                    // Jika child tag, ambil buku dengan tag tersebut dan parent tagnya
+                    $q->whereHas('tags', function ($query) use ($tagId) {
+                        $query->where('tags.id_tags', $tagId);
+                    })->orWhereHas('tags', function ($query) use ($selectedTag) {
+                        $query->where('tags.id_tags', $selectedTag->id_child);
+                    });
+                } else {
+                    // Jika parent tag, ambil buku dengan tag tersebut dan semua child tagnya
+                    $childTagIds = Tags::where('id_child', $tagId)->pluck('id_tags');
+                    $q->whereHas('tags', function ($query) use ($tagId, $childTagIds) {
+                        $query->where('tags.id_tags', $tagId)
+                            ->orWhereIn('tags.id_tags', $childTagIds);
+                    });
+                }
+            });
+        }
 
-    $buku = $query->get();
+        $buku = $query->get();
 
-    // Ambil daftar favorit user
-    $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+        // Ambil daftar favorit user
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
-    // Proses durasi audio
-    $getID3 = new getID3();
+        // Proses durasi audio
+        $getID3 = new getID3();
 
-    foreach ($buku as $b) {
-        $totalSeconds = 0;
+        foreach ($buku as $b) {
+            $totalSeconds = 0;
 
-        foreach ($b->detailBuku as $detail) {
-            if ($detail->audio) {
-                $filePath = storage_path('app/public/' . $detail->audio);
-                if (file_exists($filePath)) {
-                    $audioInfo = $getID3->analyze($filePath);
-                    if (isset($audioInfo['playtime_seconds'])) {
-                        $totalSeconds += $audioInfo['playtime_seconds'];
+            foreach ($b->detailBuku as $detail) {
+                if ($detail->audio) {
+                    $filePath = storage_path('app/public/' . $detail->audio);
+                    if (file_exists($filePath)) {
+                        $audioInfo = $getID3->analyze($filePath);
+                        if (isset($audioInfo['playtime_seconds'])) {
+                            $totalSeconds += $audioInfo['playtime_seconds'];
+                        }
                     }
                 }
             }
+
+            // Format waktu
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            $seconds = $totalSeconds % 60;
+
+            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+            $b->totalWaktu = $totalSeconds;
+
+            // Set flag can_read
+            $b->can_read = $b->is_free || $checkLangganan ? true : false;
         }
 
-        // Format waktu
-        $hours = floor($totalSeconds / 3600);
-        $minutes = floor(($totalSeconds % 3600) / 60);
-        $seconds = $totalSeconds % 60;
-
-        $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-        $b->totalWaktu = $totalSeconds;
-
-        // Set flag can_read
-        $b->can_read = $b->is_free || $checkLangganan ? true : false;
+        return view('sewa_buku.user.buku.search_buku', [
+            'buku' => $buku,
+            'favorites' => $favorites,
+            'checkLangganan' => $checkLangganan,
+            'tag' => $tag,
+            'tagId' => $tagId
+        ]);
     }
-
-    return view('sewa_buku.user.buku.search_buku', [
-        'buku' => $buku,
-        'favorites' => $favorites,
-        'checkLangganan' => $checkLangganan,
-        'tag' => $tag,
-        'tagId' => $tagId
-    ]);
-}
 
 
     public function searchBuku(Request $request)
@@ -649,46 +655,45 @@ class BukuController extends Controller
         $search = $request->input('search');
 
         $buku = Buku::where('judul_buku', 'like', "%$search%")
-                    ->orWhere('penulis', 'like', "%$search%")
-                    ->withCount(['rating as ratingRerata' => function ($query)
-                     {$query->select(DB::raw('coalesce(avg(rating), 0)'));
-                    }])
-                    ->get();
+            ->orWhere('penulis', 'like', "%$search%")
+            ->withCount(['rating as ratingRerata' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->get();
 
-                    $getID3 = new getID3();
+        $getID3 = new getID3();
 
-                    foreach ($buku as $b) {
-                        $totalSeconds = 0;
+        foreach ($buku as $b) {
+            $totalSeconds = 0;
 
-                        foreach ($b->detailBuku as $detail) {
-                            if ($detail->audio) {
-                                $filePath = storage_path('app/public/' . $detail->audio);
-                                if (file_exists($filePath)) {
-                                    $audioInfo = $getID3->analyze($filePath);
-                                    if (isset($audioInfo['playtime_seconds'])) {
-                                        $totalSeconds += $audioInfo['playtime_seconds'];
-                                    }
-                                }
-                            }
+            foreach ($b->detailBuku as $detail) {
+                if ($detail->audio) {
+                    $filePath = storage_path('app/public/' . $detail->audio);
+                    if (file_exists($filePath)) {
+                        $audioInfo = $getID3->analyze($filePath);
+                        if (isset($audioInfo['playtime_seconds'])) {
+                            $totalSeconds += $audioInfo['playtime_seconds'];
                         }
-
-                        // Simpan total waktu dalam format jam, menit, detik
-                        $hours = floor($totalSeconds / 3600);
-                        $minutes = floor(($totalSeconds % 3600) / 60);
-                        $seconds = $totalSeconds % 60;
-
-                        $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-                        $b->totalWaktu = $totalSeconds;
-
-
                     }
+                }
+            }
+
+            // Simpan total waktu dalam format jam, menit, detik
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            $seconds = $totalSeconds % 60;
+
+            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+            $b->totalWaktu = $totalSeconds;
+        }
 
         $html = view('sewa_buku.user.buku.grid_search_buku', compact('buku'))->render();
 
         return response()->json(['html' => $html]);
     }
 
-    public function myCollection(){
+    public function myCollection()
+    {
         $userId = Auth::id();
 
         // Periksa status langganan
@@ -700,11 +705,11 @@ class BukuController extends Controller
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
         $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
-        ->withCount(['rating as ratingRerata' => function ($query) {
-            $query->select(DB::raw('coalesce(avg(rating), 0)'));
-        }])
-        ->whereIn('id_buku', $favorites)
-        ->get();
+            ->withCount(['rating as ratingRerata' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->whereIn('id_buku', $favorites)
+            ->get();
 
 
 
@@ -735,17 +740,16 @@ class BukuController extends Controller
 
             // Tentukan apakah buku dapat dibaca
             $b->can_read = $b->is_free || $checkLangganan ? true : false;
-
         }
 
         $diselesaikan = Diselesaikan::where('id', $userId)->pluck('id_buku');
 
         $bukuDiselesaikan = Buku::with('coverBuku', 'rating', 'detailBuku')
-        ->withCount(['rating as ratingRerata' => function ($query) {
-            $query->select(DB::raw('coalesce(avg(rating), 0)'));
-        }])
-        ->whereIn('id_buku', $diselesaikan)
-        ->get();
+            ->withCount(['rating as ratingRerata' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->whereIn('id_buku', $diselesaikan)
+            ->get();
 
 
 
@@ -776,13 +780,12 @@ class BukuController extends Controller
 
             // Tentukan apakah buku dapat dibaca
             $b->can_read = $b->is_free || $checkLangganan ? true : false;
-
         }
 
 
         $terakhirDibaca = Dibaca::where('id', $userId)
-                                        ->orderBy('updated_at', 'desc')
-                                        ->first();
+            ->orderBy('updated_at', 'desc')
+            ->first();
 
         // return response()->json(['disimpan' => $disimpan]);
 
@@ -804,13 +807,13 @@ class BukuController extends Controller
 
         // Periksa status langganan
         $checkLangganan = Langganan::where('status_langganan', true)
-                                   ->where('id', $userId)
-                                   ->first();
+            ->where('id', $userId)
+            ->first();
 
         $highlight = Highlight::where('id', $userId)->pluck('id_buku');
 
         // Ambil semua tags
-        $tag = Tags::all();
+        $tag = Tags::whereNull('id_child')->get();
 
         // Query dasar untuk buku yang di-highlight
         $query = Buku::with(['coverBuku', 'rating', 'detailBuku', 'tags'])
@@ -824,23 +827,23 @@ class BukuController extends Controller
 
         // Filter berdasarkan tag jika ada
         if ($tagId) {
-            $query->where(function($q) use ($tagId) {
+            $query->where(function ($q) use ($tagId) {
                 // Cek apakah tag yang dipilih adalah child
                 $selectedTag = Tags::find($tagId);
 
                 if ($selectedTag->id_child) {
                     // Jika child tag, ambil buku dengan tag tersebut dan parent tagnya
-                    $q->whereHas('tags', function($query) use ($tagId) {
+                    $q->whereHas('tags', function ($query) use ($tagId) {
                         $query->where('tags.id_tags', $tagId);
-                    })->orWhereHas('tags', function($query) use ($selectedTag) {
+                    })->orWhereHas('tags', function ($query) use ($selectedTag) {
                         $query->where('tags.id_tags', $selectedTag->id_child);
                     });
                 } else {
                     // Jika parent tag, ambil buku dengan tag tersebut dan semua child tagnya
                     $childTagIds = Tags::where('id_child', $tagId)->pluck('id_tags');
-                    $q->whereHas('tags', function($query) use ($tagId, $childTagIds) {
+                    $q->whereHas('tags', function ($query) use ($tagId, $childTagIds) {
                         $query->where('tags.id_tags', $tagId)
-                              ->orWhereIn('tags.id_tags', $childTagIds);
+                            ->orWhereIn('tags.id_tags', $childTagIds);
                     });
                 }
             });
@@ -891,21 +894,22 @@ class BukuController extends Controller
     }
 
 
-    public function detailHighlight($id) {
+    public function detailHighlight($id)
+    {
         $userId = Auth::id();
 
         $buku = Buku::with('detailBuku', 'detailBuku.quiz')
-        ->withCount(['detailBuku as jumlahChapter' => function ($query) {
-            $query->select(DB::raw('coalesce(count(id_detail_buku))'));
-        }])
-        ->findOrFail($id);
+            ->withCount(['detailBuku as jumlahChapter' => function ($query) {
+                $query->select(DB::raw('coalesce(count(id_detail_buku))'));
+            }])
+            ->findOrFail($id);
 
         $jumlahQuiz = Quiz::whereIn('id_detail_buku', function ($query) use ($buku) {
             $query->select('id_detail_buku')
                 ->from('detail_buku')
                 ->where('id_buku', $buku->id_buku);
         })
-        ->count();
+            ->count();
 
 
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
@@ -913,8 +917,8 @@ class BukuController extends Controller
         $rating = Rating::where('id_buku', $buku->id_buku)->get();
 
         $ratingCheck = Rating::where('id', $userId)
-        ->where('id_buku', $buku->id_buku)
-        ->first();
+            ->where('id_buku', $buku->id_buku)
+            ->first();
 
         $checkLanggananAktif = Langganan::where('id', $userId)
             ->where('status_langganan', true)
@@ -964,112 +968,109 @@ class BukuController extends Controller
         ]);
     }
 
-    public function hapusHighlight($id){
+    public function hapusHighlight($id)
+    {
         $highlight = Highlight::findOrFail($id);
         $highlight->delete();
         return redirect()->back()->with('success', 'highlight berhasil dihapus');
     }
 
-public function searchBukuHighlight(Request $request)
-{
-    $userId = Auth::id();
+    public function searchBukuHighlight(Request $request)
+    {
+        $userId = Auth::id();
 
-    // Ambil daftar id_buku dari tabel Highlight untuk user tertentu
-    $highlight = Highlight::where('id', $userId)->pluck('id_buku');
+        // Ambil daftar id_buku dari tabel Highlight untuk user tertentu
+        $highlight = Highlight::where('id', $userId)->pluck('id_buku');
 
-    $search = $request->input('search');
+        $search = $request->input('search');
 
-    // Query buku hanya jika id_buku terdapat pada $highlight
-    $buku = Buku::whereIn('id_buku', $highlight) // Filter buku berdasarkan highlight
-                ->when($search, function ($query) use ($search) {
-                    $query->where(function ($subQuery) use ($search) {
-                        $subQuery->where('judul_buku', 'like', "%$search%")
-                                 ->orWhere('penulis', 'like', "%$search%");
-                    });
-                })->withCount(['highlight as total_highlight' => function ($query) use ($userId) {
-                    $query->where('id', $userId);
-                }])
-                ->get();
+        // Query buku hanya jika id_buku terdapat pada $highlight
+        $buku = Buku::whereIn('id_buku', $highlight) // Filter buku berdasarkan highlight
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->where('judul_buku', 'like', "%$search%")
+                        ->orWhere('penulis', 'like', "%$search%");
+                });
+            })->withCount(['highlight as total_highlight' => function ($query) use ($userId) {
+                $query->where('id', $userId);
+            }])
+            ->get();
 
-    // Render view dengan data buku yang difilter
-    $html = view('sewa_buku.user.buku.highlight.list_highlight', compact('buku'))->render();
+        // Render view dengan data buku yang difilter
+        $html = view('sewa_buku.user.buku.highlight.list_highlight', compact('buku'))->render();
 
-    return response()->json(['html' => $html]);
-}
+        return response()->json(['html' => $html]);
+    }
 
 
-public function filterTagsBuku(Request $request)
-{
-    try {
-        $tags = $request->input('tags');
-        $search = $request->input('search', '');
+    public function filterTagsBuku(Request $request)
+    {
+        try {
+            $tags = $request->input('tags');
+            $search = $request->input('search', '');
 
-        $query = Buku::with(['tags', 'detailBuku'])->withCount([
-            'rating as ratingRerata' => function ($query) {
-                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            $query = Buku::with(['tags', 'detailBuku'])->withCount([
+                'rating as ratingRerata' => function ($query) {
+                    $query->select(DB::raw('coalesce(avg(rating), 0)'));
+                }
+            ]);
+
+            // Filter berdasarkan tags jika dipilih
+            if ($tags && $tags !== 'all') {
+                $query->whereHas('tags', function ($tagQuery) use ($tags) {
+                    $tagQuery->where('id_tags', $tags);
+                });
             }
-        ]);
 
-        // Filter berdasarkan tags jika dipilih
-        if ($tags && $tags !== 'all') {
-            $query->whereHas('tags', function ($tagQuery) use ($tags) {
-                $tagQuery->where('id_tags', $tags);
-            });
-        }
+            // Filter berdasarkan pencarian jika ada
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('judul_buku', 'like', "%{$search}%")
+                        ->orWhere('penulis', 'like', "%{$search}%")
+                        ->orWhere('penerbit', 'like', "%{$search}%");
+                });
+            }
 
-        // Filter berdasarkan pencarian jika ada
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('judul_buku', 'like', "%{$search}%")
-                    ->orWhere('penulis', 'like', "%{$search}%")
-                    ->orWhere('penerbit', 'like', "%{$search}%");
-            });
-        }
+            $buku = $query->get();
 
-        $buku = $query->get();
+            // Proses durasi audio
+            $getID3 = new getID3();
+            foreach ($buku as $b) {
+                $totalSeconds = 0;
 
-        // Proses durasi audio
-        $getID3 = new getID3();
-        foreach ($buku as $b) {
-            $totalSeconds = 0;
-
-            if ($b->detailBuku) {
-                foreach ($b->detailBuku as $detail) {
-                    if ($detail->audio) {
-                        $filePath = storage_path('app/public/' . $detail->audio);
-                        if (file_exists($filePath)) {
-                            $audioInfo = $getID3->analyze($filePath);
-                            if (isset($audioInfo['playtime_seconds'])) {
-                                $totalSeconds += $audioInfo['playtime_seconds'];
+                if ($b->detailBuku) {
+                    foreach ($b->detailBuku as $detail) {
+                        if ($detail->audio) {
+                            $filePath = storage_path('app/public/' . $detail->audio);
+                            if (file_exists($filePath)) {
+                                $audioInfo = $getID3->analyze($filePath);
+                                if (isset($audioInfo['playtime_seconds'])) {
+                                    $totalSeconds += $audioInfo['playtime_seconds'];
+                                }
                             }
                         }
                     }
                 }
+
+                $hours = floor($totalSeconds / 3600);
+                $minutes = floor(($totalSeconds % 3600) / 60);
+                $seconds = $totalSeconds % 60;
+
+                $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+                $b->totalWaktu = $totalSeconds;
             }
 
-            $hours = floor($totalSeconds / 3600);
-            $minutes = floor(($totalSeconds % 3600) / 60);
-            $seconds = $totalSeconds % 60;
+            $html = view('sewa_buku.user.buku.grid_search_buku', compact('buku'))->render();
 
-            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-            $b->totalWaktu = $totalSeconds;
+            return response()->json([
+                'html' => $html,
+                'count' => $buku->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
-
-        $html = view('sewa_buku.user.buku.grid_search_buku', compact('buku'))->render();
-
-        return response()->json([
-            'html' => $html,
-            'count' => $buku->count()
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => true,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-        ], 500);
     }
-}
-
-
-
 }

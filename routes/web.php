@@ -21,22 +21,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::get('/', [LandingPageController::class, 'landingPage'])->name('sewa_buku.user.landing');
 Route::middleware('auth')->group(function () {
-    // Route::get('/', function () {
-    //     $user = Auth::user();
-    //     if ($user->is_admin == 1) {
-    //         return redirect()->route('admin.buku.index');
-    //     } else {
-    //         return redirect()->route('user.buku.index');
-    //     }
-
-    // })->name('home');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -125,7 +111,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/index', [OrderController::class, 'indexOrder'])->name('user.order.index');
             Route::get('/invoice/{id}', [OrderController::class, 'cetakInvoice'])->name('user.order.invoice');
             Route::get('/show/{id}', [OrderController::class, 'showOrder'])->name('user.order.show');
-            Route::post('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
+            Route::get('/store/{id}', [OrderController::class, 'storeOrder'])->name('user.order.store');
             Route::post('/bayar/{id}', [OrderController::class, 'storePayment'])->name('user.payment.store');
             Route::put('/batal/{id}', [OrderController::class, 'batalkanOrder'])->name('user.order.batal');
             Route::get('/search', [OrderController::class, 'searchOrder'])->name('user.order.search');

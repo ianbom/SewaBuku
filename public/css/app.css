@@ -3,6 +3,7 @@
  * Copyright 2011-2024 The Bootstrap Authors
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
 .ps {
     overflow: hidden !important;
     overflow-anchor: none;
@@ -156,7 +157,7 @@
     --bs-dark-border-subtle: #adb5bd;
     --bs-white-rgb: 255, 255, 255;
     --bs-black-rgb: 0, 0, 0;
-    --bs-font-sans-serif: "Montserrat", system-ui, -apple-system, "Segoe UI",
+    --bs-font-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI",
         Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans",
         sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
@@ -167,7 +168,7 @@
         rgba(255, 255, 255, 0.15),
         rgba(255, 255, 255, 0)
     );
-    --bs-body-font-family: "Montserrat";
+    --bs-body-font-family: "Inter";
     --bs-body-font-size: 13px;
     --bs-body-font-weight: 400;
     --bs-body-line-height: 1.5;
@@ -5625,7 +5626,7 @@ fieldset:disabled .btn {
     z-index: var(--bs-tooltip-zindex);
     display: block;
     margin: var(--bs-tooltip-margin);
-    font-family: "Montserrat";
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -5738,7 +5739,7 @@ fieldset:disabled .btn {
     z-index: var(--bs-popover-zindex);
     display: block;
     max-width: var(--bs-popover-max-width);
-    font-family: "Montserrat";
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -17673,51 +17674,51 @@ body .bi:before,
     vertical-align: sub;
 }
 @font-face {
-    font-family: "Montserrat";
+    font-family: "Inter";
     font-style: normal;
     font-display: swap;
     font-weight: 300;
-    src: url("../fonts/Montserrat-Light.ttf");
+    src: url("../fonts/Inter-Light.ttf");
     /* unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
         U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
         U+2215, U+FEFF, U+FFFD; */
 }
 @font-face {
-    font-family: "Montserrat";
+    font-family: "Inter";
     font-style: normal;
     font-display: swap;
     font-weight: 400;
-    src: url("../fonts/Montserrat-Regular.ttf");
+    src: url("../fonts/Inter-Regular.ttf");
     /* unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
         U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
         U+2215, U+FEFF, U+FFFD; */
 }
 @font-face {
-    font-family: "Montserrat";
+    font-family: "Inter";
     font-style: normal;
     font-display: swap;
     font-weight: 600;
-    src: url("../fonts/Montserrat-SemiBold.ttf");
+    src: url("../fonts/Inter-SemiBold.ttf");
     /* unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
         U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
         U+2215, U+FEFF, U+FFFD; */
 }
 @font-face {
-    font-family: "Montserrat";
+    font-family: "Inter";
     font-style: normal;
     font-display: swap;
     font-weight: 700;
-    src: url("../fonts/Montserrat-Bold.ttf");
+    src: url("../fonts/Inter-Bold.ttf");
     /* unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
         U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
         U+2215, U+FEFF, U+FFFD; */
 }
 @font-face {
-    font-family: "Montserrat";
+    font-family: "Inter";
     font-style: normal;
     font-display: swap;
     font-weight: 800;
-    src: url("../fonts/Montserrat-ExtraBold.ttf");
+    src: url("../fonts/Inter-ExtraBold.ttf");
     /* unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
         U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212,
         U+2215, U+FEFF, U+FFFD; */

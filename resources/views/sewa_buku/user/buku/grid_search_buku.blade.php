@@ -3,14 +3,15 @@
        <!-- Wrap the entire book card in a link to the book detail page -->
     <a href="{{ route('user.buku.show', $book->id_buku) }}">
         @if($book->coverBuku && $book->coverBuku->first())
-            <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Book Cover" class="w-full h-128 object-cover rounded-[16px]">
+            <img src="{{ asset('storage/' . $book->coverBuku->first()->file_image) }}" alt="Book Cover" class=" w-full aspect-[1/1] object-cover rounded-[16px]">
         @else
             <img src="https://via.placeholder.com/150" alt="Cover Placeholder" class="w-full h-64 object-cover">
         @endif
     </a>
 
     <div class="p-4">
-        <h3 class="text-[#052D6E] text-[14px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">{{ $book->judul_buku }}</h3>
+        <h3 class="text-[#052D6E] text-[15px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">{{ $book->judul_buku }}</h3>
+        <h2 class="text-[#979797] text-[14px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">Sub Judul{{ $book->judul_buku }}</h2>
         <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">{{ $book->penulis }}</p>
 
         <div class="flex justify-between items-center text-[#979797] text-sm mt-4">

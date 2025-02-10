@@ -64,7 +64,7 @@
                 <div class="col-span-12 sm:col-span-3">
                     @if ($buku->coverBuku && $buku->coverBuku->count() > 0)
                         <img src="{{ asset('storage/' . $buku->coverBuku->first()->file_image) }}" alt="Cover Buku"
-                            class="w-full h-[300px] object-cover rounded-[16px]">
+                            class="w-full aspect-[1/1] object-cover rounded-[16px]">
                     @endif
                 </div>
 
@@ -78,11 +78,28 @@
                             </h2>
                             <p class="text-[#052D6E] font-bold mb-2">AUTHOR - {{ $buku->penulis }} / PUBLISHER -
                                 {{ $buku->penerbit }}</p>
-                            <p class="text-sm text-[#979797] font-bold">{{ $buku->tentang_penulis }}</p>
                         </div>
                         <hr class="w-full border-t border-[#052D6E]">
 
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+                            <div class="flex mt-6 items-center">
+                                <div
+                                    class="text-center bg-[#FFE8E2] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                    <i class="fas  fa-book -circle text-[#DD7971] text-[12px]"></i>
+                                </div>
+                                <span class="text-[12px] text-[#979797] font-bold">Teks & Audio </span>
+
+                                {{-- <span class="text-[12px] text-[#979797] font-bold">{{ $jumlahQuiz }} Poin Utama</span> --}}
+                            </div>
+                            <div class="flex mt-6 items-center">
+                                <div
+                                    class="text-center bg-[#EBE4FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
+                                    <i class="fas fa-list text-[#8F7CC1] text-[12px]"></i>
+                                </div>
+                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ $buku->jumlahChapter }}
+                                    Poin Utama</span>
+                            </div>
+
                             <div class="flex mt-6 items-center">
                                 <div
                                     class="text-center bg-[#D3E9FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
@@ -101,54 +118,48 @@
                                     class="text-[12px] text-sm text-[#979797] font-bold">{{ number_format($averageRating, 1) }}</span>
                             </div>
 
-                            <div class="flex mt-6 items-center">
-                                <div
-                                    class="text-center bg-[#FFE8E2] p-2 rounded-[6px] mr-2 flex items-center justify-center">
-                                    <i class="fas fa-book text-[#DD7971] text-[12px]"></i>
-                                </div>
-                                <span class="text-[12px] text-sm text-[#979797] font-bold">{{ $buku->jumlahChapter }}
-                                    Tipe</span>
-                            </div>
 
-                            <div class="flex mt-6 items-center">
-                                <div
-                                    class="text-center bg-[#EBE4FF] p-2 rounded-[6px] mr-2 flex items-center justify-center">
-                                    <i class="fas fa-question-circle text-[#8F7CC1] text-[12px]"></i>
-                                </div>
-                                <span class="text-[12px] text-[#979797] font-bold">{{ $jumlahQuiz }} Bab</span>
-                            </div>
                         </div>
 
                         <hr class="border-t border-[#052D6E]">
                     </div>
 
-                    <!-- Actions -->
+
                     <div class="flex gap-4 mb-6">
                         @if ($buku->is_free || $checkLanggananAktif)
+                        <div class="flex justify-end mt-6">
+                            <a href="{{ $buku->detailBuku?->first() ? route('user.buku.bacaBab', $buku->detailBuku?->first()?->id_detail_buku) : '#empty-bab' }}"
+                                type="submit"
+                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#052D6E]">
+                                <strong>Mulai Baca</strong>
+                            </a>
+                        </div>
+                        <div class="flex justify-end mt-6">
+                            <a href="{{ $buku->detailBuku?->first() ? route('user.buku.bacaBab', $buku->detailBuku?->first()?->id_detail_buku) : '#empty-bab' }}"
+                                type="submit"
+                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#052D6E]">
+                                <strong>Audio Book</strong>
+                            </a>
+                        </div>
+                    @else
+                        <div class="flex justify-end mt-6">
+                            <a href="{{ route('user.paketLangganan.index') }}" type="submit"
+                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] disabled">
+                                <strong>Langganan untuk membaca</strong>
+                            </a>
+                        </div>
+                    @endif
                             <div class="flex justify-end mt-6">
-                                <a href="{{ $buku->detailBuku?->first() ? route('user.buku.bacaBab', $buku->detailBuku?->first()?->id_detail_buku) : '#empty-bab' }}"
-                                    type="submit"
-                                    class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#052D6E]">
-                                    <strong>Baca Buku</strong>
-                                </a>
+                                <button type="button"
+                                class="flex items-center gap-2 px-4 py-3 text-white bg-[#B79F54] rounded-[12px] hover:bg-[#FAFAD8] hover:text-[#B79F54]">
+                                <i class="fas fa-shopping-cart"></i>
+                                <strong>Buku Utama</strong>
+                            </button>
                             </div>
-
-                            <div class="flex justify-end mt-6">
-                                <button type="button" onclick="toggleModal('ratingModal')"
-                                    class="flex items-center gap-2 px-4 py-3 text-white bg-[#B79F54] rounded-[12px] hover:bg-[#FAFAD8] hover:text-[#B79F54]">
-                                    <i class="fas fa-pen"></i>
-                                    <strong>Beri Ulasan</strong>
-                                </button>
-                            </div>
-                        @else
-                            <div class="flex justify-end mt-6">
-                                <a href="{{ route('user.paketLangganan.index') }}" type="submit"
-                                    class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] disabled">
-                                    <strong>Langganan untuk membaca</strong>
-                                </a>
-                            </div>
-                        @endif
-
+                    </div>
+                    <hr class="border-t border-[#052D6E]">
+                    <!-- Actions -->
+                    <div class="flex gap-4 mb-6">
                         @if ($diselesaikanCheck)
                             <form action="{{ route('user.delete.bookFinished', $buku->id_buku) }}" method="POST">
                                 @csrf
@@ -175,7 +186,13 @@
                                 </button>
                             </form>
                         @endif
-
+                        <div class="flex justify-end mt-6">
+                            <button type="button" onclick="toggleModal('ratingModal')"
+                            class="flex items-center gap-2 px-4 py-3 text-white bg-[#B79F54] rounded-[12px] hover:bg-[#FAFAD8] hover:text-[#B79F54]">
+                            <i class="fas fa-pen"></i>
+                            <strong>Beri Ulasan</strong>
+                        </button>
+                        </div>
                         <form
                             action="{{ in_array($buku->id_buku, $favorites) ? route('user.favorite.delete', $buku->id_buku) : route('user.favorite.store', $buku->id_buku) }}"
                             method="POST" class="mt-2">
@@ -194,6 +211,14 @@
                                 </button>
                             @endif
                         </form>
+                         {{-- BELUM ADA REPORT ISSUE --}}
+                         <div class="flex justify-end mt-6">
+                            <button type="button"
+                            class="flex items-center gap-2 px-4 py-3 text-white bg-[#8F7CC1] rounded-[12px] hover:bg-[#EBE4FF] hover:text-[#8F7CC1]">
+                            <i class="fas fa-pen"></i>
+                            <strong>Report Issue</strong>
+                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -201,19 +226,32 @@
 
         <div class="mt-12">
             <div class="mb-10">
-                <p class="text-[18px] text-[#052D6E] font-bold mb-2">Sinopsis Buku</p>
+                <p class="text-[18px] text-[#052D6E] font-bold mb-2">Intisari Buku</p>
                 <p class="text-[#979797] leading-relaxed">{{ $buku->sinopsis }}</p>
             </div>
+            <div class="mb-10">
+                <p class="text-[18px] text-[#052D6E] font-bold mb-2">Tentang Penulis</p>
+                <p class="text-[#979797] leading-relaxed">{{ $buku->tentang_penulis }}</p>
+            </div>
 
-            @if ($buku->teaser_audio)
+            <!-- INI DISURUH HAPUS -->
+            {{-- @if ($buku->teaser_audio)
                 <div class="mt-8 mb-8">
                     <audio controls controlsList="nodownload" class="custom-audio w-full">
                         <source src="{{ asset('storage/' . $buku->teaser_audio) }}" type="audio/mp3">
                     </audio>
                 </div>
-            @endif
+            @endif --}}
 
-            <!-- Reviews Section -->
+            <!-- Book SIMILar -->
+    <div class="mb-10">
+        <p class="text-[16px] sm:text-[18px] text-[#052D6E] font-bold mb-4 sm:mb-6">Buku Serupa</p>
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+            {{-- @include('sewa_buku.user.buku.grid_search_buku', ['buku' => $buku]) --}}
+        </div>
+    </div>
+
+            {{-- <!-- Reviews Section -->
             @if ($rating)
                 <div class="mt-8 rounded-xl">
                     <p class="text-[18px] text-[#052D6E] font-bold mb-4">Ulasan</p>
@@ -228,13 +266,13 @@
                                     <span class="text-[#B79F54] ml-2">★</span>
                                     <span class="text-sm text-[#979797] ml-1">{{ $review->rating }}/5</span>
                                 </div>
-                                <p class="text-[#979797] text-sm">{{ $review->komentar }}</p>
-                            </div>
+                                {{-- <p class="text-[#979797] text-sm">{{ $review->komentar }}</p> --}}
+                            {{-- </div>
                         @endforeach
                     </div>
                 </div>
-            @endif
-
+            @endif --}}
+{{--
             <!-- Rating Section -->
             <div class="mt-10">
                 @if ($checkLanggananAktif)
@@ -281,7 +319,7 @@
                         </div>
                     </div>
                 @endif
-            </div>
+            </div> --}}
         </div>
     </div>
 

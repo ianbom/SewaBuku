@@ -42,19 +42,36 @@
                 <h3 class="text-gray-400 text-sm font-semibold uppercase mb-3">Menu</h3>
                 <ul>
                     <li class="mb-2">
+                        <a href="{{ route('sewa_buku.user.landing') }}"
+                            class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                           {{ Route::currentRouteName() == 'sewa_buku.user.landing' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
+                            <i class="fas fa-home text-blue-500 mr-3"></i>
+                            <span class="text-gray-700">Home</span>
+                        </a>
+                    </li>
+                    {{-- <li class="mb-2">
                         <a href="{{ route('user.buku.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                            {{ Route::currentRouteName() == 'user.buku.index' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
                             <i class="fas fa-home text-blue-500 mr-3"></i>
                             <span class="text-gray-700">Explore</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="mb-2">
                         <a href="{{ route('search_buku') }}"
                         class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                         {{ Route::currentRouteName() == 'search_buku' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
                             <i class="fas fa-search text-blue-500 mr-3"></i>
-                            <span class="text-gray-700">Search</span>
+                            <span class="text-gray-700">Explore</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{ route('user.myCollection') }}"
+                        class="flex items-center px-4 py-2 rounded hover:bg-gray-100
+                                                {{ Route::currentRouteName() == 'user.myCollection' ? 'bg-[#D3E9FF] text-[#052D6E] font-semibold' : '' }}">
+
+                              <i class="fas fa-bookmark text-blue-500 mr-3"></i>
+                            <span class="text-gray-700">My Favorite</span>
                         </a>
                     </li>
                     <li class="mb-2">
@@ -65,15 +82,6 @@
                             <span class="text-gray-700">Highlight</span>
                         </a>
                     </li>
-                </ul>
-                <hr class="my-8 border-t-1 border-[#1E90FF]">
-
-
-            </div>
-
-
-            <div>
-                <ul>
                     <li class="mb-2">
                         <a href="{{ route('user.paketLangganan.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-100
@@ -82,6 +90,16 @@
                             <span class="text-gray-700">Subscription Package</span>
                         </a>
                     </li>
+                </ul>
+                <hr class="my-8 border-t-1 border-[#1E90FF]">
+
+
+            </div>
+
+
+            {{-- Order BLM DIPINDAH --}}
+            {{-- <div>
+                <ul>
                     <li class="mb-2">
                         <a href="{{ route('user.order.index') }}"
                             class="flex items-center px-4 py-2 rounded hover:bg-gray-100
@@ -92,7 +110,7 @@
                     </li>
                 </ul>
             </div>
-            <hr class="my-8 border-t-1 border-[#1E90FF]">
+            <hr class="my-8 border-t-1 border-[#1E90FF]"> --}}
 
             <div>
                 <ul>
@@ -115,7 +133,7 @@
                 </ul>
 
             </div>
-            <hr class="my-8 border-t-1 border-[#1E90FF]">
+            {{-- <hr class="my-8 border-t-1 border-[#1E90FF]">
 
             <div>
                 <a href="{{ route('user.myCollection') }}">
@@ -128,15 +146,21 @@
                    {{ Route::currentRouteName() == 'user.myCollection' ? 'text-[#052D6E] font-semibold' : 'text-gray-700' }}">
                     <span class="text-sm">My Favorite</span>
                 </a>
-            </div>
+            </div> --}}
 
         </nav>
     </aside>
 
-    <!-- Main Content -->
     <div class="flex-1 sm:ml-64"
-        style="background-image: url('{{ asset('images/bg.png') }}'); background-size: cover; background-position: center; background-color: white;">
+    @if(Route::currentRouteName() === 'sewa_buku.user.landing')
+        style="background-color: white;"
+    @else
+        style="background-image: url('{{ asset(path: 'images/bg.png') }}'); background-size: cover; background-position: center; background-color: white;"
+    @endif
+>
+    @yield('content')
+</div>
 
-        @yield('content')
-    </div>
+
+
 </div>

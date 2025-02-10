@@ -14,7 +14,7 @@
         // Array of available images
         $images = [asset('images/paket1.png'), asset('images/paket2.png'), asset('images/paket3.png')];
     @endphp
-
+<div>
     <div class="container mx-auto mt-10 p-10">
 
         <!-- Page Title -->
@@ -87,6 +87,57 @@
                 </div>
             </div>
         </div>
+    </div>
+    <footer class="bg-[#1E90FF] text-white pt-12 pb-12 mt-20">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
+                <!-- Deskripsi Website -->
+                <div class="max-w-xs sm:max-w-sm">
+                    <p class="font-semibold text-lg" style="font-family: 'Inter', sans-serif;">Shae Insight</p>
+                    <p class="text-sm mt-2" style="font-family: 'Inter', sans-serif;">
+                        Empowering your personal growth with insights that drive lasting change and deepen understanding in just 1 minute.
+                    </p>
+                </div>
+
+                <!-- Copyright (Dipusatkan di antara dua elemen lainnya) -->
+                <div class="flex-grow flex justify-center">
+                    <h4 class="font-semibold text-white mb-3" style="font-family: 'Inter', sans-serif;">
+                        &copy; 2025 Shae Insight. All Rights Reserved.
+                    </h4>
+                </div>
+
+                <!-- Social Media Links -->
+                <div>
+                    <h4 class="font-semibold text-white mb-3" style="font-family: 'Inter', sans-serif;">Follow Us</h4>
+                    <ul class="flex space-x-6 justify-center sm:justify-start">
+                        <li>
+                            <a href="https://facebook.com" target="_blank" class="hover:text-[#052D6E]">
+                                <i class="fab fa-facebook-f text-2xl"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com" target="_blank" class="hover:text-[#052D6E]">
+                                <i class="fab fa-twitter text-2xl"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://linkedin.com" target="_blank" class="hover:text-[#052D6E]">
+                                <i class="fab fa-linkedin-in text-2xl"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://instagram.com" target="_blank" class="hover:text-[#052D6E]">
+                                <i class="fab fa-instagram text-2xl"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    </div>
 
 
         <script>
@@ -101,3 +152,5 @@
             }
         </script>
     @endsection
+
+

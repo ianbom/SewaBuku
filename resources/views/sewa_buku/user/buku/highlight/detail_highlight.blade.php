@@ -154,14 +154,14 @@
                                 <a href="{{ route('user.buku.bacaBab', $buku->detailBuku->first()->id_detail_buku) }}"
                                     type="submit"
                                     class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] hover:bg-[#AFC4E7FF] hover:text-[#052D6E]">
-                                    <strong>Baca Buku</strong>
+                                    <strong>Mulai Baca</strong>
                                 </a>
                             </div>
                         @else
                             <div class="flex justify-end mt-6">
                                 <a href="{{ route('user.paketLangganan.index') }}" type="submit"
                                     class="flex items-center gap-2 px-4 py-3 text-white bg-[#052D6E] rounded-[12px] disabled ">
-                                    <strong>Langganan untuk membaca22</strong>
+                                    <strong>Berlanggan untuk Membaca</strong>
                                 </a>
                             </div>
                         @endif

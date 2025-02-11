@@ -16,6 +16,7 @@ class Buku extends Model
     protected $fillable = [
         'id_buku',
         'judul_buku',
+        'sub_judul',
         'penulis',
         'tentang_penulis',
         'penerbit',
@@ -30,7 +31,7 @@ class Buku extends Model
         'created_at',
         'updated_at',
     ];
-    
+
     public function detailBuku()
     {
         return $this->hasMany(DetailBuku::class, 'id_buku', 'id_buku');

@@ -29,145 +29,6 @@ class BukuController extends Controller
         return view('sewa_buku.admin.buku.index_buku', ['buku' => $buku]);
     }
 
-    public function indexBukuUser()
-    {
-        $userId = Auth::id();
-
-        // Periksa status langganan
-        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
-
-        $parentTags = Tags::where('id_child', null)->get();
-        $childTags = Tags::whereNotNull('id_child')->get();
-
-        $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
-            ->withCount(['rating as ratingRerata' => function ($query) {
-                $query->select(DB::raw('coalesce(avg(rating), 0)'));
-            }])
-            ->get();
-
-        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
-
-        $getID3 = new getID3();
-
-        foreach ($buku as $b) {
-            $totalSeconds = 0;
-
-            foreach ($b->detailBuku as $detail) {
-                if ($detail->audio) {
-                    $filePath = storage_path('app/public/' . $detail->audio);
-                    if (file_exists($filePath)) {
-                        $audioInfo = $getID3->analyze($filePath);
-                        if (isset($audioInfo['playtime_seconds'])) {
-                            $totalSeconds += $audioInfo['playtime_seconds'];
-                        }
-                    }
-                }
-            }
-
-            // Simpan total waktu dalam format jam, menit, detik
-            $hours = floor($totalSeconds / 3600);
-            $minutes = floor(($totalSeconds % 3600) / 60);
-            $seconds = $totalSeconds % 60;
-
-            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-            $b->totalWaktu = $totalSeconds;
-
-            // Tentukan apakah buku dapat dibaca
-            $b->can_read = $b->is_free || $checkLangganan ? true : false;
-
-            $terakhirDibaca = Dibaca::where('id', $userId)
-                ->orderBy('updated_at', 'desc')
-                ->first();
-        }
-
-        return view('sewa_buku.user.buku.index_buku', [
-            'buku' => $buku,
-            'favorites' => $favorites,
-            'checkLangganan' => $checkLangganan,
-            'parentTags' => $parentTags,
-            'childTags' => $childTags,
-            'terakhirDibaca' => $terakhirDibaca ?? null
-        ]);
-    }
-
-
-
-    public function detailBukuUser($id)
-    {
-        $userId = Auth::id();
-
-        $buku = Buku::with('detailBuku', 'detailBuku.quiz')
-            ->withCount(['detailBuku as jumlahChapter' => function ($query) {
-                $query->select(DB::raw('coalesce(count(id_detail_buku))'));
-            }])
-            ->findOrFail($id);
-
-        $jumlahQuiz = Quiz::whereIn('id_detail_buku', function ($query) use ($buku) {
-            $query->select('id_detail_buku')
-                ->from('detail_buku')
-                ->where('id_buku', $buku->id_buku);
-        })
-            ->count();
-
-
-        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
-
-        $rating = Rating::where('id_buku', $buku->id_buku)->get();
-
-        $ratingCheck = Rating::where('id', $userId)
-            ->where('id_buku', $buku->id_buku)
-            ->first();
-
-        $checkLanggananAktif = Langganan::where('id', $userId)
-            ->where('status_langganan', true)
-            ->exists();
-
-        $averageRating = $rating->isNotEmpty() ? $rating->avg('rating') : null;
-
-        $getID3 = new getID3();
-
-        $totalSeconds = 0;
-
-
-        foreach ($buku->detailBuku as $detail) {
-            if ($detail->audio) {
-                $filePath = storage_path('app/public/' . $detail->audio);
-                if (file_exists($filePath)) {
-                    $audioInfo = $getID3->analyze($filePath);
-                    if (isset($audioInfo['playtime_seconds'])) {
-                        $totalSeconds += $audioInfo['playtime_seconds'];
-                    }
-                }
-            }
-        }
-
-        // Simpan total waktu dalam format jam, menit, detik
-        $hours = floor($totalSeconds / 3600);
-        $minutes = floor(($totalSeconds % 3600) / 60);
-        $seconds = $totalSeconds % 60;
-
-        $buku->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-        $buku->totalWaktu = $totalSeconds;
-
-        $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
-
-        $highlight = Highlight::where('id', $userId)->where('id_buku', $buku->id_buku)->get();
-        // dd($buku->detailBuku);
-        return view('sewa_buku.user.buku.detail_buku', [
-            'buku' => $buku,
-            'favorites' => $favorites,
-            'averageRating' => $averageRating,
-            'ratingCheck' => $ratingCheck,
-            'rating' => $rating,
-            'checkLanggananAktif' => $checkLanggananAktif,
-            'jumlahQuiz' => $jumlahQuiz,
-            'diselesaikanCheck' => $diselesaikanCheck,
-            'highlight' => $highlight
-        ]);
-    }
-
-
-
     public function create()
     {
         return view('sewa_buku.admin.buku.create_buku');
@@ -177,6 +38,7 @@ class BukuController extends Controller
     {
         $request->validate([
             'judul_buku' => 'required|string|max:255',
+            'sub_judul' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
             'penerbit' => 'required|string|max:255',
             'tentang_penulis' => 'required|string',
@@ -200,6 +62,7 @@ class BukuController extends Controller
 
         $buku = Buku::create([
             'judul_buku' => $request->judul_buku,
+            'sub_judul' => $request->sub_judul,
             'penulis' => $request->penulis,
             'penerbit' => $request->penerbit,
             'tentang_penulis' => $request->tentang_penulis,
@@ -231,6 +94,7 @@ class BukuController extends Controller
         try {
             $request->validate([
                 'judul_buku' => 'required|string|max:255',
+                'sub_judul' => 'required|string|max:255',
                 'penulis' => 'required|string|max:255',
                 'penerbit' => 'required|string|max:255',
                 'tentang_penulis' => 'required|string',
@@ -258,6 +122,7 @@ class BukuController extends Controller
             // Create a new book
             $buku = Buku::create([
                 'judul_buku' => $request->judul_buku,
+                'sub_judul' => $request->sub_judul,
                 'penulis' => $request->penulis,
                 'penerbit' => $request->penerbit,
                 'tentang_penulis' => $request->tentang_penulis,
@@ -698,10 +563,6 @@ class BukuController extends Controller
 
         // Periksa status langganan
         $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
-
-
-
-
         $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
 
         $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
@@ -1072,5 +933,142 @@ class BukuController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function indexBukuUser()
+    {
+        $userId = Auth::id();
+
+        // Periksa status langganan
+        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+
+        $parentTags = Tags::where('id_child', null)->get();
+        $childTags = Tags::whereNotNull('id_child')->get();
+
+        $buku = Buku::with('coverBuku', 'rating', 'detailBuku')
+            ->withCount(['rating as ratingRerata' => function ($query) {
+                $query->select(DB::raw('coalesce(avg(rating), 0)'));
+            }])
+            ->get();
+
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+
+        $getID3 = new getID3();
+
+        foreach ($buku as $b) {
+            $totalSeconds = 0;
+
+            foreach ($b->detailBuku as $detail) {
+                if ($detail->audio) {
+                    $filePath = storage_path('app/public/' . $detail->audio);
+                    if (file_exists($filePath)) {
+                        $audioInfo = $getID3->analyze($filePath);
+                        if (isset($audioInfo['playtime_seconds'])) {
+                            $totalSeconds += $audioInfo['playtime_seconds'];
+                        }
+                    }
+                }
+            }
+
+            // Simpan total waktu dalam format jam, menit, detik
+            $hours = floor($totalSeconds / 3600);
+            $minutes = floor(($totalSeconds % 3600) / 60);
+            $seconds = $totalSeconds % 60;
+
+            $b->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+            $b->totalWaktu = $totalSeconds;
+
+            // Tentukan apakah buku dapat dibaca
+            $b->can_read = $b->is_free || $checkLangganan ? true : false;
+
+            $terakhirDibaca = Dibaca::where('id', $userId)
+                ->orderBy('updated_at', 'desc')
+                ->first();
+        }
+
+        return view('sewa_buku.user.buku.index_buku', [
+            'buku' => $buku,
+            'favorites' => $favorites,
+            'checkLangganan' => $checkLangganan,
+            'parentTags' => $parentTags,
+            'childTags' => $childTags,
+            'terakhirDibaca' => $terakhirDibaca ?? null
+        ]);
+    }
+
+
+
+    public function detailBukuUser($id)
+    {
+        $userId = Auth::id();
+
+        $buku = Buku::with('detailBuku', 'detailBuku.quiz')
+            ->withCount(['detailBuku as jumlahChapter' => function ($query) {
+                $query->select(DB::raw('coalesce(count(id_detail_buku))'));
+            }])
+            ->findOrFail($id);
+
+        $jumlahQuiz = Quiz::whereIn('id_detail_buku', function ($query) use ($buku) {
+            $query->select('id_detail_buku')
+                ->from('detail_buku')
+                ->where('id_buku', $buku->id_buku);
+        })
+            ->count();
+
+
+        $favorites = Favorite::where('id', $userId)->pluck('id_buku')->toArray();
+
+        $rating = Rating::where('id_buku', $buku->id_buku)->get();
+
+        $ratingCheck = Rating::where('id', $userId)
+            ->where('id_buku', $buku->id_buku)
+            ->first();
+
+        $checkLanggananAktif = Langganan::where('id', $userId)
+            ->where('status_langganan', true)
+            ->exists();
+
+        $averageRating = $rating->isNotEmpty() ? $rating->avg('rating') : null;
+
+        $getID3 = new getID3();
+
+        $totalSeconds = 0;
+
+
+        foreach ($buku->detailBuku as $detail) {
+            if ($detail->audio) {
+                $filePath = storage_path('app/public/' . $detail->audio);
+                if (file_exists($filePath)) {
+                    $audioInfo = $getID3->analyze($filePath);
+                    if (isset($audioInfo['playtime_seconds'])) {
+                        $totalSeconds += $audioInfo['playtime_seconds'];
+                    }
+                }
+            }
+        }
+
+        // Simpan total waktu dalam format jam, menit, detik
+        $hours = floor($totalSeconds / 3600);
+        $minutes = floor(($totalSeconds % 3600) / 60);
+        $seconds = $totalSeconds % 60;
+
+        $buku->formatted_total_waktu = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        $buku->totalWaktu = $totalSeconds;
+
+        $diselesaikanCheck = Diselesaikan::where('id', $userId)->where('id_buku', $buku->id_buku)->first();
+
+        $highlight = Highlight::where('id', $userId)->where('id_buku', $buku->id_buku)->get();
+        // dd($buku->detailBuku);
+        return view('sewa_buku.user.buku.detail_buku', [
+            'buku' => $buku,
+            'favorites' => $favorites,
+            'averageRating' => $averageRating,
+            'ratingCheck' => $ratingCheck,
+            'rating' => $rating,
+            'checkLanggananAktif' => $checkLanggananAktif,
+            'jumlahQuiz' => $jumlahQuiz,
+            'diselesaikanCheck' => $diselesaikanCheck,
+            'highlight' => $highlight
+        ]);
     }
 }

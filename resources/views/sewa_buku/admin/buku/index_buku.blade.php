@@ -44,6 +44,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Judul Buku</th>
+                                            <th>Sub Judul</th>
                                             <th>Penulis</th>
                                             <th>Penerbit</th>
                                             <th>ISBN</th>
@@ -60,6 +61,7 @@
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>{{ $item->judul_buku }}</td>
+                                                <td>{{ $item->sub_judul }}</td>
                                                 <td>{{ $item->penulis }}</td>
                                                 <td>{{ $item->penerbit }}</td>
                                                 <td>{{ $item->isbn }}</td>
@@ -85,7 +87,8 @@
                                                         class="btn btn-warning btn-sm">
                                                         Edit
                                                     </a>
-                                                    <a href="{{ route('admin.buku.show', $item->id_buku) }}" class="btn btn-success">
+                                                    <a href="{{ route('admin.buku.show', $item->id_buku) }}"
+                                                        class="btn btn-success">
                                                         Detail
                                                     </a>
                                                     <a href="#deleteData" class="btn btn-danger btn-sm"
@@ -117,7 +120,7 @@
                         className: 'text-center'
                     },
                     {
-                        targets: [7, 9],
+                        targets: [8, 9],
                         orderable: false,
                         searchable: false
                     },

@@ -13,11 +13,12 @@ class PaketLanggananController extends Controller
      */
     public function index()
     {
-            $paketLangganan = PaketLangganan::get();
-            return view('sewa_buku.admin.paket_langganan.index_paket_langganan', ['paketLangganan' => $paketLangganan]);
+        $paketLangganan = PaketLangganan::get();
+        return view('sewa_buku.admin.paket_langganan.index_paket_langganan', ['paketLangganan' => $paketLangganan]);
     }
 
-    public function indexUser(){
+    public function indexUser()
+    {
         $paketLangganan = PaketLangganan::where('is_active', true)->get();
         return view('sewa_buku.user.paket_langganan.index_paket_langganan', ['paketLangganan' => $paketLangganan]);
     }
@@ -51,7 +52,6 @@ class PaketLanggananController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);
         }
-
     }
 
     /**
@@ -92,7 +92,6 @@ class PaketLanggananController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()]);
         }
-
     }
 
     /**

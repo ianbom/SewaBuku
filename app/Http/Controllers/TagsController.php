@@ -10,7 +10,6 @@ class TagsController extends Controller
     public function indexTags(){
         $tags = Tags::with('parent', 'child')->get();
         $parent = Tags::where('id_child', null)->get();
-        //return response()->json(['tags' => $tags]);
         return view('sewa_buku.admin.tags.index_tags', ['tags' => $tags, 'parent' => $parent]);
     }
 

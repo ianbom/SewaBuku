@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Storage;
 
 class LanggananController extends Controller
 {
-    public function indexUser(){
+    public function indexUser()
+    {
         $user = Auth::user();
         $langganan = Langganan::where('id', $user->id)->get();
         foreach ($langganan as $lang) {
@@ -28,216 +29,214 @@ class LanggananController extends Controller
                 $lang->save();
             }
         }
-        return view('sewa_buku.user.langganan.index_langganan', ['langganan' => $langganan, 'user'=> $user]);
+        return view('sewa_buku.user.langganan.index_langganan', ['langganan' => $langganan, 'user' => $user]);
     }
 
     public function updateProfile(Request $request)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Validasi input
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-        'password' => 'nullable|min:8',
-        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:8',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Update nama dan email
-    $user->name = $validated['name'];
-    $user->email = $validated['email'];
+        // Update nama dan email
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
 
-    // Update password jika diisi
-    if (!empty($validated['password'])) {
-        $user->password = Hash::make($validated['password']);
-    }
-
-    // Update foto jika ada file baru
-    if ($request->hasFile('foto')) {
-        // Hapus foto lama jika ada
-        if ($user->foto) {
-            Storage::delete('public/' . $user->foto);
+        // Update password jika diisi
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
         }
 
-        // Simpan foto baru
-        $path = $request->file('foto')->store('user_photos', 'public');
-        $user->foto = $path;
+        // Update foto jika ada file baru
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($user->foto) {
+                Storage::delete('public/' . $user->foto);
+            }
+
+            // Simpan foto baru
+            $path = $request->file('foto')->store('user_photos', 'public');
+            $user->foto = $path;
+        }
+
+        // Simpan perubahan pada user
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
     }
 
-    // Simpan perubahan pada user
-    $user->save();
 
-    return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
-}
-
-
-    public function showUser($id){
+    public function showUser($id)
+    {
         $userId = Auth::id();
         $langganan = Langganan::where('id', $userId)->findOrFail($id);
         return view('sewa_buku.user.langganan.show_langganan', ['langganan' => $langganan]);
     }
 
     public function bacaBuku($id)
-{
-    try {
-        $buku = Buku::with('detailBuku')->findOrFail($id);
-        $userId = Auth::id();
-        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
+    {
+        try {
+            $buku = Buku::with('detailBuku')->findOrFail($id);
+            $userId = Auth::id();
+            $checkLangganan = Langganan::where('status_langganan', true)->where('id', $userId)->first();
 
-        $terakhirDibaca = Dibaca::where('id', $userId)
-        ->where('id_buku', $buku->id_buku)
-        ->where('is_read', true)
-        ->latest('updated_at')
-        ->first();
+            $terakhirDibaca = Dibaca::where('id', $userId)
+                ->where('id_buku', $buku->id_buku)
+                ->where('is_read', true)
+                ->latest('updated_at')
+                ->first();
 
-        $diselesaikan = Diselesaikan::where('id', $userId)->pluck('id_detail_buku')->toArray();
+            $diselesaikan = Diselesaikan::where('id', $userId)->pluck('id_detail_buku')->toArray();
 
-        $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
+            $babTerakhirDibaca = $terakhirDibaca ? $terakhirDibaca->id_detail_buku : null;
 
-        $quizStatus = [];
-        $quizScores = [];
-        $userId = Auth::id();
-        foreach ($buku->detailBuku as $detailBuku) {
+            $quizStatus = [];
+            $quizScores = [];
+            $userId = Auth::id();
+            foreach ($buku->detailBuku as $detailBuku) {
+                $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+
+                if ($quiz) {
+
+                    $isAttempted = Jawaban::where('id_quiz', $quiz->id_quiz)
+                        ->where('id', $userId)
+                        ->exists();
+
+                    $quizStatus[$detailBuku->id_detail_buku] = $isAttempted;
+
+                    if ($isAttempted) {
+                        $totalSoal = Soal::where('id_quiz', $quiz->id_quiz)->count();
+                        $benar = Jawaban::where('id_quiz', $quiz->id_quiz)
+                            ->where('id', $userId)
+                            ->where('is_correct', true)
+                            ->count();
+                        $quizScores[$detailBuku->id_detail_buku] = "{$benar}/{$totalSoal}";
+                    } else {
+                        $quizScores[$detailBuku->id_detail_buku] = null;
+                    }
+                } else {
+                    $quizStatus[$detailBuku->id_detail_buku] = false;
+                    $quizScores[$detailBuku->id_detail_buku] = null;
+                }
+
+                if ($detailBuku->is_free_detail || $checkLangganan) {
+
+                    $detailBuku->can_read = true;
+                } else {
+
+                    $detailBuku->can_read = false;
+                }
+            }
+
+            return view('sewa_buku.user.buku.baca_buku', [
+                'buku' => $buku,
+                'quizStatus' => $quizStatus,
+                'quizScores' => $quizScores,
+                'checkLangganan' => $checkLangganan,
+                'babTerakhirDibaca' => $babTerakhirDibaca,
+                'diselesaikan' => $diselesaikan,
+                'idBuku' => $buku->id_buku,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json(['err' => $th->getMessage()]);
+        }
+    }
+
+    public function bacaBabBuku($id)
+    {
+        try {
+            $user = Auth::user();
+            $detailBuku = DetailBuku::findOrFail($id);
+
+            $checkLangganan = Langganan::where('status_langganan', true)->where('id', $user->id)->exists();
+
+            Dibaca::where('id', $user->id)
+                ->where('id_buku', $detailBuku->id_buku)
+                ->update(['is_read' => false]);
+
+            $dibaca = Dibaca::where('id', $user->id)
+                ->where('id_detail_buku', $detailBuku->id_detail_buku)
+                ->where('id_buku', $detailBuku->id_buku)
+                ->first();
+
+            if ($dibaca) {
+                $dibaca->is_read = true;
+                $dibaca->save();
+            } else {
+                Dibaca::create([
+                    'id' => $user->id,
+                    'id_detail_buku' => $detailBuku->id_detail_buku,
+                    'id_buku' => $detailBuku->id_buku,
+                    'is_read' => true,
+                ]);
+            }
+
+            $diselesaikanCheck = Diselesaikan::where('id_buku', $detailBuku->id_buku)->where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+            
             $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
+            $quizStatus = null;
+            $quizScore = null;
 
             if ($quiz) {
-
                 $isAttempted = Jawaban::where('id_quiz', $quiz->id_quiz)
-                    ->where('id', $userId)
+                    ->where('id', $user->id)
                     ->exists();
-
-                $quizStatus[$detailBuku->id_detail_buku] = $isAttempted;
 
                 if ($isAttempted) {
                     $totalSoal = Soal::where('id_quiz', $quiz->id_quiz)->count();
                     $benar = Jawaban::where('id_quiz', $quiz->id_quiz)
-                        ->where('id', $userId)
+                        ->where('id', $user->id)
                         ->where('is_correct', true)
                         ->count();
-                    $quizScores[$detailBuku->id_detail_buku] = "{$benar}/{$totalSoal}";
+                    $quizScore = "{$benar}/{$totalSoal}";
                 } else {
-                    $quizScores[$detailBuku->id_detail_buku] = null;
+                    $quizStatus = 'Quiz belum dikerjakan';
                 }
             } else {
-                $quizStatus[$detailBuku->id_detail_buku] = false;
-                $quizScores[$detailBuku->id_detail_buku] = null;
+                $quizStatus = 'Quiz belum tersedia';
             }
 
-            if ($detailBuku->is_free_detail || $checkLangganan) {
-
-                $detailBuku->can_read = true;
-            } else {
-
-                $detailBuku->can_read = false;
-            }
-
-        }
-
-        return view('sewa_buku.user.buku.baca_buku', [
-            'buku' => $buku,
-            'quizStatus' => $quizStatus,
-            'quizScores' => $quizScores,
-            'checkLangganan' => $checkLangganan,
-            'babTerakhirDibaca' => $babTerakhirDibaca,
-            'diselesaikan' => $diselesaikan,
-            'idBuku' => $buku->id_buku,
-        ]);
-
-    } catch (\Throwable $th) {
-        return response()->json(['err' => $th->getMessage()]);
-    }
-}
-
-public function bacaBabBuku($id)
-{
-    try {
-        $user = Auth::user();
-        $detailBuku = DetailBuku::findOrFail($id);
-
-        $checkLangganan = Langganan::where('status_langganan', true)->where('id', $user->id)->exists();
-
-        Dibaca::where('id', $user->id)
-            ->where('id_buku', $detailBuku->id_buku)
-            ->update(['is_read' => false]);
-
-        $dibaca = Dibaca::where('id', $user->id)
-            ->where('id_detail_buku', $detailBuku->id_detail_buku)
-            ->where('id_buku', $detailBuku->id_buku)
-            ->first();
-
-        if ($dibaca) {
-            $dibaca->is_read = true;
-            $dibaca->save();
-        } else {
-            Dibaca::create([
-                'id' => $user->id,
-                'id_detail_buku' => $detailBuku->id_detail_buku,
-                'id_buku' => $detailBuku->id_buku,
-                'is_read' => true,
+            return view('sewa_buku.user.buku.baca_bab_buku', [
+                'detailBuku' => $detailBuku,
+                'quiz' => $quiz,
+                'quizStatus' => $quizStatus,
+                'quizScore' => $quizScore,
+                'idBuku' => $detailBuku->id_buku,
+                'checkLangganan' => $checkLangganan,
+                'diselesaikanCheck' => $diselesaikanCheck,
             ]);
+        } catch (\Throwable $th) {
+            return response()->json(['err' => $th->getMessage()]);
         }
-
-        $diselesaikanCheck = Diselesaikan::where('id_buku', $detailBuku->id_buku)->where('id_detail_buku', $detailBuku->id_detail_buku)->first();
-        // return response()->json(['status' => $diselesaikanCheck]);
-
-
-
-        $quiz = Quiz::where('id_detail_buku', $detailBuku->id_detail_buku)->first();
-        $quizStatus = null;
-        $quizScore = null;
-
-        if ($quiz) {
-            $isAttempted = Jawaban::where('id_quiz', $quiz->id_quiz)
-                ->where('id', $user->id)
-                ->exists();
-
-            if ($isAttempted) {
-                $totalSoal = Soal::where('id_quiz', $quiz->id_quiz)->count();
-                $benar = Jawaban::where('id_quiz', $quiz->id_quiz)
-                    ->where('id', $user->id)
-                    ->where('is_correct', true)
-                    ->count();
-                $quizScore = "{$benar}/{$totalSoal}";
-            } else {
-                $quizStatus = 'Quiz belum dikerjakan';
-            }
-        } else {
-            $quizStatus = 'Quiz belum tersedia';
-        }
-
-        return view('sewa_buku.user.buku.baca_bab_buku', [
-            'detailBuku' => $detailBuku,
-            'quiz' => $quiz,
-            'quizStatus' => $quizStatus,
-            'quizScore' => $quizScore,
-            'idBuku' => $detailBuku->id_buku,
-            'checkLangganan' => $checkLangganan,
-            'diselesaikanCheck' => $diselesaikanCheck,
-        ]);
-    } catch (\Throwable $th) {
-        return response()->json(['err' => $th->getMessage()]);
     }
-}
 
 
 
-    public function tandaiBabDiselesaikan($id){
+    public function tandaiBabDiselesaikan($id)
+    {
         $userId = Auth::id();
 
         $detailBuku = DetailBuku::findOrFail($id);
         $buku = Buku::where('id_buku', $detailBuku->id_buku)->first();
 
-            Diselesaikan::create([
-                'id' => $userId,
-                'id_buku' => $buku->id_buku,
-                'id_detail_buku' => $detailBuku->id_detail_buku,
-                'is_finished' => true
-            ]);
+        Diselesaikan::create([
+            'id' => $userId,
+            'id_buku' => $buku->id_buku,
+            'id_detail_buku' => $detailBuku->id_detail_buku,
+            'is_finished' => true
+        ]);
 
         return redirect()->back()->with('success', 'Chapter mark as finished');
     }
 
-    public function hapusTandaBabDiselesaikan($id){
+    public function hapusTandaBabDiselesaikan($id)
+    {
         $userId = Auth::id();
 
         $detailBuku = DetailBuku::findOrFail($id);
@@ -248,22 +247,24 @@ public function bacaBabBuku($id)
         return redirect()->back()->with('success', 'Chapter mark as unfinished');
     }
 
-    public function tandaiBukuDiselesaikan($id){
+    public function tandaiBukuDiselesaikan($id)
+    {
         $userId = Auth::id();
 
         $buku = Buku::findOrFail($id);
 
-            Diselesaikan::create([
-                'id' => $userId,
-                'id_buku' => $buku->id_buku,
-                'id_detail_buku' => null,
-                'is_finished' => true
-            ]);
+        Diselesaikan::create([
+            'id' => $userId,
+            'id_buku' => $buku->id_buku,
+            'id_detail_buku' => null,
+            'is_finished' => true
+        ]);
 
         return redirect()->back()->with('success', 'Book mark as finished');
     }
 
-    public function hapusTandaBukuDiselesaikan($id){
+    public function hapusTandaBukuDiselesaikan($id)
+    {
         $userId = Auth::id();
 
         $buku = Buku::findOrFail($id);
@@ -275,7 +276,8 @@ public function bacaBabBuku($id)
     }
 
 
-    public function highlightText(Request $request){
+    public function highlightText(Request $request)
+    {
         $userId = Auth::id();
 
         $highlight = Highlight::create([
@@ -290,9 +292,4 @@ public function bacaBabBuku($id)
             'highlight' => $highlight
         ]);
     }
-
-
-
-
-
 }

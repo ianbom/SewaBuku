@@ -101,7 +101,7 @@
                         </li>
                     @else
                         <li class="mb-2">
-                            <a href="#logout" id="button-logout"
+                            <a href="{{ route('login')}}"
                                 class="flex items-center px-4 py-2 rounded hover:bg-gray-100
                   'bg-[#D3E9FF] text-[#1E90FF] font-semibold' : '' }}">
                                 <i class="fas fa-sign-in-alt mr-2"></i>

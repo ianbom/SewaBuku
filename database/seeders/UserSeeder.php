@@ -15,9 +15,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-
-        User::factory()->count(20)->create();
-
         DB::table('users')->insert([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
@@ -26,23 +23,9 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'name' => 'Ian',
-            'email' => 'ian@gmail.com',
-            'password' => Hash::make('ianian123'),
-            'is_admin' => false
-        ]);
-
-        DB::table('users')->insert([
-            'name' => 'IanBom',
-            'email' => 'ianbom@gmail.com',
-            'password' => Hash::make('ianbom123'),
-            'is_admin' => false
-        ]);
-
-        DB::table('users')->insert([
-            'name' => 'Ale',
-            'email' => 'ale@gmail.com',
-            'password' => Hash::make('aleale123'),
+            'name' => 'User',
+            'email' => 'user@gmail.com',
+            'password' => Hash::make('user12345'),
             'is_admin' => false
         ]);
     }

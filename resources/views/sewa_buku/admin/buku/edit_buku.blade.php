@@ -38,11 +38,17 @@
 
                             <!-- Nama Buku -->
                             <div class="mb-3">
-                                <label for="nama_buku" class="form-label">Nama Buku</label>
+                                <label for="nama_buku" class="form-label">Judul Buku</label>
                                 <input type="text" name="nama_buku" id="nama_buku" class="form-control" value="{{ old('nama_buku', $buku->judul_buku) }}" required>
                                 @error('nama_buku')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="sub_judul" class="form-label">Sub Judul Buku</label>
+                                <input type="text" name="sub_judul" id="sub_judul" class="form-control"
+                                    value="{{ old('sub_judul', $buku->judul_buku) }}" required>
                             </div>
 
                             <!-- ISBN -->

@@ -51,11 +51,11 @@
                                     <!-- Penulis -->
                                     <div class="col-md-6 mb-3">
                                         <label for="penulis" class="form-label">Penulis</label>
-                                        <input type="text" name="penulis" id="penulis" class="form-control" value="{{ old('penulis') }}" required>
+                                        <input type="text" name="penulis" id="penulis" class="form-control"
+                                            value="{{ old('penulis') }}" required>
                                     </div>
-
                                     <!-- Tentang Penulis -->
-                                    <div class="col-md-12 mb-3">
+                                    <div class="col-md-6 mb-3">
                                         <label for="tentang_penulis" class="form-label">Tentang Penulis</label>
                                         <textarea name="tentang_penulis" id="tentang_penulis" rows="4" class="form-control" required>{{ old('tentang_penulis') }}</textarea>
                                     </div>
@@ -64,7 +64,8 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="rating_amazon" class="form-label">Rating Amazon</label>
                                         <input type="number" name="rating_amazon" id="rating_amazon" step="0.1"
-                                            min="0" max="5" class="form-control" value="{{ old('rating_amazon') }}" required>
+                                            min="0" max="5" class="form-control"
+                                            value="{{ old('rating_amazon') }}" required>
                                     </div>
 
                                     <!-- Link Pembelian -->
@@ -77,13 +78,15 @@
                                     <!-- Penerbit -->
                                     <div class="col-md-6 mb-3">
                                         <label for="penerbit" class="form-label">Penerbit</label>
-                                        <input type="text" name="penerbit" id="penerbit" class="form-control" value="{{ old('penerbit') }}" required>
+                                        <input type="text" name="penerbit" id="penerbit" class="form-control"
+                                            value="{{ old('penerbit') }}" required>
                                     </div>
 
                                     <!-- ISBN -->
                                     <div class="col-md-6 mb-3">
                                         <label for="isbn" class="form-label">ISBN</label>
-                                        <input type="text" name="isbn" id="isbn" class="form-control" value="{{ old('isbn') }}" required>
+                                        <input type="text" name="isbn" id="isbn" class="form-control"
+                                            value="{{ old('isbn') }}" required>
                                     </div>
 
                                     <!-- Tahun Terbit -->
@@ -93,19 +96,27 @@
                                             value="{{ old('tahun_terbit') }}" required>
                                     </div>
 
+                                    <!-- Cover Buku -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="cover_buku" class="form-label">Cover Buku (JPG/PNG)</label>
+                                        <input type="file" name="cover_buku[]" id="cover_buku"
+                                            accept="image/jpeg,image/png" class="form-control" multiple required>
+                                    </div>
+                                    <!-- Ringkasan Audio -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ringkasan_audio" class="form-label">Ringkasan Audio (MP3)</label>
+                                        <input type="file" name="ringkasan_audio" id="ringkasan_audio"
+                                            accept="audio/mp3" class="form-control"
+                                            {{ old('ringkasan_audio') ? 'value=' . old('ringkasan_audio') : '' }} required>
+                                    </div>
                                     <!-- Teaser Audio -->
                                     <div class="col-md-6 mb-3">
                                         <label for="teaser_audio" class="form-label">Teaser Audio (MP3)</label>
                                         <input type="file" name="teaser_audio" id="teaser_audio" accept="audio/mp3"
-                                            class="form-control" {{ old('teaser_audio') ? 'value='.old('teaser_audio') : '' }} required>
+                                            class="form-control"
+                                            {{ old('teaser_audio') ? 'value=' . old('teaser_audio') : '' }} required>
                                     </div>
 
-                                    <!-- Ringkasan Audio -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="ringkasan_audio" class="form-label">Ringkasan Audio (MP3)</label>
-                                        <input type="file" name="ringkasan_audio" id="ringkasan_audio" accept="audio/mp3"
-                                            class="form-control" {{ old('ringkasan_audio') ? 'value='.old('ringkasan_audio') : '' }} required>
-                                    </div>
 
                                     <!-- Sinopsis -->
                                     <div class="col-md-12 mb-3">
@@ -113,12 +124,7 @@
                                         <textarea name="sinopsis" id="sinopsis" rows="4" class="form-control" required>{{ old('sinopsis') }}</textarea>
                                     </div>
 
-                                    <!-- Cover Buku -->
-                                    <div class="col-md-12 mb-3">
-                                        <label for="cover_buku" class="form-label">Cover Buku (JPG/PNG)</label>
-                                        <input type="file" name="cover_buku[]" id="cover_buku"
-                                            accept="image/jpeg,image/png" class="form-control" multiple required>
-                                    </div>
+
                                 </div>
 
                                 <!-- Is Free -->

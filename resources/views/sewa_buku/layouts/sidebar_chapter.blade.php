@@ -18,7 +18,7 @@
         <!-- Menu -->
         <nav class="flex-1 px-4 py-6 space-y-6">
             <div>
-                <h3 class="text-gray-400 text-sm font-semibold uppercase mb-3 mt-14">Chapters </h3>
+                <h3 class="text-gray-400 text-sm font-semibold uppercase mb-3 mt-14">Poin Utama </h3>
                 <ul>
                     @foreach ($buku->detailBuku as $detail)
                         @if ($detail->is_free_detail == true)

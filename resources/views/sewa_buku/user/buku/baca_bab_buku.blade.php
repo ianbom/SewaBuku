@@ -96,6 +96,66 @@
                 float: right;
             }
         </style>
+        <style>
+            /* Floating Settings Styles */
+            .floating-settings {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: white;
+                border-radius: 12px;
+                padding: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                align-items: center;
+                z-index: 1000;
+            }
+
+            .text-size-btn {
+                border: 2px solid #d3d3d3;
+                border-radius: 8px;
+                width: 40px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                transition: border 0.3s ease;
+            }
+
+            .text-size-btn:hover,
+            .text-size-btn.active {
+                border-color: #1E90FF;
+            }
+
+            .bg-color-btn {
+                border: 2px solid #d3d3d3;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                transition: border 0.3s ease;
+            }
+
+            .bg-color-btn:hover,
+            .bg-color-btn.active {
+                border-color: #1E90FF;
+            }
+
+            .reset-btn {
+                font-size: 12px;
+                text-decoration: underline;
+                cursor: pointer;
+                color: black;
+                transition: color 0.3s ease;
+            }
+
+            .reset-btn:hover {
+                color: #1E90FF;
+            }
+        </style>
+
     </head>
 
     <div class="container mx-auto p-4 sm:p-8 lg:p-10 bg-white max-w-full">
@@ -288,46 +348,48 @@
     <button id="open-settings" class="floating-btn"><i class="fas fa-font"></i></button>
 
     <!-- Modal & Overlay -->
-    <div class="modal-overlay" id="modal-overlay"></div>
-    <div class="settings-modal" id="settings-modal">
-        <button class="modal-close" id="close-settings">X</button>
-        <h3>Text Settings</h3>
+    {{-- <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="settings-modal" id="settings-modal"> --}}
+        {{-- <button class="modal-close" id="close-settings">X</button>
+        <h3>Text Settings</h3> --}}
+        <!-- Floating Text Settings -->
+        <div data-test-id="text-settings" id="settings-modal"
+            class="floating-settings transition-all overflow-hidden flex flex-col items-center gap-4 h-32 settings-modal">
+            <!-- Font Size Options -->
+            <div class="flex flex-row gap-4 m:gap-8 items-center justify-center">
+                <button id="text-size-small"
+                    class="text-size-btn border-2 rounded-lg w-10 h-8 flex items-center justify-center transition border-lightest-grey hover:border-blue">
+                    <span class="text-r2"> Aa </span>
+                </button>
+                <button id="text-size-medium"
+                    class="text-size-btn border-2 rounded-lg w-10 h-8 flex items-center justify-center transition border-blue hover:border-blue active">
+                    <span class="text-r1"> Aa </span>
+                </button>
+                <button id="text-size-large"
+                    class="text-size-btn border-2 rounded-lg w-10 h-8 flex items-center justify-center transition border-lightest-grey hover:border-blue">
+                    <span class="text-r0"> Aa </span>
+                </button>
+            </div>
 
-        <label for="font-size">Font Size</label>
-        <select id="font-size" class="border rounded p-1 w-full mb-2">
-            <option value="14px">Small</option>
-            <option value="16px" selected>Medium</option>
-            <option value="20px">Large</option>
-            <option value="24px">Extra Large</option>
-        </select>
+            <!-- Background Color Options -->
+            <div class="flex flex-row gap-4 m:gap-8 items-center justify-center">
+                <button id="bg-light"
+                    class="bg-color-btn border-2 rounded-full w-8 h-8 bg-white transition border-lightest-grey hover:border-blue active"></button>
+                <button id="bg-yellow"
+                    class="bg-color-btn border-2 rounded-full w-8 h-8 bg-background-yellow transition border-blue hover:border-blue"></button>
+                <button id="bg-dark"
+                    class="bg-color-btn border-2 rounded-full w-8 h-8 bg-deep-black transition border-lightest-grey hover:border-blue"></button>
+            </div>
 
-        <label for="font-family">Font Family</label>
-        <select id="font-family" class="border rounded p-1 w-full mb-2">
-            <option value="'Arial', sans-serif">Arial</option>
-            <option value="'Times New Roman', serif">Times New Roman</option>
-            <option value="'Georgia', serif">Georgia</option>
-            <option value="'Courier New', monospace">Courier New</option>
-        </select>
-
-        <label for="bg-color">Background</label>
-        <input type="color" id="bg-color" class="w-full mb-2" value="#ffffff">
-
-        <label for="text-color">Text Color</label>
-        <input type="color" id="text-color" class="w-full mb-2" value="#000000">
-
-        <label for="line-spacing">Line Spacing</label>
-        <select id="line-spacing" class="border rounded p-1 w-full mb-2">
-            <option value="1.2">Default</option>
-            <option value="1.5">1.5x</option>
-            <option value="2">2x</option>
-            <option value="2.5">2.5x</option>
-        </select>
-
-        <button id="reset-settings" class="bg-red-500 text-white px-4 py-2 rounded w-full">Reset Settings</button>
-    </div>
+            <!-- Reset Button -->
+            <button id="reset-styles" class="text-center underline text-sm transition hover:text-blue">
+                Reset to default
+            </button>
+        </div>
+    {{-- </div> --}}
 
     <!-- JavaScript -->
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             const isiBab = document.getElementById("isiBab");
             const container = document.getElementById("read_books_container");
@@ -364,7 +426,8 @@
                 isiBab, "fontSize"));
             fontFamilySelector.addEventListener("change", () => applySetting("fontFamily", fontFamilySelector.value,
                 isiBab, "fontFamily"));
-            bgColorPicker.addEventListener("input", () => applySetting("bgColor", bgColorPicker.value, container, "backgroundColor"));
+            bgColorPicker.addEventListener("input", () => applySetting("bgColor", bgColorPicker.value, container,
+                "backgroundColor"));
             textColorPicker.addEventListener("input", () => applySetting("textColor", textColorPicker.value, isiBab,
                 "color"));
             lineSpacingSelector.addEventListener("change", () => applySetting("lineSpacing", lineSpacingSelector
@@ -374,6 +437,80 @@
                 localStorage.clear();
                 location.reload();
             });
+        });
+    </script> --}}
+
+    <!-- JavaScript to Handle Settings -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const openBtn = document.getElementById("open-settings");
+            const closeBtn = document.getElementById("close-settings");
+            const resetBtn = document.getElementById("reset-settings");
+            const settingsModal = document.getElementById("settings-modal");
+            const modalOverlay = document.getElementById("modal-overlay");
+             // Open & Close Modal
+             openBtn.addEventListener("click", () => {
+                settingsModal.style.display = "block";
+                modalOverlay.style.display = "block";
+            });
+
+            closeBtn.addEventListener("click", () => {
+                settingsModal.style.display = "none";
+                modalOverlay.style.display = "none";
+            });
+            const isiBab = document.getElementById("isiBab");
+
+            // Font Size Buttons
+            document.getElementById("text-size-small").addEventListener("click", function() {
+                isiBab.style.fontSize = "14px";
+                updateActiveClass("text-size-small");
+            });
+
+            document.getElementById("text-size-medium").addEventListener("click", function() {
+                isiBab.style.fontSize = "16px";
+                updateActiveClass("text-size-medium");
+            });
+
+            document.getElementById("text-size-large").addEventListener("click", function() {
+                isiBab.style.fontSize = "20px";
+                updateActiveClass("text-size-large");
+            });
+
+            // Background Color Buttons
+            document.getElementById("bg-light").addEventListener("click", function() {
+                document.body.style.backgroundColor = "#ffffff";
+                updateActiveClass("bg-light");
+            });
+
+            document.getElementById("bg-yellow").addEventListener("click", function() {
+                document.body.style.backgroundColor = "#f7ebc6";
+                updateActiveClass("bg-yellow");
+            });
+
+            document.getElementById("bg-dark").addEventListener("click", function() {
+                document.body.style.backgroundColor = "#1a1a1a";
+                isiBab.style.color = "#ffffff";
+                updateActiveClass("bg-dark");
+            });
+
+            // Reset Button
+            document.getElementById("reset-styles").addEventListener("click", function() {
+                isiBab.style.fontSize = "16px";
+                document.body.style.backgroundColor = "#ffffff";
+                isiBab.style.color = "#000000";
+                updateActiveClass("text-size-medium");
+                updateActiveClass("bg-light");
+            });
+
+            // Function to update active button states
+            function updateActiveClass(activeId) {
+                document.querySelectorAll(".text-size-btn, .bg-color-btn").forEach(btn => {
+                    btn.classList.remove("border-blue");
+                    btn.classList.add("border-lightest-grey");
+                });
+                document.getElementById(activeId).classList.remove("border-lightest-grey");
+                document.getElementById(activeId).classList.add("border-blue");
+            }
         });
     </script>
 

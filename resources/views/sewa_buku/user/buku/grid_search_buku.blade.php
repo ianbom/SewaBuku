@@ -11,7 +11,7 @@
 
     <div class="p-4">
         <h3 class="text-[#052D6E] text-[15px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">{{ $book->judul_buku }}</h3>
-        <h2 class="text-[#979797] text-[14px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">Sub Judul{{ $book->judul_buku }}</h2>
+        <h2 class="text-[#979797] text-[14px] font-semibold mb-2" style="font-family: 'Inter', sans-serif;">{{ $book->sub_judul }}</h2>
         <p class="text-[#979797] font-medium text-[14px]" style="font-family: 'Inter', sans-serif;">{{ $book->penulis }}</p>
 
         <div class="flex justify-between items-center text-[#979797] text-sm mt-4">

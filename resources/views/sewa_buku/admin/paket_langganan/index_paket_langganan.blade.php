@@ -59,7 +59,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($paketLangganan as $paket)
+                                        @foreach($paketLangganan as $paket)
                                             <tr>
                                                 <td>{{ $paket->nama_paket }}</td>
                                                 <td>Rp {{ number_format($paket->harga, 0, ',', '.') }}</td>
@@ -81,11 +81,7 @@
                                                     </form>
                                                 </td>
                                             </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="6" class="text-center">Belum ada paket langganan.</td>
-                                            </tr>
-                                        @endforelse
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

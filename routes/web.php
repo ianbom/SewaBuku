@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [LandingPageController::class, 'landingPage'])->name('sewa_buku.user.landing');
+Route::get('/user/buku/search', [BukuController::class, 'searchBukuIndex'])->name('search_buku');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -103,7 +104,6 @@ Route::middleware('auth')->group(function () {
             Route::delete('/highlight/delete/{id}', [BukuController::class, 'hapusHighlight'])->name('user.highlight.delete');
             Route::get('/search/highlight', [BukuController::class, 'searchBukuHighlight'])->name('highlight.search');
         });
-        Route::get('/user/buku/search', [BukuController::class, 'searchBukuIndex'])->name('search_buku');
         // Route::get('user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');
         // Route::get('/user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');
 

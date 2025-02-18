@@ -136,7 +136,7 @@
 
                                 <!-- Submit Button -->
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-primary">Simpan Buku</button>
+                                    <button type="submit" class="btn btn-lg btn-primary">Simpan Buku</button>
                                 </div>
                             </form>
 

@@ -22,10 +22,6 @@
     ];
     @endphp
 
-
-
-
-
     <div class="bg-[#F1F8FF] rounded-[16px] py-6 px-6 grid grid-cols-12 gap-6 sm:gap-8">
         <!-- Kolom Kiri - Gambar Buku -->
         <div class="col-span-12 sm:col-span-3">

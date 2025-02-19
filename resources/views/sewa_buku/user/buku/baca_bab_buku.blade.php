@@ -364,7 +364,8 @@
                 isiBab, "fontSize"));
             fontFamilySelector.addEventListener("change", () => applySetting("fontFamily", fontFamilySelector.value,
                 isiBab, "fontFamily"));
-            bgColorPicker.addEventListener("input", () => applySetting("bgColor", bgColorPicker.value, container, "backgroundColor"));
+            bgColorPicker.addEventListener("input", () => applySetting("bgColor", bgColorPicker.value, container,
+                "backgroundColor"));
             textColorPicker.addEventListener("input", () => applySetting("textColor", textColorPicker.value, isiBab,
                 "color"));
             lineSpacingSelector.addEventListener("change", () => applySetting("lineSpacing", lineSpacingSelector

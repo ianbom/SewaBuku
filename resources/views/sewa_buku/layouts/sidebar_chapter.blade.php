@@ -109,7 +109,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto p-6 sm:p-8 bg-white">
+    <main class="flex-1 overflow-y-auto p-6 sm:p-8 bg-white" id="scrollspy">
         @foreach ($buku->detailBuku as $detail)
             <div id="bab-{{ $detail->id_detail_buku }}" class="mb-12">
                 <h2 class="text-lg sm:text-xl font-bold text-[#052D6E] mb-4">{{ $detail->bab }}</h2>
@@ -251,7 +251,8 @@
 
                     const sections = document.querySelectorAll("main > div[id^='bab-']");
                     const navLinks = document.querySelectorAll("nav ul li a span");
-
+                    const navLinks_anchor = document.querySelectorAll("nav ul li a");
+                    const main_content = document.getElementById("scrollspy")
                     function markAsRead(activeIndex) {
                         navLinks.forEach((link, index) => {
                             if (index === activeIndex) {
@@ -265,21 +266,45 @@
                     }
 
                     function updateActiveSection() {
-                        let scrollPosition = window.scrollY;
-                        let offset = window.innerHeight / 3; // Adjust threshold for better accuracy
+                        let currentSection = "";
 
-                        sections.forEach((section, index) => {
-                            const sectionTop = section.offsetTop - offset;
-                            const sectionBottom = sectionTop + section.offsetHeight;
-
-                            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                                markAsRead(index)
+                        sections.forEach(section => {
+                            const sectionTop = section.offsetTop - main_content.offsetTop;
+                            const sectionHeight = section.clientHeight;
+                            if (main_content.scrollTop >= sectionTop - sectionHeight / 3) {
+                                currentSection = section.getAttribute("id");
+                            }
+                        });
+                        navLinks_anchor.forEach(link => {
+                            link.classList.remove("text-[#1E90FF]");
+                            link.classList.add("text-[#979797]");
+                            
+                            if (link.getAttribute("href").slice(1) === currentSection) {
+                                link.classList.remove("text-[#979797]");
+                                link.classList.add("text-[#1E90FF]");
                             }
                         });
                     }
 
-                    // Event listener for scrolling
-                    window.addEventListener("scroll", updateActiveSection);
+                    function scrollToHashFromURL() {
+                        const hash = window.location.hash; // Get hash from URL
+                        if (hash) {
+                            const targetSection = document.querySelector(hash);
+                            if (targetSection) {
+                                setTimeout(() => {
+                                    targetSection.scrollIntoView({
+                                        behavior: "smooth",
+                                        block: "start"
+                                    });
+                                    markAsRead([...sections].indexOf(
+                                        targetSection)); // Update nav highlight
+                                }, 100); // Delay to ensure DOM is fully loaded
+                            }
+                        }
+                    }
+
+                    // Scroll event listener
+                    main_content.addEventListener("scroll", updateActiveSection);
 
                     // Event listener for clicks on nav items
                     navLinks.forEach((link, index) => {
@@ -287,6 +312,7 @@
                             markAsRead(index);
                         });
                     });
+                    scrollToHashFromURL();
                 });
             </script>
         @endforeach

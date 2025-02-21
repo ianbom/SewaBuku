@@ -173,7 +173,7 @@
         @foreach ($buku->detailBuku as $detail)
             <div id="bab-{{ $detail->id_detail_buku }}" class="mb-12">
                 <h2 class="text-lg sm:text-xl font-bold text-[#052D6E] mb-4">{{ $detail->bab }}</h2>
-                <p class="text-[#979797] leading-relaxed">{{ $detail->isi }}</p>
+                <p class="text-[#979797] leading-relaxed" style="text-align: justify;">{{ $detail->isi }}</p>
             </div>
 
             <!-- Chapter Audio -->

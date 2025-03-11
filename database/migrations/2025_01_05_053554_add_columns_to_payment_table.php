@@ -25,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payment', function (Blueprint $table) {
-            //
+            $table->dropColumn(['fraud_status', 'payment_date', 'snap_token', 'id_payment_gateway']);
         });
     }
 };

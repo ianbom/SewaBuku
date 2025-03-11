@@ -52,8 +52,6 @@
                     Login
                 </button>
 
-
-
                 <div class="text-center mb-3">
                     <a href="{{ route('auth.google') }}" class="btn btn-outline-light w-100"
                         style="background-color: #1A1B22; border: none; padding: 10px 0; display: flex; align-items: center; justify-content: center; color: #fff; border-radius: 16px;"

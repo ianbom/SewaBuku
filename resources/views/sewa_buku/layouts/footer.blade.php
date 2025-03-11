@@ -8,7 +8,7 @@
     </div>
 
     <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/6285817324271" target="_blank" class="whatsapp-float" title="Chat with CS on WhatsApp">
+    {{-- <a href="https://wa.me/6285817324271" target="_blank" class="whatsapp-float" title="Chat with CS on WhatsApp">
         <i class="fab fa-whatsapp my-float"></i>
-    </a>
+    </a> --}}
 </footer>

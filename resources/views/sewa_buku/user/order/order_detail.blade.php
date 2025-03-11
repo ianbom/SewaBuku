@@ -256,9 +256,12 @@
                     });
             }
 
-            $('#pay-button').click(function() {
-                handlePayment(event, '/pay');
-            });
+            $('#payment_form').submit(function(e) {
+                e.preventDefault();
+                let url = $(this).attr('action');
+                console.log(url)
+                handlePayment(e, url)
+            })
         });
     </script>
 @endpush

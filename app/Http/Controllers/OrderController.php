@@ -128,7 +128,7 @@ class OrderController extends Controller
                 'status' => $status->transaction_status,
             ]);
         } catch (\Exception $e) {
-            $id_payment_gateway = $order->id . '-' . Str::uuid();
+            $id_payment_gateway = $id . '-' . Str::uuid();
             $transactionDetails = [
                 'order_id' => $id_payment_gateway,
                 'gross_amount' => $order->total_bayar,

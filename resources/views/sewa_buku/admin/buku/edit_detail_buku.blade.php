@@ -103,6 +103,10 @@
                                                 </select>
                                             </div>
 
+
+{{-- 
+                                            <a href="{{ route('quiz.create', $detail->id_detail_buku) }}"
+                                                class="btn btn-primary btn-sm">Buat Quiz</a>
                                             @if ($detail && $detail->bab && $detail->isi)
                                                 <div class="mb-3">
                                                     @if ($detailWithQuiz->contains($detail))
@@ -113,7 +117,8 @@
                                                             class="btn btn-primary btn-sm">Buat Quiz</a>
                                                     @endif
                                                 </div>
-                                            @endif
+                                            @endif --}}
+
 
                                         </div>
                                     @endforeach

@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
             Route::put('/detail/update/{id}', [BukuController::class, 'updateDetailBuku'])->name('admin.updateBuku.edit');
             Route::get('/tags/edit{id}', [BukuController::class, 'editTagsBuku'])->name('admin.tagsBuku.edit');
             Route::put('/tags/update{id}', [BukuController::class, 'updateTagsBuku'])->name('admin.tagsBuku.update');
+
+            Route::get('/create/newQuiz/{id}', [BukuController::class, 'createNewQuiz'])->name('admin.create.newQuiz');
         });
         Route::group(['prefix' => 'order'], function () {
             Route::get('/index', [OrderController::class, 'indexOrderAdmin'])->name('admin.order.index');

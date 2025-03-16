@@ -54,6 +54,7 @@
                                         <input type="text" name="penulis" id="penulis" class="form-control"
                                             value="{{ old('penulis') }}" required>
                                     </div>
+
                                     <!-- Tentang Penulis -->
                                     <div class="col-md-6 mb-3">
                                         <label for="tentang_penulis" class="form-label">Tentang Penulis</label>
@@ -102,29 +103,26 @@
                                         <input type="file" name="cover_buku[]" id="cover_buku"
                                             accept="image/jpeg,image/png" class="form-control" multiple required>
                                     </div>
+
                                     <!-- Ringkasan Audio -->
                                     <div class="col-md-6 mb-3">
                                         <label for="ringkasan_audio" class="form-label">Ringkasan Audio (MP3)</label>
                                         <input type="file" name="ringkasan_audio" id="ringkasan_audio"
-                                            accept="audio/mp3" class="form-control"
-                                            {{ old('ringkasan_audio') ? 'value=' . old('ringkasan_audio') : '' }} required>
+                                            accept="audio/mp3" class="form-control" required>
                                     </div>
+
                                     <!-- Teaser Audio -->
                                     <div class="col-md-6 mb-3">
                                         <label for="teaser_audio" class="form-label">Teaser Audio (MP3)</label>
                                         <input type="file" name="teaser_audio" id="teaser_audio" accept="audio/mp3"
-                                            class="form-control"
-                                            {{ old('teaser_audio') ? 'value=' . old('teaser_audio') : '' }} required>
+                                            class="form-control" required>
                                     </div>
-
 
                                     <!-- Sinopsis -->
                                     <div class="col-md-12 mb-3">
                                         <label for="sinopsis" class="form-label">Sinopsis</label>
                                         <textarea name="sinopsis" id="sinopsis" rows="4" class="form-control" required>{{ old('sinopsis') }}</textarea>
                                     </div>
-
-
                                 </div>
 
                                 <!-- Is Free -->
@@ -134,17 +132,69 @@
                                     <label for="is_free" class="form-check-label">Apakah Buku Gratis?</label>
                                 </div>
 
+                                <!-- Detail Buku Section -->
+                                <h4 class="mt-4 mb-3">Detail Buku</h4>
+
+                                <div id="detailContainer">
+                                    <!-- Initial detail field will be added here via JavaScript -->
+                                </div>
+
+                                <button type="button" id="addDetailButton" class="btn btn-success mb-3">Tambah Detail Baru</button>
+
                                 <!-- Submit Button -->
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-lg btn-primary">Simpan Buku</button>
+                                <div class="text-end mt-4">
+                                    <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">Kembali</a>
+                                    <button type="submit" class="btn btn-primary">Simpan Buku</button>
                                 </div>
                             </form>
-
-
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add first detail field when page loads
+            addDetailField();
+
+            // Set up button click handler
+            document.getElementById('addDetailButton').addEventListener('click', function() {
+                addDetailField();
+            });
+        });
+
+        function addDetailField() {
+            const container = document.getElementById('detailContainer');
+            const index = document.querySelectorAll('.detail-buku').length;
+
+            const newDetailHTML = `
+                <div class="border p-4 mb-4 rounded detail-buku">
+                    <h5 class="text-primary">Detail Buku ${index + 1}</h5>
+                    <div class="mb-3">
+                        <label for="detail_buku[${index}][bab]" class="form-label">Bab</label>
+                        <input type="text" name="detail_buku[${index}][bab]" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="detail_buku[${index}][isi]" class="form-label">Isi</label>
+                        <textarea name="detail_buku[${index}][isi]" rows="3" class="form-control" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="detail_buku[${index}][audio]" class="form-label">Audio</label>
+                        <input type="file" name="detail_buku[${index}][audio]" class="form-control" accept="audio/mp3">
+                    </div>
+                    <div class="mb-3">
+                        <label for="detail_buku[${index}][is_free_detail]" class="form-label">Gratis?</label>
+                        <select name="detail_buku[${index}][is_free_detail]" class="form-select">
+                            <option value="0">Tidak</option>
+                            <option value="1">Ya</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', newDetailHTML);
+        }
+    </script>
 @endsection

@@ -83,5 +83,9 @@ class User extends Authenticatable
         return $this->hasMany(Diselesaikan::class, 'id', 'id');
     }
 
+    public function report(){
+        return $this->hasMany(Report::class, 'id', 'id');
+    }
+
 
 }

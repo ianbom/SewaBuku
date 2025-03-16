@@ -10,6 +10,7 @@ use App\Http\Controllers\PaketLanggananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UserController;
@@ -79,6 +80,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/opsi/create/{id}', [OpsiController::class, 'create'])->name('opsi.create');
 
         Route::resource('/paket-langganan', PaketLanggananController::class);
+        Route::resource('/report', ReportController::class);
     });
 
 
@@ -103,6 +105,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/highlight/{id}', [BukuController::class, 'detailHighlight'])->name('user.highlight.detail');
             Route::delete('/highlight/delete/{id}', [BukuController::class, 'hapusHighlight'])->name('user.highlight.delete');
             Route::get('/search/highlight', [BukuController::class, 'searchBukuHighlight'])->name('highlight.search');
+            Route::post('/report/{id}', [ReportController::class, 'store'])->name('user.report.issue');
         });
         // Route::get('user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');
         // Route::get('/user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');

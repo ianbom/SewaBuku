@@ -55,6 +55,13 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item {{ Route::is('report.index') ? 'active' : '' }}">
+                    <a href="{{ route('report.index') }}" class='sidebar-link'>
+                        <i class="bi bi-box-seam"></i>
+                        <span>Report Issues</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-title">Logout</li>
                 <li class="sidebar-item">
                     <a type="button" class='sidebar-link' id="button-logout">

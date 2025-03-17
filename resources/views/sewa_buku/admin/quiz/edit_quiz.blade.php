@@ -73,6 +73,7 @@
 
                             <!-- Tombol Submit -->
                             <div class="text-end">
+                                <a href="{{ route('soal.create', $quiz->id_quiz)}}" class="btm btn-info">Buat Soal</a>
                                 <a href="{{ route('quiz.index') }}" class="btn btn-secondary">Batal</a>
                                 <button type="submit" class="btn btn-primary">Update Quiz</button>
                             </div>

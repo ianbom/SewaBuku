@@ -180,6 +180,13 @@
                                         class="btn btn-warning">Edit Tags Buku</a>
                                     <a href="{{ route('admin.detailBuku.edit', $buku->id_buku) }}"
                                         class="btn btn-success">Edit Chapter Buku</a>
+                                        @if (!$checkQuiz)
+                                        <a href="{{ route('admin.create.newQuiz', $buku->id_buku) }}" class=" btn btn-info"> Buat Quiz</a>
+                                        @else
+                                        <a href="{{ route('quiz.show', $detailBuku->id_detail_buku) }}" class="btn btn-danger"> Edit Quiz</a>
+                                        @endif
+
+
                                     <button type="submit" class="btn btn-primary">Update Buku</button>
                                 </div>
                             </form>

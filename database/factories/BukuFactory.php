@@ -25,6 +25,7 @@ class BukuFactory extends Factory
         return [
             'judul_buku' => $this->faker->sentence(3),
             'penulis' => $this->faker->name(),
+            'sub_judul' => $this->faker->sentence(4),
             'tentang_penulis' => $this->faker->sentence(),
             'penerbit' => $this->faker->company(),
             'isbn' => $this->faker->isbn13(),

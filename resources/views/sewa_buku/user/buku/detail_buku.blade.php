@@ -57,7 +57,38 @@
         }
     </style>
 
+
+
+
     <div class="container mx-auto mt-10 p-10">
+
+    @if (session('success'))
+        <div class="flex items-center p-4 mb-4 text-sm text-green-800 bg-green-100 border border-green-400 rounded-lg shadow-md transition-opacity duration-500 ease-in-out"
+            role="alert" id="successAlert">
+            <svg class="w-5 h-5 text-green-800 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11a1 1 0 012 0v4a1 1 0 01-2 0V7zm1 6a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="font-medium">{{ session('success') }}</span>
+            <button type="button" class="ml-auto text-green-800 hover:text-green-600" onclick="closeAlert()">
+                &times;
+            </button>
+        </div>
+
+        <script>
+            function closeAlert() {
+                document.getElementById('successAlert').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('successAlert').style.display = 'none';
+                }, 300);
+            }
+
+            // Auto-hide alert after 3 seconds
+            setTimeout(() => {
+                closeAlert();
+            }, 3000);
+        </script>
+    @endif
+
         <div class="max-w-full">
             <div class="grid grid-cols-12 gap-12">
                 <!-- Left Column - Image -->
@@ -213,11 +244,11 @@
                         </form>
                          {{-- BELUM ADA REPORT ISSUE --}}
                          <div class="flex justify-end mt-6">
-                            <button type="button"
+                            <button type="button" onclick="toggleModal('reportIssueModal')"
                             class="flex items-center gap-2 px-4 py-3 text-white bg-[#8F7CC1] rounded-[12px] hover:bg-[#EBE4FF] hover:text-[#8F7CC1]">
-                            <i class="fas fa-pen"></i>
+                            <i class="fas fa-exclamation-triangle"></i>
                             <strong>Report Issue</strong>
-                        </button>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -322,6 +353,34 @@
             </div> --}}
         </div>
     </div>
+
+       <!-- Report Issue Modal -->
+    <div id="reportIssueModal"  class="hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+       <div class="bg-white p-8 rounded-lg w-full max-w-md">
+           <h3 class="text-[16px] font-bold text-[#052D6E] mb-4">Laporkan Masalah</h3>
+           <form action="{{ route('user.report.issue', $buku->id_buku) }}" method="POST">
+               @csrf
+               <input type="hidden" name="id_buku" value="{{ $buku->id_buku }}">
+
+               <div class="mb-6">
+                   <label for="alasan" class="block text-sm font-medium text-[#052D6E] mb-2">Deskripsi Masalah</label>
+                   <textarea id="alasan" name="alasan" rows="4" placeholder="Deskripsikan masalah yang Anda temukan secara detail"
+                       class="w-full px-3 py-2 border border-[#D3E9FF] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E90FF]"></textarea>
+               </div>
+
+               <div class="flex justify-between">
+                   <button type="button" onclick="toggleModal('reportIssueModal')"
+                       class="px-4 py-2 bg-[#EBE4FF] text-[#8F7CC1] rounded-[12px] hover:bg-[#D6C8FF] hover:text-[#8F7CC1]">
+                       Batal
+                   </button>
+                   <button type="submit"
+                       class="px-4 py-2 bg-[#8F7CC1] text-bold text-white rounded-[12px] hover:bg-[#EBE4FF] hover:text-[#8F7CC1]">
+                       Kirim Laporan
+                   </button>
+               </div>
+           </form>
+       </div>
+   </div>
 
     <script>
         function toggleModal(id) {

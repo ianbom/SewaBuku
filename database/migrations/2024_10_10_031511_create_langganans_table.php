@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('langganan', function (Blueprint $table) {
             $table->id('id_langganan');
             $table->foreignId('id')->constrained('users', 'id')->cascadeOnUpdate();
-            $table->foreignId('id_buku')->nullable()->constrained('buku', 'id_buku')->cascadeOnUpdate();
+            // $table->foreignId('id_buku')->nullable()->constrained('buku', 'id_buku')->cascadeOnUpdate();
             $table->foreignId('id_paket_langganan')->constrained('paket_langganan', 'id_paket_langganan')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('status_langganan')->default(false);
             $table->date('mulai_langganan');

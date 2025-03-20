@@ -87,11 +87,6 @@
 
             <!-- Actions -->
             <div class="flex flex-wrap lg:justify-end lg:gap-6 gap-3 justify-center mt-6" style="font-family: 'Inter', sans-serif;">
-                <!-- Print Invoice -->
-                <a href="#"
-                    class="px-4 text-bold py-2 bg-[#FCEBCBFF] text-[#FDA403] rounded-[12px] hover:bg-[#FDA403] hover:text-white">
-                    <strong>Print Invoice</strong>
-                </a>
 
                 <!-- Cancel Order Button -->
                 @if ($order->status_order == 'Proses')

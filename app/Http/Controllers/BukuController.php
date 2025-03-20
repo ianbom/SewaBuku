@@ -36,61 +36,101 @@ class BukuController extends Controller
 
     public function store2(Request $request)
     {
-        $request->validate([
-            'judul_buku' => 'required|string|max:255',
-            'sub_judul' => 'required|string|max:255',
-            'penulis' => 'required|string|max:255',
-            'penerbit' => 'required|string|max:255',
-            'tentang_penulis' => 'required|string',
-            'rating_amazon' => 'required|numeric',
-            'link_pembelian' => 'required|string',
-            'isbn' => 'required|string|max:255',
-            'tahun_terbit' => 'required|string|max:255',
-            'teaser_audio' => 'required|file|mimes:mp3',
-            'sinopsis' => 'required|string',
-            'ringkasan_audio' => 'required|file|mimes:mp3',
-            'cover_buku.*' => 'required|file|mimes:jpeg,png,jpg',
-        ]);
+        try {
+            // Validate the request data
+            $validated = $request->validate([
+                'judul_buku' => 'required|string|max:255',
+                'sub_judul' => 'required|string|max:255',
+                'penulis' => 'required|string|max:255',
+                'penerbit' => 'required|string|max:255',
+                'tentang_penulis' => 'required|string',
+                'rating_amazon' => 'required|numeric|min:0|max:5',
+                'link_pembelian' => 'required|string',
+                'isbn' => 'required|string|max:255',
+                'tahun_terbit' => 'required|string|max:255',
+                'teaser_audio' => 'required|file|mimes:mp3',
+                'sinopsis' => 'required|string',
+                'ringkasan_audio' => 'required|file|mimes:mp3',
+                'cover_buku.*' => 'required|file|mimes:jpeg,png,jpg',
+                'is_free' => 'nullable|boolean',
+                'detail_buku' => 'required|array',
+                'detail_buku.*.bab' => 'required|string|max:255',
+                'detail_buku.*.isi' => 'required|string',
+                'detail_buku.*.audio' => 'nullable|file|mimes:mp3',
+                'detail_buku.*.is_free_detail' => 'required|in:0,1',
+            ]);
 
-        if ($request->hasFile('teaser_audio')) {
+            // Start DB transaction to ensure all related records are created or none
+            DB::beginTransaction();
+
+            // Handle file uploads
             $teaserAudioPath = $request->file('teaser_audio')->store('voice/teaser', 'public');
-        }
-
-        if ($request->hasFile('ringkasan_audio')) {
             $ringkasanAudioPath = $request->file('ringkasan_audio')->store('voice/ringkasan', 'public');
-        }
 
-        $buku = Buku::create([
-            'judul_buku' => $request->judul_buku,
-            'sub_judul' => $request->sub_judul,
-            'penulis' => $request->penulis,
-            'penerbit' => $request->penerbit,
-            'tentang_penulis' => $request->tentang_penulis,
-            'rating_amazon' => $request->rating_amazon,
-            'link_pembelian' => $request->link_pembelian,
-            'isbn' => $request->isbn,
-            'tahun_terbit' => $request->tahun_terbit,
-            'teaser_audio' => $teaserAudioPath,
-            'sinopsis' => $request->sinopsis,
-            'ringkasan_audio' => $ringkasanAudioPath,
-            'is_free' => $request->has('is_free'),
-        ]);
+            // Create the book
+            $buku = Buku::create([
+                'judul_buku' => $request->judul_buku,
+                'sub_judul' => $request->sub_judul,
+                'penulis' => $request->penulis,
+                'penerbit' => $request->penerbit,
+                'tentang_penulis' => $request->tentang_penulis,
+                'rating_amazon' => $request->rating_amazon,
+                'link_pembelian' => $request->link_pembelian,
+                'isbn' => $request->isbn,
+                'tahun_terbit' => $request->tahun_terbit,
+                'teaser_audio' => $teaserAudioPath,
+                'sinopsis' => $request->sinopsis,
+                'ringkasan_audio' => $ringkasanAudioPath,
+                'is_free' => $request->has('is_free') ? 1 : 0,
+            ]);
 
-        if ($request->hasFile('cover_buku')) {
-            foreach ($request->file('cover_buku') as $cover) {
-                $coverPath = $cover->store('cover_buku', 'public');
-                CoverBuku::create([
-                    'id_buku' => $buku->id_buku,
-                    'file_image' => $coverPath,
-                ]);
+            // Handle covers
+            if ($request->hasFile('cover_buku')) {
+                foreach ($request->file('cover_buku') as $cover) {
+                    $coverPath = $cover->store('cover_buku', 'public');
+                    CoverBuku::create([
+                        'id_buku' => $buku->id_buku,
+                        'file_image' => $coverPath,
+                    ]);
+                }
             }
-        }
 
-        return redirect()->route('admin.detailBuku.edit', $buku->id_buku);
+            // Handle book details
+            if ($request->has('detail_buku')) {
+                foreach ($request->detail_buku as $key => $detail) {
+                    $detailAudioPath = null;
+
+                    // Check if audio file exists for this detail
+                    if ($request->hasFile("detail_buku.$key.audio")) {
+                        $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
+                    }
+
+                    DetailBuku::create([
+                        'id_buku' => $buku->id_buku,
+                        'bab' => $detail['bab'],
+                        'isi' => $detail['isi'],
+                        'audio' => $detailAudioPath,
+                        'is_free_detail' => isset($detail['is_free_detail']) ? (bool)$detail['is_free_detail'] : false,
+                    ]);
+                }
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            return redirect()->route('admin.buku.index')->with('success', 'Buku dan detail berhasil disimpan');
+
+        } catch (\Throwable $th) {
+            // Roll back the transaction if any step fails
+            DB::rollBack();
+
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($th->getMessage());
+        }
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         try {
             $request->validate([
                 'judul_buku' => 'required|string|max:255',
@@ -168,6 +208,8 @@ class BukuController extends Controller
                 }
             }
 
+
+
             return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diupload');
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors($th->getMessage());
@@ -177,7 +219,10 @@ class BukuController extends Controller
     public function edit($id)
     {
         $buku = Buku::findOrFail($id);
-        return view('sewa_buku.admin.buku.edit_buku', ['buku' => $buku]);
+        $quiz = Quiz::pluck('id_detail_buku');
+        $checkQuiz = DetailBuku::wherein('id_detail_buku', $quiz)->first();
+        $detailBuku = $buku->detailBuku->first();
+        return view('sewa_buku.admin.buku.edit_buku', ['buku' => $buku, 'checkQuiz' => $checkQuiz, 'detailBuku' => $detailBuku]);
     }
 
     public function updateBuku(Request $request, $id)
@@ -267,6 +312,11 @@ class BukuController extends Controller
         $quiz = Quiz::all();
         $quizDetailIds = $quiz->pluck('id_detail_buku');
 
+        // $existQuiz = Buku::findOrFail($id)->whereHas('detailBuku', function ($query) use ($quizDetailIds){
+        //     $query->whereIn('id_detail_buku', $quizDetailIds);
+        // })->first();
+
+        // dd($existQuiz);
 
         $detailWithQuiz = DetailBuku::where('id_buku', $buku->id_buku)
             ->whereIn('id_detail_buku', $quizDetailIds)
@@ -281,10 +331,27 @@ class BukuController extends Controller
             'detailBuku' => $detailBuku,
             'buku' => $buku,
             'detailWithQuiz' => $detailWithQuiz,
-            'detailNoQuiz' => $detailNoQuiz
+            'detailNoQuiz' => $detailNoQuiz,
         ]);
     }
 
+
+    public function createNewQuiz($id)
+    {
+        // Find the book
+        $buku = Buku::with('detailBuku')->findOrFail($id);
+
+        // Make sure the book has at least one detail
+        if ($buku->detailBuku->isEmpty()) {
+            return redirect()->back()->with('error', 'Buku tidak memiliki detail. Tambahkan detail buku terlebih dahulu.');
+        }
+
+        // Get the first detail - assuming this is what you want to create a quiz for
+        $detailBuku = $buku->detailBuku->first();
+
+        // Pass both variables to the view
+        return view('sewa_buku.admin.buku.create_quiz', compact('buku', 'detailBuku'));
+    }
 
 
 
@@ -304,25 +371,25 @@ class BukuController extends Controller
             foreach ($request->input('detail_buku') as $key => $detail) {
                 $detailAudioPath = null;
 
-                // Cek apakah ini adalah update untuk detail yang sudah ada
+
                 $existingDetail = DetailBuku::where('id_buku', $buku->id_buku)
                     ->where('bab', $detail['bab'])
                     ->first();
 
-                // Jika ada file audio baru
+
                 if ($request->hasFile("detail_buku.$key.audio")) {
-                    // Hapus file audio lama jika ada
+
                     if ($existingDetail && $existingDetail->audio) {
                         Storage::disk('public')->delete($existingDetail->audio);
                     }
                     $detailAudioPath = $request->file("detail_buku.$key.audio")->store('voice/detail', 'public');
                 }
-                // Jika tidak ada file baru dan checkbox keep_existing_audio dicentang
+
                 elseif (isset($detail['keep_existing_audio']) && $detail['keep_existing_audio'] && $existingDetail) {
                     $detailAudioPath = $existingDetail->audio;
                 }
 
-                // Update atau create detail buku
+
                 DetailBuku::updateOrCreate(
                     [
                         'id_buku' => $buku->id_buku,

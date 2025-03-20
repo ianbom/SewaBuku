@@ -10,6 +10,7 @@ use App\Http\Controllers\PaketLanggananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\UserController;
@@ -44,6 +45,8 @@ Route::middleware('auth')->group(function () {
             Route::put('/detail/update/{id}', [BukuController::class, 'updateDetailBuku'])->name('admin.updateBuku.edit');
             Route::get('/tags/edit{id}', [BukuController::class, 'editTagsBuku'])->name('admin.tagsBuku.edit');
             Route::put('/tags/update{id}', [BukuController::class, 'updateTagsBuku'])->name('admin.tagsBuku.update');
+
+            Route::get('/create/newQuiz/{id}', [BukuController::class, 'createNewQuiz'])->name('admin.create.newQuiz');
         });
         Route::group(['prefix' => 'order'], function () {
             Route::get('/index', [OrderController::class, 'indexOrderAdmin'])->name('admin.order.index');
@@ -79,6 +82,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/opsi/create/{id}', [OpsiController::class, 'create'])->name('opsi.create');
 
         Route::resource('/paket-langganan', PaketLanggananController::class);
+        Route::resource('/report', ReportController::class);
     });
 
 
@@ -103,6 +107,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/highlight/{id}', [BukuController::class, 'detailHighlight'])->name('user.highlight.detail');
             Route::delete('/highlight/delete/{id}', [BukuController::class, 'hapusHighlight'])->name('user.highlight.delete');
             Route::get('/search/highlight', [BukuController::class, 'searchBukuHighlight'])->name('highlight.search');
+            Route::post('/report/{id}', [ReportController::class, 'store'])->name('user.report.issue');
         });
         // Route::get('user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');
         // Route::get('/user/buku/filter', [BukuController::class, 'filterTagsBuku'])->name('buku.filter');

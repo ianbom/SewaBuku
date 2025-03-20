@@ -89,4 +89,8 @@ class Buku extends Model
     {
         return $this->hasMany(Highlight::class, 'id_buku', 'id_buku');
     }
+
+    public function report(){
+        return $this->hasMany(Report::class, 'id_buku', 'id_buku');
+    }
 }
